@@ -61,7 +61,11 @@ export default function Quiz() {
             formData.append("answer", String(answer));
         });
 
-        await action({ request: new Request("", { method: "POST" }) });
+        const url = new URL(window.location.href);
+        const newRequest = new Request(url, {
+            method: "POST",
+        });
+        await action({ request: newRequest });
         setSubmitted(true);
     };
 
@@ -110,7 +114,7 @@ export default function Quiz() {
             <div className="bg-gray-800 rounded-lg p-6 border border-gray-700">
                 <div className="flex items-center justify-between mb-6">
                     <h2 className="text-xl font-semibold text-blue-400">
-                        Question {questions.questions[answers.findIndex((a) => a !== -1) + 1] || 1} of {questions.questions.length}
+                        Question
                     </h2>
                     <span className="text-gray-400">
                         Team: <span className="text-white">{team}</span>
