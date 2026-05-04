@@ -1,5 +1,5 @@
 import type { Route } from "./+types/quiz";
-import { Link, useLoaderData } from "react-router";
+import { Link, useLoaderData, redirect } from "react-router";
 import { getTodayQuestions } from "../data/questions";
 import { useState } from "react";
 
@@ -40,7 +40,7 @@ export async function action({ request }: { request: Request }) {
     storedScores[new Date().toISOString().split('T')[0]] = score;
     localStorage.setItem(`quiz_scores_${team}`, JSON.stringify(storedScores));
 
-    return { success: true, score };
+    return redirect(`/quiz-results?team=${encodeURIComponent(team)}&score=${score}`);
 }
 
 export default function Quiz() {
@@ -61,7 +61,7 @@ export default function Quiz() {
             formData.append("answer", String(answer));
         });
 
-        const result = await action({ request: new Request("", { method: "POST" }) });
+        await action({ request: new Request("", { method: "POST" }) });
         setSubmitted(true);
     };
 
