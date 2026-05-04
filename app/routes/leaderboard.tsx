@@ -14,7 +14,7 @@ export async function loader() {
     const scores: Record<string, number> = {};
 
     teams.forEach((team) => {
-        const stored = localStorage.getItem(`quiz_scores_${team}`);
+        const stored = typeof window !== 'undefined' ? localStorage.getItem(`quiz_scores_${team}`) : null;
         if (stored) {
             const teamScores = JSON.parse(stored);
             scores[team] = teamScores[today] || 0;

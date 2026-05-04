@@ -34,11 +34,13 @@ export async function action({ request }: { request: Request }) {
         return total + (answer === index ? 1 : 0);
     }, 0);
 
-    const storedScores = JSON.parse(
-        localStorage.getItem(`quiz_scores_${team}`) || "{}"
-    );
+    const storedScores = typeof window !== 'undefined'
+        ? JSON.parse(localStorage.getItem(`quiz_scores_${team}`) || "{}")
+        : {};
     storedScores[new Date().toISOString().split('T')[0]] = score;
-    localStorage.setItem(`quiz_scores_${team}`, JSON.stringify(storedScores));
+    if (typeof window !== 'undefined') {
+        localStorage.setItem(`quiz_scores_${team}`, JSON.stringify(storedScores));
+    }
 
     return redirect(`/quiz-results?team=${encodeURIComponent(team)}&score=${score}`);
 }
@@ -64,7 +66,9 @@ export default function Quiz() {
         const url = new URL(window.location.href);
         const newRequest = new Request(url, {
             method: "POST",
+            body: formData,
         });
+
         await action({ request: newRequest });
         setSubmitted(true);
     };
@@ -114,7 +118,7 @@ export default function Quiz() {
             <div className="bg-gray-800 rounded-lg p-6 border border-gray-700">
                 <div className="flex items-center justify-between mb-6">
                     <h2 className="text-xl font-semibold text-blue-400">
-                        Question
+                        Question {questions.questions[answers.findIndex((a) => a !== -1) + 1] || 1} of {questions.questions.length}
                     </h2>
                     <span className="text-gray-400">
                         Team: <span className="text-white">{team}</span>
