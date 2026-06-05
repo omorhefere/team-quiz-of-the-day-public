@@ -1,28 +1,33 @@
-# Welcome to React Router!
+# Office Trivia League
 
-A modern, production-ready template for building full-stack React applications using React Router.
+One AI-free daily trivia deck, every team, one global leaderboard. Teams play
+today's 10 questions together after standup, score out of 10, and climb a
+cross-company leaderboard. Built on React Router 7 (SSR) + TypeScript + Tailwind
++ Drizzle/Postgres.
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/remix-run/react-router-templates/tree/main/default)
-
-## Features
-
-- 🚀 Server-side rendering
-- ⚡️ Hot Module Replacement (HMR)
-- 📦 Asset bundling and optimization
-- 🔄 Data loading and mutations
-- 🔒 TypeScript by default
-- 🎉 TailwindCSS for styling
-- 📖 [React Router docs](https://reactrouter.com/)
+See **[HANDOFF.md](./HANDOFF.md)** for the full build status, what's needed to
+go live, and architecture decisions. **[PROGRESS.md](./PROGRESS.md)** has the
+task table.
 
 ## Getting Started
 
-### Installation
-
-Install the dependencies:
-
 ```bash
 npm install
+npm run seed   # load sample decks into a local PGlite DB
+npm run dev    # http://localhost:5173
 ```
+
+Useful commands: `npm test`, `npm run typecheck`, `npm run build`,
+`npm run smoke` (content gate), `npm run db:generate` (new migration).
+
+Decks are JSON in `app/data/decks/` (one per UTC day, exactly 10 questions);
+`npm run seed` validates and loads them.
+
+---
+
+## Built on React Router
+
+The sections below are the underlying template's docs.
 
 ### Development
 
