@@ -1,0 +1,56 @@
+{
+  "deck_date": "2026-06-07",
+  "curator_notes": "Sample general-knowledge deck (seed).",
+  "questions": [
+    {
+      "q": "What is the boiling point of water at sea level in Celsius?",
+      "choices": ["90", "100", "110", "120"],
+      "correct_idx": 1
+    },
+    {
+      "q": "Which language has the most native speakers worldwide?",
+      "choices": ["English", "Spanish", "Mandarin Chinese", "Hindi"],
+      "correct_idx": 2
+    },
+    {
+      "q": "Who developed the theory of general relativity?",
+      "choices": ["Isaac Newton", "Albert Einstein", "Niels Bohr", "Galileo Galilei"],
+      "correct_idx": 1
+    },
+    {
+      "q": "What is the most abundant gas in Earth's atmosphere?",
+      "choices": ["Oxygen", "Carbon dioxide", "Nitrogen", "Argon"],
+      "correct_idx": 2
+    },
+    {
+      "q": "In Git, which command stages all changes for commit?",
+      "choices": ["git stage", "git add .", "git commit -a", "git push"],
+      "correct_idx": 1
+    },
+    {
+      "q": "Which mammal is known to be the largest animal ever to have lived?",
+      "choices": ["African elephant", "Blue whale", "Giraffe", "Colossal squid"],
+      "correct_idx": 1
+    },
+    {
+      "q": "What is the capital of Canada?",
+      "choices": ["Toronto", "Vancouver", "Ottawa", "Montreal"],
+      "correct_idx": 2
+    },
+    {
+      "q": "How many bits are in a byte?",
+      "choices": ["4", "8", "16", "32"],
+      "correct_idx": 1
+    },
+    {
+      "q": "Which artist released the album 'Thriller'?",
+      "choices": ["Prince", "Michael Jackson", "Madonna", "Stevie Wonder"],
+      "correct_idx": 1
+    },
+    {
+      "q": "What is the freezing point of water in Fahrenheit?",
+      "choices": ["0", "32", "100", "212"],
+      "correct_idx": 1
+    }
+  ]
+}

@@ -4,14 +4,14 @@
   "type": "module",
   "scripts": {
     "build": "react-router build",
-    "dev": "react-router dev",
+    "dev": "PGLITE_DATA_DIR=.pgdata react-router dev",
     "start": "react-router-serve ./build/server/index.js",
     "typecheck": "react-router typegen && tsc",
     "test": "vitest run",
     "test:watch": "vitest",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "tsx scripts/migrate.ts",
-    "seed": "tsx scripts/seed.ts",
+    "seed": "PGLITE_DATA_DIR=.pgdata tsx scripts/seed.ts",
     "smoke": "tsx scripts/smoke-test.ts"
   },
   "dependencies": {

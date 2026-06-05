@@ -1,0 +1,56 @@
+{
+  "deck_date": "2026-06-05",
+  "curator_notes": "Sample general-knowledge deck (seed).",
+  "questions": [
+    {
+      "q": "Which planet is the largest in our solar system?",
+      "choices": ["Saturn", "Jupiter", "Neptune", "Earth"],
+      "correct_idx": 1
+    },
+    {
+      "q": "What is the capital city of Australia?",
+      "choices": ["Sydney", "Melbourne", "Canberra", "Perth"],
+      "correct_idx": 2
+    },
+    {
+      "q": "In which year did the first iPhone launch?",
+      "choices": ["2005", "2007", "2009", "2010"],
+      "correct_idx": 1
+    },
+    {
+      "q": "Which element has the chemical symbol 'Fe'?",
+      "choices": ["Fluorine", "Iron", "Lead", "Francium"],
+      "correct_idx": 1
+    },
+    {
+      "q": "Who wrote the play 'Romeo and Juliet'?",
+      "choices": ["Charles Dickens", "Jane Austen", "William Shakespeare", "Mark Twain"],
+      "correct_idx": 2
+    },
+    {
+      "q": "What is the largest ocean on Earth?",
+      "choices": ["Atlantic", "Indian", "Arctic", "Pacific"],
+      "correct_idx": 3
+    },
+    {
+      "q": "How many sides does a hexagon have?",
+      "choices": ["5", "6", "7", "8"],
+      "correct_idx": 1
+    },
+    {
+      "q": "Which programming language was created by Guido van Rossum?",
+      "choices": ["Ruby", "Python", "Java", "Go"],
+      "correct_idx": 1
+    },
+    {
+      "q": "What is the tallest mountain above sea level?",
+      "choices": ["K2", "Kangchenjunga", "Mount Everest", "Lhotse"],
+      "correct_idx": 2
+    },
+    {
+      "q": "Which country hosted the 2016 Summer Olympics?",
+      "choices": ["China", "Brazil", "United Kingdom", "Japan"],
+      "correct_idx": 1
+    }
+  ]
+}

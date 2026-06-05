@@ -5,10 +5,19 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useRouteLoaderData,
 } from "react-router";
 
 import type { Route } from "./+types/root";
 import "./app.css";
+
+export async function loader() {
+  // The Cloudflare Analytics token is a public site token; safe to expose to
+  // the client. env import is dynamic so this server-only module never reaches
+  // the client bundle. (T9)
+  const { env } = await import("~/lib/env");
+  return { cloudflareAnalyticsToken: env.cloudflareAnalyticsToken ?? null };
+}
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -24,6 +33,8 @@ export const links: Route.LinksFunction = () => [
 ];
 
 export function Layout({ children }: { children: React.ReactNode }) {
+  const data = useRouteLoaderData<typeof loader>("root");
+  const cfToken = data?.cloudflareAnalyticsToken;
   return (
     <html lang="en">
       <head>
@@ -36,6 +47,13 @@ export function Layout({ children }: { children: React.ReactNode }) {
         {children}
         <ScrollRestoration />
         <Scripts />
+        {cfToken && (
+          <script
+            defer
+            src="https://static.cloudflareinsights.com/beacon.min.js"
+            data-cf-beacon={JSON.stringify({ token: cfToken })}
+          />
+        )}
       </body>
     </html>
   );

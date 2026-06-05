@@ -1,4 +1,4 @@
-import { Form, Link, data, redirect, useActionData } from "react-router";
+import { Form, Link, data, useActionData } from "react-router";
 import type { Route } from "./+types/register";
 import { getDb } from "~/db/client";
 import { createTeam } from "~/db/repository";
@@ -8,9 +8,11 @@ import {
   validateDisplayName,
 } from "~/lib/profanity";
 
-// Direct GETs to /register just go home (the form lives there).
+// No loader redirect: the loader re-runs during the post-action render, so
+// redirecting here would discard the action result. Direct GETs fall through to
+// the form rendered by the component.
 export async function loader() {
-  throw redirect("/");
+  return null;
 }
 
 export async function action({ request }: Route.ActionArgs) {

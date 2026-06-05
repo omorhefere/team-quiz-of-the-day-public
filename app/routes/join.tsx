@@ -5,8 +5,10 @@ import { getTeamByCode } from "~/db/repository";
 import { isTeamCodeFormat } from "~/lib/code";
 import { commitTeamId } from "~/lib/session.server";
 
+// See register.tsx: no loader redirect, or it would clobber the action's error
+// result during the post-action render.
 export async function loader() {
-  throw redirect("/");
+  return null;
 }
 
 export async function action({ request }: Route.ActionArgs) {
@@ -37,10 +39,14 @@ export default function Join() {
   const result = useActionData<typeof action>();
   return (
     <main className="flex min-h-screen flex-col items-center justify-center bg-gray-950 px-6 text-center text-gray-100">
-      <h1 className="text-2xl font-bold text-red-400">Couldn&rsquo;t join</h1>
-      <p className="mt-3 max-w-sm text-gray-400">{result?.error}</p>
+      <h1 className="text-2xl font-bold text-red-400">
+        {result?.error ? "Couldn’t join" : "Join your team"}
+      </h1>
+      <p className="mt-3 max-w-sm text-gray-400">
+        {result?.error ?? "Enter your team code on the home page to play."}
+      </p>
       <Link to="/" className="mt-8 inline-block text-indigo-400 hover:underline">
-        ← Back
+        ← Back home
       </Link>
     </main>
   );
