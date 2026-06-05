@@ -1,7 +1,17 @@
 .DS_Store
 .env
+.env.local
 /node_modules/
 
 # React Router
 /.react-router/
 /build/
+
+# Test / coverage
+/coverage/
+
+# Local dev database (PGlite)
+/.pgdata/
+
+# Aider
+.aider*
