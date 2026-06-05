@@ -22,12 +22,16 @@ import {
 } from "drizzle-orm/pg-core";
 import { ulid } from "ulid";
 
-/** A single multiple-choice question. Stored inside `deck.questions` as JSONB. */
+/**
+ * A single multiple-choice question. Stored inside `deck.questions` as JSONB.
+ * The "exactly 4 choices / correct_idx in range" invariant is enforced at write
+ * time by the Zod schema in `~/lib/quiz`, not by this storage type.
+ */
 export interface Question {
   /** The question prompt. */
   q: string;
-  /** Exactly 4 answer choices. */
-  choices: [string, string, string, string];
+  /** The answer choices (exactly 4, validated on write). */
+  choices: string[];
   /** Index (0–3) of the correct choice. */
   correct_idx: number;
 }

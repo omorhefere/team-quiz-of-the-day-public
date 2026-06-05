@@ -1,82 +1,113 @@
+import { Form, Link, redirect } from "react-router";
 import type { Route } from "./+types/home";
-import { Link } from "@react-router";
+import { getDb } from "~/db/client";
+import { getTeamById } from "~/db/repository";
+import { getTeamId } from "~/lib/session.server";
 
-export function meta({}: Route.MetaArgs) {
+export function meta(_: Route.MetaArgs) {
   return [
-    { title: "Team Quiz Of The Day" },
-    { name: "description", content: "Welcome to React Router!" },
+    { title: "Office Trivia League" },
+    {
+      name: "description",
+      content:
+        "One daily trivia deck. Every team. One global leaderboard. Play with your team after standup.",
+    },
   ];
 }
 
-export async function loader() {
-  return {};
+export async function loader({ request }: Route.LoaderArgs) {
+  const teamId = await getTeamId(request);
+  if (teamId) {
+    const db = await getDb();
+    const team = await getTeamById(db, teamId);
+    // Bonded device → straight to today's quiz.
+    if (team) throw redirect("/play");
+  }
+  return null;
 }
 
 export default function Home() {
-  const teams = ["Marketing", "Engineering", "Sales", "Design", "Product"];
-
   return (
-    <div className="space-y-8">
-      <div className="text-center space-y-4">
-        <h1 className="text-4xl font-bold text-blue-400">
-          Welcome to Daily Team Quiz
+    <main className="min-h-screen bg-gray-950 text-gray-100">
+      <div className="mx-auto flex max-w-2xl flex-col items-center px-6 py-20 text-center">
+        <p className="mb-4 text-sm font-semibold uppercase tracking-widest text-indigo-400">
+          Office Trivia League
+        </p>
+        <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
+          One quiz a day.
+          <br />
+          Every team. One league.
         </h1>
-        <p className="text-gray-400">
-          Test your knowledge and compete with your team!
+        <p className="mt-5 max-w-md text-lg text-gray-400">
+          Gather the team after standup, play today&rsquo;s 10 questions
+          together, and climb the global leaderboard.
         </p>
-      </div>
 
-      <div className="bg-gray-800 rounded-lg p-6 border border-gray-700">
-        <h2 className="text-xl font-semibold text-blue-400 mb-4">
-          Select Your Team
-        </h2>
-        <p className="text-gray-400 mb-6">
-          Choose a team to join. Your team's score will be tracked on the leaderboard.
-        </p>
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-          {teams.map((team) => (
-            <Link
-              key={team}
-              to={`/quiz?team=${encodeURIComponent(team)}`}
-              className="bg-gray-700 hover:bg-gray-600 text-white font-medium py-3 px-4 rounded-lg transition-colors border border-gray-600 hover:border-blue-500"
+        <div className="mt-12 w-full max-w-sm space-y-8">
+          {/* New team */}
+          <Form method="post" action="/register" className="space-y-3">
+            <label
+              htmlFor="displayName"
+              className="block text-left text-sm font-medium text-gray-300"
             >
-              {team}
-            </Link>
-          ))}
-        </div>
-      </div>
+              Start a new team
+            </label>
+            <input
+              id="displayName"
+              name="displayName"
+              type="text"
+              required
+              maxLength={30}
+              placeholder="e.g. Platform Engineering"
+              className="w-full rounded-lg border border-gray-700 bg-gray-900 px-4 py-3 text-base outline-none focus:border-indigo-500"
+            />
+            <button
+              type="submit"
+              className="w-full rounded-lg bg-indigo-600 px-4 py-3 font-semibold text-white transition hover:bg-indigo-500"
+            >
+              Get our team code
+            </button>
+          </Form>
 
-      <div className="bg-gray-800 rounded-lg p-6 border border-gray-700">
-        <h2 className="text-xl font-semibold text-blue-400 mb-4">
-          How It Works
-        </h2>
-        <ol className="space-y-3 text-gray-400">
-          <li className="flex gap-3">
-            <span className="flex-shrink-0 w-6 h-6 bg-blue-500 rounded-full text-white text-sm flex items-center justify-center">
-              1
-            </span>
-            <span>Select your team from the list above</span>
-          </li>
-          <li className="flex gap-3">
-            <span className="flex-shrink-0 w-6 h-6 bg-blue-500 rounded-full text-white text-sm flex items-center justify-center">
-              2
-            </span>
-            <span>Answer 10 questions (1 point each for correct answers)</span>
-          </li>
-          <li className="flex gap-3">
-            <span className="flex-shrink-0 w-6 h-6 bg-blue-500 rounded-full text-white text-sm flex items-center justify-center">
-              3
-            </span>
-            <span>Submit your score to the leaderboard</span>
-          </li>
-          <li className="flex gap-3">
-            <span className="flex-shrink-0 w-6 h-6 bg-blue-500 rounded-full text-white text-sm flex items-center justify-center">
-              4
-            </span>
-            <span>Check back tomorrow for new questions!</span>
-          </li>
-        </ol>
+          <div className="flex items-center gap-3 text-xs text-gray-600">
+            <span className="h-px flex-1 bg-gray-800" />
+            OR
+            <span className="h-px flex-1 bg-gray-800" />
+          </div>
+
+          {/* Returning team */}
+          <Form method="post" action="/join" className="space-y-3">
+            <label
+              htmlFor="code"
+              className="block text-left text-sm font-medium text-gray-300"
+            >
+              Already have a code?
+            </label>
+            <input
+              id="code"
+              name="code"
+              type="text"
+              required
+              placeholder="BLUE-FOX-71"
+              autoCapitalize="characters"
+              className="w-full rounded-lg border border-gray-700 bg-gray-900 px-4 py-3 text-base uppercase tracking-wider outline-none focus:border-indigo-500"
+            />
+            <button
+              type="submit"
+              className="w-full rounded-lg border border-gray-700 px-4 py-3 font-semibold text-gray-200 transition hover:bg-gray-900"
+            >
+              Play as our team
+            </button>
+          </Form>
+        </div>
+
+        <Link
+          to="/leaderboard"
+          className="mt-12 text-sm text-gray-500 underline-offset-4 hover:text-gray-300 hover:underline"
+        >
+          View the global leaderboard →
+        </Link>
       </div>
-    </div>
+    </main>
   );
 }
