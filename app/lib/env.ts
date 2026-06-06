@@ -21,8 +21,21 @@ export const env = {
   /** Postgres connection string. When absent, the app uses a local PGlite DB. */
   databaseUrl: read("DATABASE_URL"),
 
-  /** Secret used to sign the team-session cookie. */
-  sessionSecret: read("SESSION_SECRET") ?? "dev-insecure-session-secret",
+  /**
+   * Secret used to sign the team-session cookie. REQUIRED in production —
+   * falling back to a public constant there would let anyone forge a team
+   * cookie. Dev/test get a fixed insecure default for convenience.
+   */
+  get sessionSecret(): string {
+    const value = read("SESSION_SECRET");
+    if (value) return value;
+    if (this.isProduction) {
+      throw new Error(
+        "SESSION_SECRET is required in production — refusing to sign cookies with a public default.",
+      );
+    }
+    return "dev-insecure-session-secret";
+  },
 
   /** Sentry DSN. When absent, Sentry is a no-op. */
   sentryDsn: read("SENTRY_DSN"),

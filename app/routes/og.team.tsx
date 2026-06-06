@@ -4,10 +4,14 @@ import { getTeamDailyStanding } from "~/db/repository";
 import { isDeckDate } from "~/lib/date";
 import { renderScoreCardPng } from "~/lib/og-card";
 
+// ULID shape (26 Crockford-base32 chars). Cheap guard so obviously-invalid
+// requests don't reach the DB + the relatively expensive PNG rasterization.
+const ULID_RE = /^[0-9A-HJKMNP-TV-Z]{26}$/i;
+
 export async function loader({ params }: Route.LoaderArgs) {
   const { teamId, deckDate } = params;
-  if (!isDeckDate(deckDate)) {
-    return new Response("Bad deck date", { status: 400 });
+  if (!isDeckDate(deckDate) || !ULID_RE.test(teamId)) {
+    return new Response("Bad request", { status: 400 });
   }
 
   const db = await getDb();

@@ -12,7 +12,7 @@ import {
 import { currentUtcDeckDate } from "~/lib/date";
 import { env } from "~/lib/env";
 import { clearTeam, getTeamId } from "~/lib/session.server";
-import { MAX_SCORE, QUESTIONS_PER_DECK } from "~/lib/quiz";
+import { answersSchema, MAX_SCORE, QUESTIONS_PER_DECK } from "~/lib/quiz";
 import type { ValidQuestion } from "~/lib/quiz";
 
 export function meta() {
@@ -81,14 +81,21 @@ export async function action({ request }: Route.ActionArgs) {
   if (!deck) throw redirect("/play");
 
   const form = await request.formData();
-  const answers: number[] = [];
+  const rawAnswers: number[] = [];
   for (let i = 0; i < QUESTIONS_PER_DECK; i++) {
     const raw = form.get(`q-${i}`);
     if (raw === null) {
       return { error: "Please answer every question before submitting." };
     }
-    answers.push(Number(raw));
+    rawAnswers.push(Number(raw));
   }
+
+  // Validate shape + range (10 answers, each 0–3) before it reaches the DB.
+  const parsed = answersSchema.safeParse(rawAnswers);
+  if (!parsed.success) {
+    return { error: "Please answer every question before submitting." };
+  }
+  const answers = parsed.data;
 
   try {
     await submitAnswers(db, { teamId: team.id, deck, answers });
