@@ -143,3 +143,88 @@ a 500.
 
 That's the whole layer. If you remember one thing: **`repository.ts` is the door
 to the database, and everything else just walks through it.**
+
+---
+
+## Appendix A: why IDs are `ulid()`, not `uuid`
+
+Both are 128-bit unique IDs you can generate without asking the database for the
+next number. The difference is encoding and ordering.
+
+A **UUID** (the common v4) is fully random, 36 hex chars with dashes:
+`550e8400-e29b-41d4-a716-446655440000`. Two made back-to-back have no relationship.
+
+A **ULID** is the same 128 bits, but split into **48 bits of timestamp + 80 bits
+of randomness**, written as 26 dash-free characters:
+
+```
+01KTCZY91T0D480JWZ9JP2NGJ8
+  └ timestamp ┘└── random ──┘
+```
+
+Because the timestamp is the leading part, **ULIDs sort by creation time when
+sorted as plain text** — `ORDER BY id` ≈ "oldest first," for free. We use them
+because they're sortable, URL-safe (no dashes, used in `/og/team/:teamId/...`),
+and unguessable — unlike sequential integers (`1, 2, 3…`), nobody can enumerate
+your teams or count how many exist. (Tradeoff: a ULID leaks its creation time.
+Fine here. The 2024 `UUIDv7` standard is the time-sortable native-`uuid`
+alternative if you ever want it.)
+
+---
+
+## Appendix B: how the indexes work
+
+An **index** is a pre-sorted copy of just the columns you care about, kept in sync
+by the database automatically, so a query becomes "jump to the spot and read in
+order" instead of "scan the whole table and sort."
+
+Picture `daily_submission` as a pile of cards in the random order teams submitted:
+
+```
+Alpha  06-06  score 7      Wolves 06-05  score 10
+Beta   06-06  score 10     Alpha  06-05  score 4
+Gamma  06-06  score 7      Beta   06-05  score 9
+```
+
+To answer "today's (06-06) leaderboard, best first" **without an index**, the DB
+reads *every* card, keeps the 06-06 ones, then sorts them. Fine for 6 cards; at 2
+million it reads all 2 million on every refresh.
+
+The index `(deck_date, score, submitted_at)` is a second pile, already sorted by
+date, then score, then time:
+
+```
+06-05  10  Wolves
+06-05   9  Beta
+06-05   4  Alpha
+06-06  10  Beta     ← today starts here
+06-06   7  Alpha
+06-06   7  Gamma
+```
+
+Now the answer is just "find where 06-06 begins and read down" — already grouped
+by day, already in score order. No scan, no sort. (Descending = read that block
+bottom-to-top; Postgres scans indexes backwards.)
+
+**Column order is the trick.** The pile is sorted by the *first* column first, so
+you can jump to a date instantly — but you couldn't jump by score alone, because
+scores are scattered across dates. Like a phone book sorted by (lastname,
+firstname): great for "find Smith," useless for "find every John." So the leading
+column must be the thing you filter on (`deck_date`), followed by what you sort by
+(`score`, `submitted_at`).
+
+A **unique** index does all that *plus* refuses to file two cards with the same
+value. On insert, the DB checks that slot in the sorted pile; if a card is already
+there, it rejects the new one — atomically, so two simultaneous inserts can't both
+win. That's how `daily_submission_team_date_uq` enforces "one play per team per
+day" and `league_membership_uq` enforces "can't join the same league twice,"
+without any check-then-insert race in app code.
+
+The catch: every index is another pile the DB keeps sorted, so each write does a
+little extra work and each index costs storage. Add them deliberately — for read
+speed or a uniqueness rule — not on every column.
+
+Our three:
+- `daily_submission_team_date_uq` — unique `(team_id, deck_date)`: one play per day.
+- `daily_submission_leaderboard_idx` — `(deck_date, score, submitted_at)`: fast leaderboard.
+- `league_membership_uq` — unique `(league_id, team_id)`: no double-joins.
