@@ -2,9 +2,12 @@ import { Form, Link } from "react-router";
 import type { Route } from "./+types/league";
 import { getDb } from "~/db/client";
 import {
+  getActiveCustomQuiz,
+  getCustomQuizSubmission,
   getLeagueByCode,
   getLeagueDailyLeaderboard,
   getLeagueWeeklyLeaderboard,
+  isLeagueAdmin,
   isLeagueMember,
 } from "~/db/repository";
 import { currentUtcDeckDate, weeklyWindow } from "~/lib/date";
@@ -24,17 +27,35 @@ export async function loader({ request, params }: Route.LoaderArgs) {
 
   const deckDate = currentUtcDeckDate();
   const teamId = await getTeamId(request);
-  const [daily, weekly, member] = await Promise.all([
+  const [daily, weekly, member, activeQuiz] = await Promise.all([
     getLeagueDailyLeaderboard(db, league.id, deckDate),
     getLeagueWeeklyLeaderboard(db, league.id, weeklyWindow(deckDate)),
     teamId ? isLeagueMember(db, league.id, teamId) : Promise.resolve(false),
+    getActiveCustomQuiz(db, league),
   ]);
 
-  return { league, deckDate, daily, weekly, teamId, member };
+  // Has this member already played the active custom quiz?
+  const playedActive =
+    activeQuiz && teamId
+      ? !!(await getCustomQuizSubmission(db, activeQuiz.id, teamId))
+      : false;
+
+  return {
+    league,
+    deckDate,
+    daily,
+    weekly,
+    teamId,
+    member,
+    isAdmin: isLeagueAdmin(league, teamId),
+    activeQuiz: activeQuiz ? { title: activeQuiz.title } : null,
+    playedActive,
+  };
 }
 
 export default function LeaguePage({ loaderData }: Route.ComponentProps) {
-  const { league, deckDate, daily, weekly, teamId, member } = loaderData;
+  const { league, deckDate, daily, weekly, teamId, member, isAdmin, activeQuiz, playedActive } =
+    loaderData;
   return (
     <main className="min-h-screen bg-gray-950 text-gray-100">
       <div className="mx-auto max-w-2xl px-6 py-12">
@@ -42,9 +63,19 @@ export default function LeaguePage({ loaderData }: Route.ComponentProps) {
           <Link to="/" className="text-sm text-indigo-400 hover:underline">
             ← Home
           </Link>
-          <Link to="/leaderboard" className="text-sm text-gray-500 hover:underline">
-            Global leaderboard
-          </Link>
+          <div className="flex gap-4">
+            {isAdmin && (
+              <Link
+                to={`/league/${league.code}/manage`}
+                className="text-sm text-indigo-400 hover:underline"
+              >
+                Manage quizzes
+              </Link>
+            )}
+            <Link to="/leaderboard" className="text-sm text-gray-500 hover:underline">
+              Global leaderboard
+            </Link>
+          </div>
         </div>
 
         <h1 className="text-3xl font-bold">{league.name}</h1>
@@ -52,6 +83,22 @@ export default function LeaguePage({ loaderData }: Route.ComponentProps) {
           Private league · invite code{" "}
           <span className="select-all font-mono text-indigo-300">{league.code}</span>
         </p>
+
+        {/* Quiz of the day (custom quiz). */}
+        {member && activeQuiz && (
+          <div className="mt-5 rounded-xl border border-indigo-500/40 bg-indigo-500/10 p-4">
+            <p className="text-xs uppercase tracking-widest text-indigo-300">
+              Quiz of the day
+            </p>
+            <p className="mt-1 text-lg font-semibold">{activeQuiz.title}</p>
+            <Link
+              to={`/league/${league.code}/play`}
+              className="mt-3 inline-block rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500"
+            >
+              {playedActive ? "See your result →" : "Play now →"}
+            </Link>
+          </div>
+        )}
 
         {teamId && !member && (
           <Form method="post" action="/leagues/join" className="mt-4">
