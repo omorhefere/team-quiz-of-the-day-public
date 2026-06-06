@@ -111,10 +111,21 @@ export const leagues = pgTable("league", {
   /** Shareable join code e.g. "JADE-LYNX-08". Stored uppercase, unique. */
   code: text("code").notNull().unique(),
   name: text("name").notNull(),
-  /** The team that created the league (null if that team is later deleted). */
+  /**
+   * The team that created the league. Also the league's admin in v1 (the "light
+   * admin" — the only team that can manage custom quizzes).
+   */
   createdByTeamId: uuid("created_by_team_id").references(() => teams.id, {
     onDelete: "set null",
   }),
+  /** Entitlement tier. "pro" unlocks AI quiz generation (billing wired later). */
+  plan: text("plan").notNull().default("free"),
+  /**
+   * The admin's chosen "quiz of the day" — the custom quiz members currently
+   * play. Plain pointer (no FK) to avoid a circular league<->quiz constraint;
+   * the app keeps it consistent.
+   */
+  activeCustomQuizId: uuid("active_custom_quiz_id"),
   createdAt: timestamp("created_at", { withTimezone: true })
     .notNull()
     .defaultNow(),
@@ -144,6 +155,64 @@ export const leagueMemberships = pgTable(
   ],
 );
 
+/**
+ * A custom quiz owned by a league — built by hand (this PR) or AI-generated from
+ * the company's documents (later). Reuses the `Question` shape; allows a variable
+ * number of questions (the global daily deck is fixed at 10, custom quizzes are
+ * 1–20).
+ */
+export const customQuizzes = pgTable("custom_quiz", {
+  id: uuid("id")
+    .primaryKey()
+    .$defaultFn(() => uuidv7()),
+  leagueId: uuid("league_id")
+    .notNull()
+    .references(() => leagues.id, { onDelete: "cascade" }),
+  title: text("title").notNull(),
+  questions: jsonb("questions").$type<Question[]>().notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+});
+
+/** A team's one-shot play of a custom quiz (one per team per quiz). */
+export const customQuizSubmissions = pgTable(
+  "custom_quiz_submission",
+  {
+    id: uuid("id")
+      .primaryKey()
+      .$defaultFn(() => uuidv7()),
+    customQuizId: uuid("custom_quiz_id")
+      .notNull()
+      .references(() => customQuizzes.id, { onDelete: "cascade" }),
+    teamId: uuid("team_id")
+      .notNull()
+      .references(() => teams.id, { onDelete: "cascade" }),
+    answers: jsonb("answers").$type<number[]>().notNull(),
+    score: smallint("score").notNull(),
+    submittedAt: timestamp("submitted_at", { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+    rankSnapshot: integer("rank_snapshot"),
+  },
+  (table) => [
+    // One play per team per custom quiz.
+    uniqueIndex("custom_quiz_submission_uq").on(
+      table.customQuizId,
+      table.teamId,
+    ),
+    // Drives the per-quiz leaderboard: order by (quiz, score, submitted_at).
+    index("custom_quiz_submission_leaderboard_idx").on(
+      table.customQuizId,
+      table.score,
+      table.submittedAt,
+    ),
+  ],
+);
+
 export type Team = typeof teams.$inferSelect;
 export type NewTeam = typeof teams.$inferInsert;
 export type Deck = typeof decks.$inferSelect;
@@ -153,6 +222,9 @@ export type NewDailySubmission = typeof dailySubmissions.$inferInsert;
 export type League = typeof leagues.$inferSelect;
 export type NewLeague = typeof leagues.$inferInsert;
 export type LeagueMembership = typeof leagueMemberships.$inferSelect;
+export type CustomQuiz = typeof customQuizzes.$inferSelect;
+export type NewCustomQuiz = typeof customQuizzes.$inferInsert;
+export type CustomQuizSubmission = typeof customQuizSubmissions.$inferSelect;
 
 export const schema = {
   teams,
@@ -160,4 +232,6 @@ export const schema = {
   dailySubmissions,
   leagues,
   leagueMemberships,
+  customQuizzes,
+  customQuizSubmissions,
 };

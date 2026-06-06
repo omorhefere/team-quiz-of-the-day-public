@@ -33,6 +33,31 @@ export const deckInputSchema = z.object({
 export type DeckInput = z.infer<typeof deckInputSchema>;
 export type ValidQuestion = z.infer<typeof questionSchema>;
 
+// --- Custom quizzes (league-owned; built by hand or AI-generated) -----------
+// Same question shape as the daily deck, but a variable number of questions.
+export const MIN_CUSTOM_QUESTIONS = 1;
+export const MAX_CUSTOM_QUESTIONS = 20;
+export const CUSTOM_QUIZ_TITLE_MAX = 80;
+
+export const customQuizQuestionsSchema = z
+  .array(questionSchema)
+  .min(MIN_CUSTOM_QUESTIONS, "Add at least one question")
+  .max(MAX_CUSTOM_QUESTIONS, `A quiz can have at most ${MAX_CUSTOM_QUESTIONS} questions`);
+
+export const customQuizInputSchema = z.object({
+  title: z.string().trim().min(1, "Title is required").max(CUSTOM_QUIZ_TITLE_MAX),
+  questions: customQuizQuestionsSchema,
+});
+
+export type CustomQuizInput = z.infer<typeof customQuizInputSchema>;
+
+/** Validates the answers for a custom quiz of `questionCount` questions. */
+export function customAnswersSchema(questionCount: number) {
+  return z
+    .array(z.number().int().min(0).max(CHOICES_PER_QUESTION - 1))
+    .length(questionCount);
+}
+
 /** The answers a team submits: one chosen index per question. */
 export const answersSchema = z
   .array(z.number().int().min(0).max(CHOICES_PER_QUESTION - 1))
