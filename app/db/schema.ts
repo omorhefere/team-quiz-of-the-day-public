@@ -19,8 +19,9 @@ import {
   text,
   timestamp,
   uniqueIndex,
+  uuid,
 } from "drizzle-orm/pg-core";
-import { ulid } from "ulid";
+import { v7 as uuidv7 } from "uuid";
 
 /**
  * A single multiple-choice question. Stored inside `deck.questions` as JSONB.
@@ -37,9 +38,9 @@ export interface Question {
 }
 
 export const teams = pgTable("team", {
-  id: text("id")
+  id: uuid("id")
     .primaryKey()
-    .$defaultFn(() => ulid()),
+    .$defaultFn(() => uuidv7()),
   /** Public, shareable code e.g. "BLUE-FOX-71". Stored uppercase, unique. */
   code: text("code").notNull().unique(),
   /** Human-friendly team name shown on the leaderboard and OG card. */
@@ -65,10 +66,10 @@ export const decks = pgTable("deck", {
 export const dailySubmissions = pgTable(
   "daily_submission",
   {
-    id: text("id")
+    id: uuid("id")
       .primaryKey()
-      .$defaultFn(() => ulid()),
-    teamId: text("team_id")
+      .$defaultFn(() => uuidv7()),
+    teamId: uuid("team_id")
       .notNull()
       .references(() => teams.id, { onDelete: "cascade" }),
     deckDate: date("deck_date")
@@ -104,14 +105,14 @@ export const dailySubmissions = pgTable(
  * leaderboard scoped to its members. Teams can belong to many leagues.
  */
 export const leagues = pgTable("league", {
-  id: text("id")
+  id: uuid("id")
     .primaryKey()
-    .$defaultFn(() => ulid()),
+    .$defaultFn(() => uuidv7()),
   /** Shareable join code e.g. "JADE-LYNX-08". Stored uppercase, unique. */
   code: text("code").notNull().unique(),
   name: text("name").notNull(),
   /** The team that created the league (null if that team is later deleted). */
-  createdByTeamId: text("created_by_team_id").references(() => teams.id, {
+  createdByTeamId: uuid("created_by_team_id").references(() => teams.id, {
     onDelete: "set null",
   }),
   createdAt: timestamp("created_at", { withTimezone: true })
@@ -122,13 +123,13 @@ export const leagues = pgTable("league", {
 export const leagueMemberships = pgTable(
   "league_membership",
   {
-    id: text("id")
+    id: uuid("id")
       .primaryKey()
-      .$defaultFn(() => ulid()),
-    leagueId: text("league_id")
+      .$defaultFn(() => uuidv7()),
+    leagueId: uuid("league_id")
       .notNull()
       .references(() => leagues.id, { onDelete: "cascade" }),
-    teamId: text("team_id")
+    teamId: uuid("team_id")
       .notNull()
       .references(() => teams.id, { onDelete: "cascade" }),
     joinedAt: timestamp("joined_at", { withTimezone: true })

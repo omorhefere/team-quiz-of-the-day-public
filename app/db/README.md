@@ -50,8 +50,9 @@ team ──< league_membership >── league     (teams join many leagues)
 This file is the **single source of truth** for the database shape. Each table is
 a `pgTable(...)` block listing its columns and types. A few things to notice:
 
-- **IDs** use `ulid()` — a sortable, random, unguessable string ID (nicer than
-  auto-increment integers for public-facing things).
+- **IDs** are `uuid` columns generated with **UUIDv7** — a time-sortable,
+  unguessable ID (nicer than auto-increment integers for public-facing things).
+  See Appendix A.
 - **Indexes** (the performance + safety rules) are declared at the bottom of a
   table:
   - `daily_submission_team_date_uq` — the **unique** "one per team per day" rule.
@@ -146,29 +147,41 @@ to the database, and everything else just walks through it.**
 
 ---
 
-## Appendix A: why IDs are `ulid()`, not `uuid`
+## Appendix A: why IDs are UUIDv7
 
-Both are 128-bit unique IDs you can generate without asking the database for the
-next number. The difference is encoding and ordering.
+IDs are stored in native Postgres `uuid` columns and generated with **UUIDv7**
+(`import { v7 as uuidv7 } from "uuid"`), so we never ask the database for "the
+next number."
 
-A **UUID** (the common v4) is fully random, 36 hex chars with dashes:
-`550e8400-e29b-41d4-a716-446655440000`. Two made back-to-back have no relationship.
+A plain **UUIDv4** is fully random, 36 hex chars with dashes:
+`550e8400-e29b-41d4-a716-446655440000`. Two made back-to-back have no
+relationship, so they're unguessable but not sortable.
 
-A **ULID** is the same 128 bits, but split into **48 bits of timestamp + 80 bits
-of randomness**, written as 26 dash-free characters:
+**UUIDv7** is the same 128 bits and the same familiar format, but the first
+**48 bits are a millisecond timestamp**, with the rest random:
 
 ```
-01KTCZY91T0D480JWZ9JP2NGJ8
-  └ timestamp ┘└── random ──┘
+019e9dbc-301d-7174-bdda-90e6530401e9
+└ timestamp ┘ ^ version 7        ^ random
 ```
 
-Because the timestamp is the leading part, **ULIDs sort by creation time when
-sorted as plain text** — `ORDER BY id` ≈ "oldest first," for free. We use them
-because they're sortable, URL-safe (no dashes, used in `/og/team/:teamId/...`),
-and unguessable — unlike sequential integers (`1, 2, 3…`), nobody can enumerate
-your teams or count how many exist. (Tradeoff: a ULID leaks its creation time.
-Fine here. The 2024 `UUIDv7` standard is the time-sortable native-`uuid`
-alternative if you ever want it.)
+Because the timestamp leads, **UUIDv7s sort by creation time when sorted
+normally** — `ORDER BY id` ≈ "oldest first," for free. We use them because they:
+
+- are **sortable** (handy for pagination / rough time-ordering with no extra
+  column), and give the database good insert locality (new rows land near the end
+  of the index instead of scattering it);
+- are **unguessable** — unlike sequential integers (`1, 2, 3…`), nobody can
+  enumerate your teams or count how many exist (the IDs appear in URLs like
+  `/og/team/:teamId/...`);
+- are a **real IETF standard** (RFC 9562, 2024) stored in the native 16-byte
+  `uuid` column type, and every tool/ORM already understands a UUID.
+
+(Tradeoff: a UUIDv7 leaks its creation time — fine here. An earlier version of
+this code used **ULID**, a community spec with the same timestamp+random idea but
+a shorter 26-char dash-free string; we switched to UUIDv7 for the standard +
+native `uuid` type. ULID is still a reasonable pick if you specifically want the
+compact URL string.)
 
 ---
 
