@@ -1,0 +1,23 @@
+# Fly.io deployment config. Rename `app` and set `primary_region` before first
+# deploy: `fly launch --no-deploy` then `fly deploy`.
+app = "office-trivia-league"
+primary_region = "lhr"
+
+[build]
+
+[http_service]
+  internal_port = 3000
+  force_https = true
+  auto_stop_machines = "stop"
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ["app"]
+
+[env]
+  PORT = "3000"
+  NODE_ENV = "production"
+
+[[vm]]
+  cpu_kind = "shared"
+  cpus = 1
+  memory_mb = 512

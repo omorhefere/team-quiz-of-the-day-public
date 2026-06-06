@@ -1,19 +1,15 @@
-import {
-  type RouteConfig,
-  route,
-  layout,
-} from "@react-router/dev/routes";
-import "./+types";
+import { type RouteConfig, index, route } from "@react-router/dev/routes";
 
-export default defineRouteConfig(
-  [
-    route("/", "./routes/home.tsx"),
-    route("/quiz", "./routes/quiz.tsx"),
-    route("/quiz-results", "./routes/quiz-results.tsx"),
-    route("/quiz-leaderboard", "./routes/quiz-leaderboard.tsx"),
-    layout("app/root.tsx"),
-  ],
-  {
-    // Optional: Add any route config options here
-  }
-);
+export default [
+  index("routes/home.tsx"),
+  route("register", "routes/register.tsx"),
+  route("join", "routes/join.tsx"),
+  route("play", "routes/play.tsx"),
+  route("leaderboard", "routes/leaderboard.tsx"),
+  route("leagues/create", "routes/leagues.create.tsx"),
+  route("leagues/join", "routes/leagues.join.tsx"),
+  route("league/:code", "routes/league.tsx"),
+  route("logout", "routes/logout.tsx"),
+  // OG share card (dynamic image). T7.
+  route("og/team/:teamId/:deckDate", "routes/og.team.tsx"),
+] satisfies RouteConfig;

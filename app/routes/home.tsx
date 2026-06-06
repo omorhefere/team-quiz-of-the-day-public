@@ -1,82 +1,346 @@
+import { Form, Link } from "react-router";
 import type { Route } from "./+types/home";
-import { Link } from "@react-router";
+import { getDb } from "~/db/client";
+import {
+  getLeaguesForTeam,
+  getPublishedDeck,
+  getSubmission,
+  getTeamById,
+  getTeamHistory,
+  getTeamStats,
+} from "~/db/repository";
+import { currentUtcDeckDate } from "~/lib/date";
+import { getTeamId } from "~/lib/session.server";
+import { MAX_SCORE } from "~/lib/quiz";
 
-export function meta({}: Route.MetaArgs) {
+export function meta(_: Route.MetaArgs) {
   return [
-    { title: "Team Quiz Of The Day" },
-    { name: "description", content: "Welcome to React Router!" },
+    { title: "Office Trivia League" },
+    {
+      name: "description",
+      content:
+        "One daily trivia deck. Every team. One global leaderboard. Play with your team after standup.",
+    },
   ];
 }
 
-export async function loader() {
-  return {};
+export async function loader({ request }: Route.LoaderArgs) {
+  const teamId = await getTeamId(request);
+  if (!teamId) return { state: "landing" as const };
+
+  const db = await getDb();
+  const team = await getTeamById(db, teamId);
+  // Stale cookie (team deleted) → fall back to the landing page.
+  if (!team) return { state: "landing" as const };
+
+  const deckDate = currentUtcDeckDate();
+  const [deck, submission, stats, history, leagues] = await Promise.all([
+    getPublishedDeck(db, deckDate),
+    getSubmission(db, team.id, deckDate),
+    getTeamStats(db, team.id),
+    getTeamHistory(db, team.id),
+    getLeaguesForTeam(db, team.id),
+  ]);
+
+  const todayStatus = !deck ? "no-deck" : submission ? "played" : "available";
+
+  return {
+    state: "dashboard" as const,
+    team,
+    deckDate,
+    todayStatus,
+    todayScore: submission?.score ?? null,
+    stats,
+    history,
+    leagues: leagues.map((l) => ({
+      code: l.league.code,
+      name: l.league.name,
+      memberCount: l.memberCount,
+    })),
+  };
 }
 
-export default function Home() {
-  const teams = ["Marketing", "Engineering", "Sales", "Design", "Product"];
+export default function Home({ loaderData }: Route.ComponentProps) {
+  if (loaderData.state === "dashboard") {
+    return <Dashboard data={loaderData} />;
+  }
+  return <Landing />;
+}
 
+// ---------------------------------------------------------------------------
+// Bonded team dashboard
+// ---------------------------------------------------------------------------
+
+function Dashboard({
+  data,
+}: {
+  data: Extract<Route.ComponentProps["loaderData"], { state: "dashboard" }>;
+}) {
   return (
-    <div className="space-y-8">
-      <div className="text-center space-y-4">
-        <h1 className="text-4xl font-bold text-blue-400">
-          Welcome to Daily Team Quiz
-        </h1>
-        <p className="text-gray-400">
-          Test your knowledge and compete with your team!
-        </p>
-      </div>
+    <main className="min-h-screen bg-gray-950 text-gray-100">
+      <div className="mx-auto max-w-2xl px-6 py-10">
+        <div className="mb-8 flex items-center justify-between">
+          <div>
+            <h1 className="text-2xl font-bold">{data.team.displayName}</h1>
+            <p className="font-mono text-sm text-gray-500">{data.team.code}</p>
+          </div>
+          <Form method="post" action="/logout">
+            <button className="text-xs text-gray-500 hover:text-gray-300">
+              Sign out
+            </button>
+          </Form>
+        </div>
 
-      <div className="bg-gray-800 rounded-lg p-6 border border-gray-700">
-        <h2 className="text-xl font-semibold text-blue-400 mb-4">
-          Select Your Team
-        </h2>
-        <p className="text-gray-400 mb-6">
-          Choose a team to join. Your team's score will be tracked on the leaderboard.
-        </p>
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-          {teams.map((team) => (
-            <Link
-              key={team}
-              to={`/quiz?team=${encodeURIComponent(team)}`}
-              className="bg-gray-700 hover:bg-gray-600 text-white font-medium py-3 px-4 rounded-lg transition-colors border border-gray-600 hover:border-blue-500"
+        {/* Today */}
+        <section className="rounded-2xl border border-gray-800 bg-gray-900/50 p-6">
+          <p className="text-sm uppercase tracking-widest text-indigo-400">
+            Today · {data.deckDate}
+          </p>
+          {data.todayStatus === "available" && (
+            <>
+              <h2 className="mt-2 text-xl font-semibold">Today&rsquo;s quiz is ready</h2>
+              <Link
+                to="/play"
+                className="mt-4 inline-block rounded-lg bg-indigo-600 px-6 py-3 text-lg font-semibold text-white hover:bg-indigo-500"
+              >
+                Play today&rsquo;s quiz →
+              </Link>
+            </>
+          )}
+          {data.todayStatus === "played" && (
+            <>
+              <h2 className="mt-2 text-xl font-semibold">
+                You scored {data.todayScore}/{MAX_SCORE} today
+              </h2>
+              <div className="mt-4 flex flex-wrap gap-3">
+                <Link
+                  to="/play"
+                  className="rounded-lg bg-indigo-600 px-5 py-3 font-semibold text-white hover:bg-indigo-500"
+                >
+                  See results &amp; review
+                </Link>
+                <Link
+                  to="/leaderboard"
+                  className="rounded-lg border border-gray-700 px-5 py-3 font-semibold text-gray-200 hover:bg-gray-900"
+                >
+                  Leaderboard
+                </Link>
+              </div>
+            </>
+          )}
+          {data.todayStatus === "no-deck" && (
+            <h2 className="mt-2 text-xl font-semibold text-gray-300">
+              🌙 No quiz today — check back tomorrow.
+            </h2>
+          )}
+        </section>
+
+        {/* Stats */}
+        <section className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
+          <Stat label="Streak" value={`${data.stats.currentStreak}🔥`} />
+          <Stat label="Total pts" value={data.stats.totalPoints} />
+          <Stat label="Best" value={`${data.stats.bestScore}/${MAX_SCORE}`} />
+          <Stat label="Days played" value={data.stats.daysPlayed} />
+        </section>
+
+        {/* Recent history */}
+        {data.history.length > 0 && (
+          <section className="mt-8">
+            <h3 className="mb-3 text-sm font-semibold uppercase tracking-wide text-gray-400">
+              Recent quizzes
+            </h3>
+            <div className="divide-y divide-gray-800 overflow-hidden rounded-xl border border-gray-800">
+              {data.history.map((h) => (
+                <div
+                  key={h.deckDate}
+                  className="flex items-center justify-between px-4 py-2.5 text-sm"
+                >
+                  <span className="text-gray-400">{h.deckDate}</span>
+                  <span className="font-semibold text-indigo-300">
+                    {h.score}/{MAX_SCORE}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* Leagues */}
+        <section className="mt-8">
+          <h3 className="mb-3 text-sm font-semibold uppercase tracking-wide text-gray-400">
+            Your leagues
+          </h3>
+          {data.leagues.length > 0 ? (
+            <div className="mb-4 divide-y divide-gray-800 overflow-hidden rounded-xl border border-gray-800">
+              {data.leagues.map((l) => (
+                <Link
+                  key={l.code}
+                  to={`/league/${l.code}`}
+                  className="flex items-center justify-between px-4 py-3 hover:bg-gray-900"
+                >
+                  <span className="font-medium">{l.name}</span>
+                  <span className="text-sm text-gray-500">
+                    {l.memberCount} {l.memberCount === 1 ? "team" : "teams"} →
+                  </span>
+                </Link>
+              ))}
+            </div>
+          ) : (
+            <p className="mb-4 text-sm text-gray-500">
+              You&rsquo;re not in any leagues yet. Create one and invite other
+              teams, or join with a code.
+            </p>
+          )}
+
+          <div className="grid gap-3 sm:grid-cols-2">
+            <Form
+              method="post"
+              action="/leagues/create"
+              className="space-y-2 rounded-xl border border-gray-800 p-4"
             >
-              {team}
-            </Link>
-          ))}
+              <label className="block text-sm font-medium text-gray-300">
+                Create a league
+              </label>
+              <input
+                name="name"
+                required
+                maxLength={30}
+                placeholder="e.g. Acme Engineering"
+                className="w-full rounded-lg border border-gray-700 bg-gray-900 px-3 py-2 text-sm"
+              />
+              <button className="w-full rounded-lg bg-indigo-600 px-3 py-2 text-sm font-semibold text-white hover:bg-indigo-500">
+                Create &amp; get invite code
+              </button>
+            </Form>
+
+            <Form
+              method="post"
+              action="/leagues/join"
+              className="space-y-2 rounded-xl border border-gray-800 p-4"
+            >
+              <label className="block text-sm font-medium text-gray-300">
+                Join a league
+              </label>
+              <input
+                name="code"
+                required
+                placeholder="JADE-LYNX-08"
+                autoCapitalize="characters"
+                className="w-full rounded-lg border border-gray-700 bg-gray-900 px-3 py-2 text-sm uppercase tracking-wider"
+              />
+              <button className="w-full rounded-lg border border-gray-700 px-3 py-2 text-sm font-semibold text-gray-200 hover:bg-gray-900">
+                Join with code
+              </button>
+            </Form>
+          </div>
+        </section>
+
+        <div className="mt-10 text-center">
+          <Link
+            to="/leaderboard"
+            className="text-sm text-gray-500 hover:text-gray-300 hover:underline"
+          >
+            View the global leaderboard →
+          </Link>
         </div>
       </div>
+    </main>
+  );
+}
 
-      <div className="bg-gray-800 rounded-lg p-6 border border-gray-700">
-        <h2 className="text-xl font-semibold text-blue-400 mb-4">
-          How It Works
-        </h2>
-        <ol className="space-y-3 text-gray-400">
-          <li className="flex gap-3">
-            <span className="flex-shrink-0 w-6 h-6 bg-blue-500 rounded-full text-white text-sm flex items-center justify-center">
-              1
-            </span>
-            <span>Select your team from the list above</span>
-          </li>
-          <li className="flex gap-3">
-            <span className="flex-shrink-0 w-6 h-6 bg-blue-500 rounded-full text-white text-sm flex items-center justify-center">
-              2
-            </span>
-            <span>Answer 10 questions (1 point each for correct answers)</span>
-          </li>
-          <li className="flex gap-3">
-            <span className="flex-shrink-0 w-6 h-6 bg-blue-500 rounded-full text-white text-sm flex items-center justify-center">
-              3
-            </span>
-            <span>Submit your score to the leaderboard</span>
-          </li>
-          <li className="flex gap-3">
-            <span className="flex-shrink-0 w-6 h-6 bg-blue-500 rounded-full text-white text-sm flex items-center justify-center">
-              4
-            </span>
-            <span>Check back tomorrow for new questions!</span>
-          </li>
-        </ol>
-      </div>
+function Stat({ label, value }: { label: string; value: string | number }) {
+  return (
+    <div className="rounded-xl border border-gray-800 bg-gray-900/50 p-4 text-center">
+      <p className="text-2xl font-bold text-indigo-300">{value}</p>
+      <p className="mt-1 text-xs uppercase tracking-wide text-gray-500">{label}</p>
     </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Anonymous landing
+// ---------------------------------------------------------------------------
+
+function Landing() {
+  return (
+    <main className="min-h-screen bg-gray-950 text-gray-100">
+      <div className="mx-auto flex max-w-2xl flex-col items-center px-6 py-20 text-center">
+        <p className="mb-4 text-sm font-semibold uppercase tracking-widest text-indigo-400">
+          Office Trivia League
+        </p>
+        <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
+          One quiz a day.
+          <br />
+          Every team. One league.
+        </h1>
+        <p className="mt-5 max-w-md text-lg text-gray-400">
+          Gather the team after standup, play today&rsquo;s 10 questions
+          together, and climb the global leaderboard.
+        </p>
+
+        <div className="mt-12 w-full max-w-sm space-y-8">
+          <Form method="post" action="/register" className="space-y-3">
+            <label
+              htmlFor="displayName"
+              className="block text-left text-sm font-medium text-gray-300"
+            >
+              Start a new team
+            </label>
+            <input
+              id="displayName"
+              name="displayName"
+              type="text"
+              required
+              maxLength={30}
+              placeholder="e.g. Platform Engineering"
+              className="w-full rounded-lg border border-gray-700 bg-gray-900 px-4 py-3 text-base outline-none focus:border-indigo-500"
+            />
+            <button
+              type="submit"
+              className="w-full rounded-lg bg-indigo-600 px-4 py-3 font-semibold text-white transition hover:bg-indigo-500"
+            >
+              Get our team code
+            </button>
+          </Form>
+
+          <div className="flex items-center gap-3 text-xs text-gray-600">
+            <span className="h-px flex-1 bg-gray-800" />
+            OR
+            <span className="h-px flex-1 bg-gray-800" />
+          </div>
+
+          <Form method="post" action="/join" className="space-y-3">
+            <label
+              htmlFor="code"
+              className="block text-left text-sm font-medium text-gray-300"
+            >
+              Already have a code?
+            </label>
+            <input
+              id="code"
+              name="code"
+              type="text"
+              required
+              placeholder="BLUE-FOX-71"
+              autoCapitalize="characters"
+              className="w-full rounded-lg border border-gray-700 bg-gray-900 px-4 py-3 text-base uppercase tracking-wider outline-none focus:border-indigo-500"
+            />
+            <button
+              type="submit"
+              className="w-full rounded-lg border border-gray-700 px-4 py-3 font-semibold text-gray-200 transition hover:bg-gray-900"
+            >
+              Play as our team
+            </button>
+          </Form>
+        </div>
+
+        <Link
+          to="/leaderboard"
+          className="mt-12 text-sm text-gray-500 underline-offset-4 hover:text-gray-300 hover:underline"
+        >
+          View the global leaderboard →
+        </Link>
+      </div>
+    </main>
   );
 }

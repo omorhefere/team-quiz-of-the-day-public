@@ -1,0 +1,66 @@
+{
+  "deck_date": "2026-06-06",
+  "curator_notes": "Sample general-knowledge deck (seed).",
+  "questions": [
+    {
+      "q": "What is the smallest prime number?",
+      "choices": ["0", "1", "2", "3"],
+      "correct_idx": 2
+    },
+    {
+      "q": "Which gas do plants primarily absorb for photosynthesis?",
+      "choices": ["Oxygen", "Nitrogen", "Carbon dioxide", "Hydrogen"],
+      "correct_idx": 2
+    },
+    {
+      "q": "Who painted the Mona Lisa?",
+      "choices": ["Michelangelo", "Leonardo da Vinci", "Raphael", "Donatello"],
+      "correct_idx": 1
+    },
+    {
+      "q": "What does 'HTTP' stand for?",
+      "choices": [
+        "HyperText Transfer Protocol",
+        "High Transfer Text Protocol",
+        "HyperText Transmission Process",
+        "Hyperlink Text Transport Protocol"
+      ],
+      "correct_idx": 0
+    },
+    {
+      "q": "Which country has the largest population as of the 2020s?",
+      "choices": ["United States", "India", "Indonesia", "Russia"],
+      "correct_idx": 1
+    },
+    {
+      "q": "How many continents are there on Earth?",
+      "choices": ["5", "6", "7", "8"],
+      "correct_idx": 2
+    },
+    {
+      "q": "What is the currency of Japan?",
+      "choices": ["Won", "Yuan", "Yen", "Ringgit"],
+      "correct_idx": 2
+    },
+    {
+      "q": "In computing, what does 'CPU' stand for?",
+      "choices": [
+        "Central Process Unit",
+        "Computer Personal Unit",
+        "Central Processing Unit",
+        "Core Processing Utility"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "Which sea creature has three hearts?",
+      "choices": ["Dolphin", "Octopus", "Shark", "Jellyfish"],
+      "correct_idx": 1
+    },
+    {
+      "q": "What year did the Berlin Wall fall?",
+      "choices": ["1987", "1989", "1991", "1993"],
+      "correct_idx": 1
+    }
+  ]
+}
