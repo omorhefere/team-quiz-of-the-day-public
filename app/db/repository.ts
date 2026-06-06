@@ -1,8 +1,21 @@
 /**
- * Data-access layer. All SQL lives here; routes call these functions.
+ * Data-access layer — the ONLY file that talks to the database tables.
+ * Routes never write SQL; they call the named functions below. For a plain-
+ * English tour of the whole `app/db/` folder, see `app/db/README.md`.
  *
- * Covers T4 (team create/lookup), T5 (deck fetch, scored submission),
- * and T6 (daily + weekly leaderboard queries).
+ * How to read this file: it's split into labelled sections (look for the
+ * `// ----` banners), in roughly the order a team experiences them:
+ *   1. Teams            — create a team (with a unique code) and look one up.
+ *   2. Decks            — fetch today's published deck; upsert decks (seeding).
+ *   3. Submissions      — score answers server-side, enforce one play per day,
+ *                         record a snapshot rank.
+ *   4. Leaderboards     — global daily + weekly standings (live rank on read).
+ *   5. Private leagues  — create/join leagues and their member-scoped boards.
+ *   6. Team stats       — totals, streak, and history for the dashboard.
+ *
+ * `isUniqueViolation` (just below) turns a database "duplicate key" error into a
+ * clean handled outcome — that's how a duplicate submission or a code collision
+ * becomes a friendly message instead of a 500.
  */
 
 import { and, asc, desc, eq, gte, inArray, lte, sql } from "drizzle-orm";

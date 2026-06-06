@@ -23,6 +23,15 @@ Useful commands: `npm test`, `npm run typecheck`, `npm run build`,
 Decks are JSON in `app/data/decks/` (one per UTC day, exactly 10 questions);
 `npm run seed` validates and loads them.
 
+## Understanding the code
+
+New to the codebase? Two plain-English guides explain the core layers:
+
+- **[`app/db/README.md`](./app/db/README.md)** — the data layer: the tables, how
+  we connect, and where every query lives.
+- **[`app/lib/README.md`](./app/lib/README.md)** — the helpers: the product rules
+  (dates, scoring, codes) and the server-only adapters (session, env).
+
 ---
 
 ## Built on React Router
