@@ -40,6 +40,13 @@ export async function loader({ request }: Route.LoaderArgs) {
   const existing = await getSubmission(db, team.id, deckDate);
   if (existing) {
     const standing = await getTeamDailyStanding(db, team.id, deckDate);
+    // Safe to reveal correct answers now — the team has submitted.
+    const review = (deck.questions as ValidQuestion[]).map((q, i) => ({
+      q: q.q,
+      choices: q.choices,
+      correctIdx: q.correct_idx,
+      yourIdx: existing.answers[i] ?? null,
+    }));
     return {
       state: "done" as const,
       deckDate,
@@ -49,6 +56,7 @@ export async function loader({ request }: Route.LoaderArgs) {
       total: standing?.total ?? 1,
       ogUrl: `${env.appUrl}/og/team/${team.id}/${deckDate}`,
       appUrl: env.appUrl,
+      review,
     };
   }
 
@@ -236,6 +244,67 @@ function Results({
       <p className="mt-6 text-sm text-gray-500">
         Come back tomorrow for a new deck. One play per team per day.
       </p>
+
+      <AnswerReview review={data.review} />
+    </div>
+  );
+}
+
+function AnswerReview({
+  review,
+}: {
+  review: Extract<
+    Route.ComponentProps["loaderData"],
+    { state: "done" }
+  >["review"];
+}) {
+  return (
+    <div className="mt-12 text-left">
+      <h2 className="mb-4 text-center text-lg font-semibold text-gray-300">
+        Review the answers
+      </h2>
+      <ol className="space-y-4">
+        {review.map((item, qi) => {
+          const gotItRight = item.yourIdx === item.correctIdx;
+          return (
+            <li
+              key={qi}
+              className="rounded-xl border border-gray-800 bg-gray-900/50 p-5"
+            >
+              <div className="mb-3 flex items-start gap-2">
+                <span className="text-lg">{gotItRight ? "✅" : "❌"}</span>
+                <p className="font-medium">
+                  {qi + 1}. {item.q}
+                </p>
+              </div>
+              <div className="space-y-2">
+                {item.choices.map((choice, ci) => {
+                  const isCorrect = ci === item.correctIdx;
+                  const isYours = ci === item.yourIdx;
+                  return (
+                    <div
+                      key={ci}
+                      className={`flex items-center justify-between rounded-lg border px-4 py-2 text-sm ${
+                        isCorrect
+                          ? "border-green-500/50 bg-green-500/10 text-green-200"
+                          : isYours
+                            ? "border-red-500/50 bg-red-500/10 text-red-200"
+                            : "border-gray-800 text-gray-400"
+                      }`}
+                    >
+                      <span>{choice}</span>
+                      <span className="ml-3 shrink-0 text-xs font-medium">
+                        {isCorrect && "Correct"}
+                        {isYours && !isCorrect && "Your pick"}
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
+            </li>
+          );
+        })}
+      </ol>
     </div>
   );
 }
