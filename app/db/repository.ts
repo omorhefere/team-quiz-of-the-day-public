@@ -10,13 +10,16 @@ import type { DB } from "./client";
 import {
   dailySubmissions,
   decks,
+  leagueMemberships,
+  leagues,
   teams,
   type Deck,
+  type League,
   type Team,
 } from "./schema";
 import { generateTeamCode, normalizeTeamCode } from "~/lib/code";
 import { scoreAnswers, type ValidQuestion } from "~/lib/quiz";
-import type { DeckDate } from "~/lib/date";
+import { addDeckDays, currentUtcDeckDate, type DeckDate } from "~/lib/date";
 
 // ---------------------------------------------------------------------------
 // Teams (T4)
@@ -313,6 +316,259 @@ export async function getDeckByDate(db: DB, deckDate: DeckDate): Promise<Deck | 
     .where(eq(decks.deckDate, deckDate))
     .limit(1);
   return deck ?? null;
+}
+
+// ---------------------------------------------------------------------------
+// Private leagues
+// ---------------------------------------------------------------------------
+
+/** Creates a league with a unique join code and adds the creator as a member. */
+export async function createLeague(
+  db: DB,
+  params: { name: string; createdByTeamId: string },
+): Promise<League> {
+  const name = params.name.trim();
+  for (let attempt = 0; attempt < 5; attempt++) {
+    try {
+      const [league] = await db
+        .insert(leagues)
+        .values({
+          code: generateTeamCode(),
+          name,
+          createdByTeamId: params.createdByTeamId,
+        })
+        .returning();
+      await joinLeague(db, league.id, params.createdByTeamId);
+      return league;
+    } catch (err) {
+      if (isUniqueViolation(err) && attempt < 4) continue;
+      throw err;
+    }
+  }
+  throw new Error("Could not generate a unique league code after 5 attempts");
+}
+
+export async function getLeagueByCode(
+  db: DB,
+  code: string,
+): Promise<League | null> {
+  const [league] = await db
+    .select()
+    .from(leagues)
+    .where(eq(leagues.code, normalizeTeamCode(code)))
+    .limit(1);
+  return league ?? null;
+}
+
+export async function getLeagueById(
+  db: DB,
+  id: string,
+): Promise<League | null> {
+  const [league] = await db
+    .select()
+    .from(leagues)
+    .where(eq(leagues.id, id))
+    .limit(1);
+  return league ?? null;
+}
+
+/** Adds a team to a league. Idempotent — re-joining is a no-op. */
+export async function joinLeague(
+  db: DB,
+  leagueId: string,
+  teamId: string,
+): Promise<void> {
+  await db
+    .insert(leagueMemberships)
+    .values({ leagueId, teamId })
+    .onConflictDoNothing();
+}
+
+export async function isLeagueMember(
+  db: DB,
+  leagueId: string,
+  teamId: string,
+): Promise<boolean> {
+  const [row] = await db
+    .select({ id: leagueMemberships.id })
+    .from(leagueMemberships)
+    .where(
+      and(
+        eq(leagueMemberships.leagueId, leagueId),
+        eq(leagueMemberships.teamId, teamId),
+      ),
+    )
+    .limit(1);
+  return !!row;
+}
+
+/** Leagues a team belongs to, each with its current member count. */
+export async function getLeaguesForTeam(
+  db: DB,
+  teamId: string,
+): Promise<{ league: League; memberCount: number }[]> {
+  const memberships = await db
+    .select()
+    .from(leagueMemberships)
+    .innerJoin(leagues, eq(leagues.id, leagueMemberships.leagueId))
+    .where(eq(leagueMemberships.teamId, teamId))
+    .orderBy(asc(leagues.name));
+
+  const result: { league: League; memberCount: number }[] = [];
+  for (const m of memberships) {
+    const [{ count }] = await db
+      .select({ count: sql<number>`count(*)::int` })
+      .from(leagueMemberships)
+      .where(eq(leagueMemberships.leagueId, m.league.id));
+    result.push({ league: m.league, memberCount: Number(count) });
+  }
+  return result;
+}
+
+/** Daily leaderboard scoped to a league's members. Same ordering rule as global. */
+export async function getLeagueDailyLeaderboard(
+  db: DB,
+  leagueId: string,
+  deckDate: DeckDate,
+  limit = 100,
+): Promise<LeaderboardRow[]> {
+  const rows = await db
+    .select({
+      teamId: dailySubmissions.teamId,
+      displayName: teams.displayName,
+      score: dailySubmissions.score,
+      submittedAt: dailySubmissions.submittedAt,
+    })
+    .from(dailySubmissions)
+    .innerJoin(
+      leagueMemberships,
+      and(
+        eq(leagueMemberships.teamId, dailySubmissions.teamId),
+        eq(leagueMemberships.leagueId, leagueId),
+      ),
+    )
+    .innerJoin(teams, eq(teams.id, dailySubmissions.teamId))
+    .where(eq(dailySubmissions.deckDate, deckDate))
+    .orderBy(desc(dailySubmissions.score), asc(dailySubmissions.submittedAt))
+    .limit(limit);
+
+  return rows.map((r, i) => ({ rank: i + 1, ...r }));
+}
+
+/** Weekly aggregate scoped to a league's members. */
+export async function getLeagueWeeklyLeaderboard(
+  db: DB,
+  leagueId: string,
+  window: DeckDate[],
+  limit = 100,
+): Promise<
+  { rank: number; teamId: string; displayName: string; total: number; daysPlayed: number }[]
+> {
+  if (window.length === 0) return [];
+  const start = window[0];
+  const end = window[window.length - 1];
+
+  const rows = await db
+    .select({
+      teamId: dailySubmissions.teamId,
+      displayName: teams.displayName,
+      total: sql<number>`sum(${dailySubmissions.score})::int`,
+      daysPlayed: sql<number>`count(*)::int`,
+    })
+    .from(dailySubmissions)
+    .innerJoin(
+      leagueMemberships,
+      and(
+        eq(leagueMemberships.teamId, dailySubmissions.teamId),
+        eq(leagueMemberships.leagueId, leagueId),
+      ),
+    )
+    .innerJoin(teams, eq(teams.id, dailySubmissions.teamId))
+    .where(
+      and(
+        gte(dailySubmissions.deckDate, start),
+        lte(dailySubmissions.deckDate, end),
+      ),
+    )
+    .groupBy(dailySubmissions.teamId, teams.displayName)
+    .orderBy(
+      desc(sql`sum(${dailySubmissions.score})`),
+      asc(sql`max(${dailySubmissions.submittedAt})`),
+    )
+    .limit(limit);
+
+  return rows.map((r, i) => ({
+    rank: i + 1,
+    teamId: r.teamId,
+    displayName: r.displayName,
+    total: Number(r.total),
+    daysPlayed: Number(r.daysPlayed),
+  }));
+}
+
+// ---------------------------------------------------------------------------
+// Team stats & history (for the team dashboard)
+// ---------------------------------------------------------------------------
+
+export interface TeamStats {
+  totalPoints: number;
+  daysPlayed: number;
+  bestScore: number;
+  /** Consecutive UTC days played, counting back from today or yesterday. */
+  currentStreak: number;
+}
+
+export async function getTeamStats(db: DB, teamId: string): Promise<TeamStats> {
+  const [agg] = await db
+    .select({
+      totalPoints: sql<number>`coalesce(sum(${dailySubmissions.score}), 0)::int`,
+      daysPlayed: sql<number>`count(*)::int`,
+      bestScore: sql<number>`coalesce(max(${dailySubmissions.score}), 0)::int`,
+    })
+    .from(dailySubmissions)
+    .where(eq(dailySubmissions.teamId, teamId));
+
+  // Streak: pull the played dates and count consecutive days from today/yesterday.
+  const playedRows = await db
+    .select({ deckDate: dailySubmissions.deckDate })
+    .from(dailySubmissions)
+    .where(eq(dailySubmissions.teamId, teamId))
+    .orderBy(desc(dailySubmissions.deckDate));
+
+  const played = new Set(playedRows.map((r) => r.deckDate));
+  const today = currentUtcDeckDate();
+  const yesterday = addDeckDays(today, -1);
+  let cursor = played.has(today) ? today : played.has(yesterday) ? yesterday : null;
+  let currentStreak = 0;
+  while (cursor && played.has(cursor)) {
+    currentStreak++;
+    cursor = addDeckDays(cursor, -1);
+  }
+
+  return {
+    totalPoints: Number(agg.totalPoints),
+    daysPlayed: Number(agg.daysPlayed),
+    bestScore: Number(agg.bestScore),
+    currentStreak,
+  };
+}
+
+/** Recent daily results for a team, newest first. */
+export async function getTeamHistory(
+  db: DB,
+  teamId: string,
+  limit = 14,
+): Promise<{ deckDate: DeckDate; score: number }[]> {
+  const rows = await db
+    .select({
+      deckDate: dailySubmissions.deckDate,
+      score: dailySubmissions.score,
+    })
+    .from(dailySubmissions)
+    .where(eq(dailySubmissions.teamId, teamId))
+    .orderBy(desc(dailySubmissions.deckDate))
+    .limit(limit);
+  return rows.map((r) => ({ deckDate: r.deckDate, score: r.score }));
 }
 
 // Re-export so route modules import a single barrel.

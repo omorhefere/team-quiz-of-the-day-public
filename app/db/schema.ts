@@ -99,11 +99,64 @@ export const dailySubmissions = pgTable(
   ],
 );
 
+/**
+ * A private league: a named group of teams with its own join code and a
+ * leaderboard scoped to its members. Teams can belong to many leagues.
+ */
+export const leagues = pgTable("league", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => ulid()),
+  /** Shareable join code e.g. "JADE-LYNX-08". Stored uppercase, unique. */
+  code: text("code").notNull().unique(),
+  name: text("name").notNull(),
+  /** The team that created the league (null if that team is later deleted). */
+  createdByTeamId: text("created_by_team_id").references(() => teams.id, {
+    onDelete: "set null",
+  }),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+});
+
+export const leagueMemberships = pgTable(
+  "league_membership",
+  {
+    id: text("id")
+      .primaryKey()
+      .$defaultFn(() => ulid()),
+    leagueId: text("league_id")
+      .notNull()
+      .references(() => leagues.id, { onDelete: "cascade" }),
+    teamId: text("team_id")
+      .notNull()
+      .references(() => teams.id, { onDelete: "cascade" }),
+    joinedAt: timestamp("joined_at", { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+  },
+  (table) => [
+    // A team is in a league at most once.
+    uniqueIndex("league_membership_uq").on(table.leagueId, table.teamId),
+    // Look up "which leagues is this team in".
+    index("league_membership_team_idx").on(table.teamId),
+  ],
+);
+
 export type Team = typeof teams.$inferSelect;
 export type NewTeam = typeof teams.$inferInsert;
 export type Deck = typeof decks.$inferSelect;
 export type NewDeck = typeof decks.$inferInsert;
 export type DailySubmission = typeof dailySubmissions.$inferSelect;
 export type NewDailySubmission = typeof dailySubmissions.$inferInsert;
+export type League = typeof leagues.$inferSelect;
+export type NewLeague = typeof leagues.$inferInsert;
+export type LeagueMembership = typeof leagueMemberships.$inferSelect;
 
-export const schema = { teams, decks, dailySubmissions };
+export const schema = {
+  teams,
+  decks,
+  dailySubmissions,
+  leagues,
+  leagueMemberships,
+};
