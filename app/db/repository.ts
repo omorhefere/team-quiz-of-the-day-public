@@ -27,10 +27,12 @@ import {
   decks,
   leagueMemberships,
   leagues,
+  sources,
   teams,
   type CustomQuiz,
   type Deck,
   type League,
+  type Source,
   type Team,
 } from "./schema";
 import { generateTeamCode, normalizeTeamCode } from "~/lib/code";
@@ -774,6 +776,62 @@ export async function getCustomQuizLeaderboard(
     .orderBy(desc(customQuizSubmissions.score), asc(customQuizSubmissions.submittedAt))
     .limit(limit);
   return rows.map((r, i) => ({ rank: i + 1, ...r }));
+}
+
+// ---------------------------------------------------------------------------
+// Sources (ingested documents a league generates quizzes from)
+// ---------------------------------------------------------------------------
+
+export async function createSource(
+  db: DB,
+  params: {
+    leagueId: string;
+    kind: "url" | "pdf";
+    label: string;
+    text: string;
+    status?: "ready" | "error";
+    error?: string | null;
+  },
+): Promise<Source> {
+  const [source] = await db
+    .insert(sources)
+    .values({
+      leagueId: params.leagueId,
+      kind: params.kind,
+      label: params.label,
+      text: params.text,
+      status: params.status ?? "ready",
+      error: params.error ?? null,
+    })
+    .returning();
+  return source;
+}
+
+export async function listSources(db: DB, leagueId: string): Promise<Source[]> {
+  return db
+    .select()
+    .from(sources)
+    .where(eq(sources.leagueId, leagueId))
+    .orderBy(desc(sources.createdAt));
+}
+
+/**
+ * Ready sources only — what quiz generation will feed to the model. A source
+ * that errored during ingestion is excluded so it can't poison generation.
+ */
+export async function getReadySources(
+  db: DB,
+  leagueId: string,
+): Promise<Source[]> {
+  return db
+    .select()
+    .from(sources)
+    .where(and(eq(sources.leagueId, leagueId), eq(sources.status, "ready")))
+    .orderBy(desc(sources.createdAt));
+}
+
+export async function deleteSource(db: DB, sourceId: string): Promise<void> {
+  await db.delete(sources).where(eq(sources.id, sourceId));
 }
 
 // Re-export so route modules import a single barrel.

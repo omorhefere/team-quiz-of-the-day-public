@@ -78,6 +78,12 @@ export default function ManageLeague({ loaderData }: Route.ComponentProps) {
           >
             + Build a quiz
           </Link>
+          <Link
+            to={`/league/${league.code}/sources`}
+            className="rounded-lg border border-gray-700 px-4 py-2 font-semibold text-gray-200 hover:bg-gray-900"
+          >
+            Sources
+          </Link>
           {activeQuizId && (
             <Form method="post">
               <input type="hidden" name="intent" value="clearActive" />

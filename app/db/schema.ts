@@ -213,6 +213,42 @@ export const customQuizSubmissions = pgTable(
   ],
 );
 
+/**
+ * A document a league ingested to generate quizzes from — a web page or PDF.
+ *
+ * WHY this table exists / the key design choice: we extract the document's
+ * readable text ONCE, at ingest time, and store it here. Generation later just
+ * reads `text` — it never re-fetches the URL or re-parses the PDF. That keeps
+ * generation fast, deterministic, and offline-testable, and means a flaky
+ * website or a slow PDF parse can't break the (paid) quiz-generation flow.
+ */
+export const sources = pgTable("source", {
+  id: uuid("id")
+    .primaryKey()
+    .$defaultFn(() => uuidv7()),
+  // A source belongs to a league; cascade so deleting a league cleans up its
+  // ingested content automatically.
+  leagueId: uuid("league_id")
+    .notNull()
+    .references(() => leagues.id, { onDelete: "cascade" }),
+  // "url" or "pdf". Plain text + code validation rather than a DB enum, so we
+  // can add kinds (e.g. "wiki") later without a migration.
+  kind: text("kind").notNull(),
+  // Human label for the UI: the page URL, or the uploaded filename.
+  label: text("label").notNull(),
+  // The extracted readable text — the actual payload generation consumes.
+  text: text("text").notNull().default(""),
+  // "ready" once extracted, "error" if ingestion failed. We never want a
+  // half-broken source (404, unparseable PDF) silently feeding generation, so
+  // generation only reads sources with status = "ready".
+  status: text("status").notNull().default("ready"),
+  // The failure reason to show the admin when status = "error".
+  error: text("error"),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+});
+
 export type Team = typeof teams.$inferSelect;
 export type NewTeam = typeof teams.$inferInsert;
 export type Deck = typeof decks.$inferSelect;
@@ -225,6 +261,8 @@ export type LeagueMembership = typeof leagueMemberships.$inferSelect;
 export type CustomQuiz = typeof customQuizzes.$inferSelect;
 export type NewCustomQuiz = typeof customQuizzes.$inferInsert;
 export type CustomQuizSubmission = typeof customQuizSubmissions.$inferSelect;
+export type Source = typeof sources.$inferSelect;
+export type NewSource = typeof sources.$inferInsert;
 
 export const schema = {
   teams,
@@ -234,4 +272,5 @@ export const schema = {
   leagueMemberships,
   customQuizzes,
   customQuizSubmissions,
+  sources,
 };

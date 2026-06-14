@@ -11,6 +11,7 @@ export default [
   route("league/:code", "routes/league.tsx"),
   // Custom quizzes (admin-managed, league-scoped).
   route("league/:code/manage", "routes/league.manage.tsx"),
+  route("league/:code/sources", "routes/league.sources.tsx"),
   route("league/:code/quizzes/new", "routes/league.quiz-new.tsx"),
   route("league/:code/quizzes/:quizId/edit", "routes/league.quiz-edit.tsx"),
   route("league/:code/play", "routes/league.play.tsx"),
