@@ -45,6 +45,14 @@ export const env = {
 
   /** Public base URL, used for absolute OG image URLs. */
   appUrl: read("APP_URL") ?? "http://localhost:5173",
+
+  /**
+   * Anthropic API key for AI quiz generation. Read lazily (getter) so it's
+   * picked up after `.env` loads at boot. Absent = generation is unavailable.
+   */
+  get anthropicApiKey(): string | undefined {
+    return read("ANTHROPIC_API_KEY");
+  },
 };
 
 /**

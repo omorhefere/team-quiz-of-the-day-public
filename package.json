@@ -15,6 +15,7 @@
     "smoke": "tsx scripts/smoke-test.ts"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.104.1",
     "@mozilla/readability": "^0.6.0",
     "@react-router/node": "7.14.0",
     "@react-router/serve": "7.14.0",

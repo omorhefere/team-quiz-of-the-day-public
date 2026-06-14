@@ -1,3 +1,5 @@
+// Must be first: load .env into process.env before any module reads it.
+import "./load-env.server";
 import { PassThrough } from "node:stream";
 
 import type { AppLoadContext, EntryContext } from "react-router";

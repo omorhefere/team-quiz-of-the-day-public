@@ -1,8 +1,14 @@
 import { Form, Link, redirect, useNavigation } from "react-router";
 import type { Route } from "./+types/league.sources";
-import { createSource, deleteSource, listSources } from "~/db/repository";
+import {
+  createSource,
+  deleteSource,
+  isLeaguePro,
+  listSources,
+} from "~/db/repository";
 import { requireLeagueAdmin } from "~/lib/custom-quiz.server";
 import { ingestUrl, IngestError } from "~/lib/ingest.server";
+import { isRealLLMConfigured } from "~/lib/llm/index.server";
 
 export function meta() {
   return [{ title: "Sources · Office Trivia League" }];
@@ -13,6 +19,8 @@ export async function loader({ request, params }: Route.LoaderArgs) {
   const items = await listSources(db, league.id);
   return {
     code: league.code,
+    isPro: isLeaguePro(league),
+    usingRealAI: isRealLLMConfigured(),
     sources: items.map((s) => ({
       id: s.id,
       kind: s.kind,
@@ -127,6 +135,53 @@ export default function Sources({ loaderData, actionData }: Route.ComponentProps
             </div>
           ))}
         </div>
+
+        {/* AI generation (Pro feature). Produces a draft quiz from the sources,
+            then opens it in the builder for review. */}
+        <section className="mt-10 rounded-xl border border-indigo-500/30 bg-indigo-500/5 p-5">
+          <div className="flex items-center justify-between">
+            <h2 className="font-semibold">Generate a quiz with AI</h2>
+            {!loaderData.usingRealAI && (
+              <span className="rounded-full bg-gray-800 px-2 py-0.5 text-xs text-gray-400">
+                dev stub (no API key)
+              </span>
+            )}
+          </div>
+          <p className="mt-1 text-sm text-gray-400">
+            Drafts questions grounded in your sources. You review and edit before
+            it goes live.
+          </p>
+          {loaderData.isPro ? (
+            <Form method="post" action={`/league/${loaderData.code}/generate`} className="mt-4 space-y-3">
+              <div className="flex flex-wrap gap-3">
+                <input
+                  name="count"
+                  type="number"
+                  min={1}
+                  max={20}
+                  defaultValue={5}
+                  className="w-24 rounded-lg border border-gray-700 bg-gray-900 px-3 py-2 text-sm"
+                  aria-label="Number of questions"
+                />
+                <input
+                  name="topic"
+                  placeholder="Optional focus, e.g. refund policy"
+                  className="flex-1 rounded-lg border border-gray-700 bg-gray-900 px-3 py-2 text-sm"
+                />
+              </div>
+              <button className="rounded-lg bg-indigo-600 px-5 py-2 font-semibold text-white hover:bg-indigo-500">
+                Generate draft →
+              </button>
+            </Form>
+          ) : (
+            <p className="mt-4 rounded-lg border border-gray-700 px-4 py-3 text-sm text-gray-400">
+              AI generation is a Pro feature.{" "}
+              <Link to={`/league/${loaderData.code}/manage`} className="text-indigo-400 hover:underline">
+                Manage plan →
+              </Link>
+            </p>
+          )}
+        </section>
       </div>
     </main>
   );
