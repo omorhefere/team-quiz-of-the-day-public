@@ -52,9 +52,11 @@ function buildSourceText(sources: GenerateParams["sources"]): string {
 
 export class AnthropicLLMService implements LLMService {
   private client: Anthropic;
+  private model: string;
 
-  constructor(apiKey: string) {
+  constructor(apiKey: string, model: string) {
     this.client = new Anthropic({ apiKey });
+    this.model = model;
   }
 
   async generateQuiz(params: GenerateParams): Promise<GeneratedQuiz> {
@@ -64,7 +66,7 @@ export class AnthropicLLMService implements LLMService {
       : "";
 
     const response = await this.client.messages.parse({
-      model: "claude-opus-4-8",
+      model: this.model,
       max_tokens: 16000,
       thinking: { type: "adaptive" },
       system: [

@@ -53,6 +53,16 @@ export const env = {
   get anthropicApiKey(): string | undefined {
     return read("ANTHROPIC_API_KEY");
   },
+
+  /**
+   * Model used for quiz generation. Defaults to Sonnet 4.6 — a strong, cheaper
+   * model that's plenty for grounded generation (the quality is enforced by the
+   * prompt + source_quote + human review, not raw model horsepower). Override
+   * with LLM_MODEL=claude-opus-4-8 for max quality.
+   */
+  get llmModel(): string {
+    return read("LLM_MODEL") ?? "claude-sonnet-4-6";
+  },
 };
 
 /**
