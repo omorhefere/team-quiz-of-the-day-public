@@ -6,6 +6,7 @@ interface BuilderQuestion {
   q: string;
   choices: string[]; // length 4
   correct_idx: number;
+  source_quote?: string;
 }
 
 export interface QuizBuilderProps {
@@ -127,6 +128,16 @@ export function QuizBuilder({
               </label>
             ))}
           </div>
+          {question.source_quote && (
+            <div className="mt-4 rounded-lg border border-indigo-500/30 bg-indigo-500/10 p-3">
+              <p className="flex items-center gap-1.5 text-xs font-semibold text-indigo-300">
+                ✨ AI Evidence
+              </p>
+              <p className="mt-1 text-sm text-indigo-100/80 leading-relaxed">
+                &ldquo;{question.source_quote}&rdquo;
+              </p>
+            </div>
+          )}
         </fieldset>
       ))}
 

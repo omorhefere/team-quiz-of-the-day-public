@@ -1,4 +1,4 @@
-import { Link, redirect } from "react-router";
+import { redirect } from "react-router";
 import type { Route } from "./+types/league.generate";
 import {
   createCustomQuiz,
@@ -12,21 +12,21 @@ import {
   type ValidQuestion,
 } from "~/lib/quiz";
 
-export async function loader() {
-  throw redirect("/");
-}
-
 export async function action({ request, params }: Route.ActionArgs) {
   const { db, league } = await requireLeagueAdmin(request, params.code);
 
+  function redirectWithError(msg: string): never {
+    throw redirect(`/league/${league.code}/sources?error=${encodeURIComponent(msg)}`);
+  }
+
   // Paid feature: AI generation is gated behind the pro plan.
   if (!isLeaguePro(league)) {
-    return { error: "AI generation is a Pro feature. Upgrade your league to use it." };
+    redirectWithError("AI generation is a Pro feature. Upgrade your league to use it.");
   }
 
   const sources = await getReadySources(db, league.id);
   if (sources.length === 0) {
-    return { error: "Add at least one source before generating a quiz." };
+    redirectWithError("Add at least one source before generating a quiz.");
   }
 
   const form = await request.formData();
@@ -43,21 +43,20 @@ export async function action({ request, params }: Route.ActionArgs) {
       count,
       topic,
     });
-    // Map the generated shape into our stored question shape. The source_quote
-    // is dropped on save for now — step 5 (review) will surface it before
-    // publishing.
+    // Map the generated shape into our stored question shape. 
+    // The source_quote is preserved so the admin can review it.
     questions = result.questions.map((q) => ({
       q: q.q,
       choices: q.choices,
       correct_idx: q.correct_idx,
+      source_quote: q.source_quote,
     }));
   } catch (err) {
-    return {
-      error:
-        err instanceof Error
-          ? `Generation failed: ${err.message}`
-          : "Generation failed.",
-    };
+    redirectWithError(
+      err instanceof Error
+        ? `Generation failed: ${err.message}`
+        : "Generation failed.",
+    );
   }
 
   // Save as a draft quiz and open it in the builder for the admin to review/edit.
@@ -67,16 +66,4 @@ export async function action({ request, params }: Route.ActionArgs) {
     questions,
   });
   throw redirect(`/league/${league.code}/quizzes/${quiz.id}/edit`);
-}
-
-export default function Generate({ actionData }: Route.ComponentProps) {
-  return (
-    <main className="flex min-h-screen flex-col items-center justify-center bg-gray-950 px-6 text-center text-gray-100">
-      <h1 className="text-2xl font-bold text-red-400">Couldn&rsquo;t generate</h1>
-      <p className="mt-3 max-w-sm text-gray-400">{actionData?.error}</p>
-      <Link to="/" className="mt-8 inline-block text-indigo-400 hover:underline">
-        ← Back
-      </Link>
-    </main>
-  );
 }

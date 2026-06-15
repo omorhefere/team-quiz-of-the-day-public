@@ -1,4 +1,5 @@
 import { Form, Link, redirect, useNavigation } from "react-router";
+import { useState } from "react";
 import type { Route } from "./+types/league.sources";
 import {
   createSource,
@@ -17,10 +18,12 @@ export function meta() {
 export async function loader({ request, params }: Route.LoaderArgs) {
   const { db, league } = await requireLeagueAdmin(request, params.code);
   const items = await listSources(db, league.id);
+  const url = new URL(request.url);
   return {
     code: league.code,
     isPro: isLeaguePro(league),
     usingRealAI: isRealLLMConfigured(),
+    globalError: url.searchParams.get("error"),
     sources: items.map((s) => ({
       id: s.id,
       kind: s.kind,
@@ -44,18 +47,40 @@ export async function action({ request, params }: Route.ActionArgs) {
   }
 
   if (intent === "add") {
-    const url = String(form.get("url") ?? "");
-    try {
-      // Ingest synchronously: fetch + extract, then store the clean text.
-      const { label, text } = await ingestUrl(url);
-      await createSource(db, { leagueId: league.id, kind: "url", label, text });
-    } catch (err) {
-      // Surface a friendly reason; don't persist a broken source.
-      const message =
-        err instanceof IngestError ? err.message : "Couldn't ingest that URL.";
-      return { error: message };
+    // Collect all URL fields — form.getAll returns every input named "url".
+    const rawUrls = form
+      .getAll("url")
+      .map((v) => String(v).trim())
+      .filter((v) => v.length > 0);
+
+    if (rawUrls.length === 0) {
+      return { errors: [{ url: "", message: "Enter at least one URL." }] };
     }
-    throw redirect(`/league/${league.code}/sources`);
+
+    // Ingest each URL independently — successes are saved, failures are
+    // collected so the admin sees exactly which ones had problems.
+    const errors: { url: string; message: string }[] = [];
+    let added = 0;
+
+    for (const raw of rawUrls) {
+      try {
+        const { label, text } = await ingestUrl(raw);
+        await createSource(db, { leagueId: league.id, kind: "url", label, text });
+        added++;
+      } catch (err) {
+        const message =
+          err instanceof IngestError ? err.message : "Couldn't ingest this URL.";
+        errors.push({ url: raw, message });
+      }
+    }
+
+    // If everything succeeded, redirect so the page refreshes with the new
+    // sources. If some failed, stay on the page and show what went wrong
+    // (the successes are already saved).
+    if (errors.length === 0) {
+      throw redirect(`/league/${league.code}/sources`);
+    }
+    return { errors, added };
   }
 
   return null;
@@ -66,6 +91,17 @@ export default function Sources({ loaderData, actionData }: Route.ComponentProps
   const adding =
     navigation.state === "submitting" &&
     navigation.formData?.get("intent") === "add";
+
+  // Dynamic URL input list — starts with one field.
+  const [urlFields, setUrlFields] = useState([crypto.randomUUID()]);
+
+  function addField() {
+    setUrlFields((prev) => [...prev, crypto.randomUUID()]);
+  }
+
+  function removeField(id: string) {
+    setUrlFields((prev) => (prev.length > 1 ? prev.filter((f) => f !== id) : prev));
+  }
 
   return (
     <main className="min-h-screen bg-gray-950 text-gray-100">
@@ -82,26 +118,82 @@ export default function Sources({ loaderData, actionData }: Route.ComponentProps
           store it.
         </p>
 
-        <Form method="post" className="mt-6 flex gap-2">
+        <Form method="post" className="mt-6">
           <input type="hidden" name="intent" value="add" />
-          <input
-            name="url"
-            type="url"
-            required
-            placeholder="https://your-company.com/about"
-            className="flex-1 rounded-lg border border-gray-700 bg-gray-900 px-4 py-3 text-gray-100 outline-none focus:border-indigo-500"
-          />
-          <button
-            disabled={adding}
-            className="rounded-lg bg-indigo-600 px-5 py-3 font-semibold text-white hover:bg-indigo-500 disabled:opacity-60"
-          >
-            {adding ? "Adding…" : "Add"}
-          </button>
+          <div className="space-y-2">
+            {urlFields.map((id, i) => (
+              <div key={id} className="flex gap-2">
+                <input
+                  name="url"
+                  type="url"
+                  required
+                  placeholder={
+                    i === 0
+                      ? "https://your-company.com/about"
+                      : "https://..."
+                  }
+                  className="flex-1 rounded-lg border border-gray-700 bg-gray-900 px-4 py-3 text-gray-100 outline-none focus:border-indigo-500"
+                />
+                {urlFields.length > 1 && (
+                  <button
+                    type="button"
+                    onClick={() => removeField(id)}
+                    className="rounded-lg border border-gray-700 px-3 py-3 text-gray-500 hover:border-red-500/50 hover:text-red-400"
+                    aria-label="Remove this URL"
+                  >
+                    ✕
+                  </button>
+                )}
+              </div>
+            ))}
+          </div>
+          <div className="mt-3 flex items-center gap-3">
+            <button
+              type="button"
+              onClick={addField}
+              className="rounded-lg border border-dashed border-gray-700 px-4 py-2 text-sm text-gray-400 hover:border-gray-500 hover:text-gray-300"
+            >
+              + Add another URL
+            </button>
+            <button
+              disabled={adding}
+              className="rounded-lg bg-indigo-600 px-5 py-3 font-semibold text-white hover:bg-indigo-500 disabled:opacity-60"
+            >
+              {adding
+                ? "Adding…"
+                : urlFields.length === 1
+                  ? "Add source"
+                  : `Add ${urlFields.length} sources`}
+            </button>
+          </div>
         </Form>
-        {actionData?.error && (
-          <p className="mt-3 rounded-lg border border-red-500/40 bg-red-500/10 px-4 py-2 text-sm text-red-300">
-            {actionData.error}
-          </p>
+
+        {/* Per-URL error feedback */}
+        {actionData?.errors && (
+          <div className="mt-3 space-y-2">
+            {(actionData.added ?? 0) > 0 && (
+              <p className="rounded-lg border border-green-500/40 bg-green-500/10 px-4 py-2 text-sm text-green-300">
+                {actionData.added} source{actionData.added !== 1 ? "s" : ""} added
+                successfully.
+              </p>
+            )}
+            {actionData.errors.map(
+              (e: { url: string; message: string }, i: number) => (
+                <p
+                  key={i}
+                  className="rounded-lg border border-red-500/40 bg-red-500/10 px-4 py-2 text-sm text-red-300"
+                >
+                  {e.url ? (
+                    <>
+                      <span className="font-medium text-red-200">{e.url}</span>
+                      {" — "}
+                    </>
+                  ) : null}
+                  {e.message}
+                </p>
+              ),
+            )}
+          </div>
         )}
 
         <div className="mt-8 space-y-3">
@@ -151,6 +243,11 @@ export default function Sources({ loaderData, actionData }: Route.ComponentProps
             Drafts questions grounded in your sources. You review and edit before
             it goes live.
           </p>
+          {loaderData.globalError && (
+            <p className="mt-4 rounded-lg border border-red-500/40 bg-red-500/10 px-4 py-3 text-sm text-red-300">
+              {loaderData.globalError}
+            </p>
+          )}
           {loaderData.isPro ? (
             <Form method="post" action={`/league/${loaderData.code}/generate`} className="mt-4 space-y-3">
               <div className="flex flex-wrap gap-3">

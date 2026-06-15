@@ -18,6 +18,7 @@ export const questionSchema = z.object({
     .array(z.string().min(1))
     .length(CHOICES_PER_QUESTION, `Each question needs exactly ${CHOICES_PER_QUESTION} choices`),
   correct_idx: z.number().int().min(0).max(CHOICES_PER_QUESTION - 1),
+  source_quote: z.string().optional(),
 });
 
 export const deckQuestionsSchema = z

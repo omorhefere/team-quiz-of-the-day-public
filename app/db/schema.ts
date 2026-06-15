@@ -35,6 +35,8 @@ export interface Question {
   choices: string[];
   /** Index (0–3) of the correct choice. */
   correct_idx: number;
+  /** Verbatim passage from the source documents that proves `correct_idx`. */
+  source_quote?: string;
 }
 
 export const teams = pgTable("team", {
