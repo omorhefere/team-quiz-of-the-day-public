@@ -1,4 +1,4 @@
-import { Form, Link } from "react-router";
+import { Form, Link, redirect } from "react-router";
 import type { Route } from "./+types/league";
 import { getDb } from "~/db/client";
 import {
@@ -9,6 +9,7 @@ import {
   getLeagueWeeklyLeaderboard,
   isLeagueAdmin,
   isLeagueMember,
+  removeTeamFromLeague,
 } from "~/db/repository";
 import { currentUtcDeckDate, weeklyWindow } from "~/lib/date";
 import { getTeamId } from "~/lib/session.server";
@@ -51,6 +52,25 @@ export async function loader({ request, params }: Route.LoaderArgs) {
     activeQuiz: activeQuiz ? { title: activeQuiz.title } : null,
     playedActive,
   };
+}
+
+export async function action({ request, params }: Route.ActionArgs) {
+  const db = await getDb();
+  const league = await getLeagueByCode(db, params.code);
+  if (!league) throw new Response("League not found", { status: 404 });
+
+  const { getTeamId } = await import("~/lib/session.server");
+  const teamId = await getTeamId(request);
+  if (!teamId) throw redirect("/");
+
+  const form = await request.formData();
+  if (String(form.get("intent")) === "leave") {
+    // Admins can't leave their own league — they must delete it via settings.
+    if (!isLeagueAdmin(league, teamId)) {
+      await removeTeamFromLeague(db, league.id, teamId);
+    }
+  }
+  throw redirect("/");
 }
 
 export default function LeaguePage({ loaderData }: Route.ComponentProps) {
@@ -109,9 +129,24 @@ export default function LeaguePage({ loaderData }: Route.ComponentProps) {
           </Form>
         )}
         {member && (
-          <p className="mt-4 inline-block rounded-lg border border-indigo-500/40 bg-indigo-500/10 px-3 py-1 text-xs text-indigo-300">
-            Your team is in this league. Share the code to add more teams.
-          </p>
+          <div className="mt-4 flex items-center gap-4">
+            <p className="inline-block rounded-lg border border-indigo-500/40 bg-indigo-500/10 px-3 py-1 text-xs text-indigo-300">
+              Your team is in this league. Share the code to add more teams.
+            </p>
+            {!isAdmin && (
+              <Form
+                method="post"
+                onSubmit={(e) => {
+                  if (!confirm("Leave this league?")) e.preventDefault();
+                }}
+              >
+                <input type="hidden" name="intent" value="leave" />
+                <button className="text-xs font-semibold text-gray-500 hover:text-red-400">
+                  Leave league
+                </button>
+              </Form>
+            )}
+          </div>
         )}
 
         <Section

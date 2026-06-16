@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { extractReadableText } from "./ingest.server";
+import { extractReadableText, ingestPdf, IngestError } from "./ingest.server";
 
 const PAGE = `<!doctype html>
 <html><head><title>Acme</title><style>.x{color:red}</style></head>
@@ -42,5 +42,18 @@ describe("extractReadableText", () => {
       "<html><body><div>Just one short line of text here.</div></body></html>",
     );
     expect(bare).toContain("Just one short line of text here.");
+  });
+});
+
+describe("ingestPdf", () => {
+  it("rejects a buffer that exceeds the 20 MB size cap", async () => {
+    const oversized = new ArrayBuffer(21 * 1024 * 1024);
+    await expect(ingestPdf(oversized, "big.pdf")).rejects.toBeInstanceOf(IngestError);
+    await expect(ingestPdf(oversized, "big.pdf")).rejects.toThrow("too large");
+  });
+
+  it("rejects an invalid (non-PDF) buffer", async () => {
+    const garbage = new TextEncoder().encode("this is not a pdf").buffer;
+    await expect(ingestPdf(garbage, "fake.pdf")).rejects.toBeInstanceOf(IngestError);
   });
 });

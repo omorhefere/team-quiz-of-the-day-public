@@ -23,11 +23,13 @@ export const generatedQuestionSchema = z.object({
   choices: z.array(z.string().min(1)).length(4),
   correct_idx: z.number().int().min(0).max(3),
   /** Verbatim passage from the source documents that proves `correct_idx`. */
-  source_quote: z.string().min(1),
+  source_quote: z.string().min(1).max(500),
 });
 
 export const generatedQuizSchema = z.object({
-  questions: z.array(generatedQuestionSchema),
+  // min(1): if the model returns [] (source too thin to ground any question),
+  // we reject rather than saving an empty draft that confuses the admin.
+  questions: z.array(generatedQuestionSchema).min(1, "Generation returned no questions"),
 });
 
 export type GeneratedQuestion = z.infer<typeof generatedQuestionSchema>;

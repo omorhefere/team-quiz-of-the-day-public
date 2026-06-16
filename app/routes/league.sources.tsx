@@ -1,4 +1,4 @@
-import { Form, Link, redirect, useNavigation } from "react-router";
+import { data, Form, Link, redirect, useNavigation } from "react-router";
 import { useState } from "react";
 import type { Route } from "./+types/league.sources";
 import {
@@ -8,8 +8,9 @@ import {
   listSources,
 } from "~/db/repository";
 import { requireLeagueAdmin } from "~/lib/custom-quiz.server";
-import { ingestUrl, IngestError } from "~/lib/ingest.server";
+import { ingestUrl, ingestPdf, IngestError } from "~/lib/ingest.server";
 import { isRealLLMConfigured } from "~/lib/llm/index.server";
+import { getFlashError } from "~/lib/session.server";
 
 export function meta() {
   return [{ title: "Sources · Office Trivia League" }];
@@ -17,22 +18,27 @@ export function meta() {
 
 export async function loader({ request, params }: Route.LoaderArgs) {
   const { db, league } = await requireLeagueAdmin(request, params.code);
-  const items = await listSources(db, league.id);
-  const url = new URL(request.url);
-  return {
-    code: league.code,
-    isPro: isLeaguePro(league),
-    usingRealAI: isRealLLMConfigured(),
-    globalError: url.searchParams.get("error"),
-    sources: items.map((s) => ({
-      id: s.id,
-      kind: s.kind,
-      label: s.label,
-      chars: s.text.length,
-      status: s.status,
-      preview: s.text.slice(0, 240),
-    })),
-  };
+  const [items, [globalError, cookie]] = await Promise.all([
+    listSources(db, league.id),
+    getFlashError(request),
+  ]);
+  return data(
+    {
+      code: league.code,
+      isPro: isLeaguePro(league),
+      usingRealAI: isRealLLMConfigured(),
+      globalError,
+      sources: items.map((s) => ({
+        id: s.id,
+        kind: s.kind,
+        label: s.label,
+        chars: s.chars,
+        status: s.status,
+        preview: s.preview,
+      })),
+    },
+    { headers: { "Set-Cookie": cookie } },
+  );
 }
 
 export async function action({ request, params }: Route.ActionArgs) {
@@ -42,7 +48,7 @@ export async function action({ request, params }: Route.ActionArgs) {
 
   if (intent === "delete") {
     const id = form.get("sourceId");
-    if (typeof id === "string") await deleteSource(db, id);
+    if (typeof id === "string") await deleteSource(db, league.id, id);
     throw redirect(`/league/${league.code}/sources`);
   }
 
@@ -54,33 +60,69 @@ export async function action({ request, params }: Route.ActionArgs) {
       .filter((v) => v.length > 0);
 
     if (rawUrls.length === 0) {
-      return { errors: [{ url: "", message: "Enter at least one URL." }] };
+      return { intent: "add" as const, errors: [{ url: "", message: "Enter at least one URL." }], added: 0 };
     }
 
-    // Ingest each URL independently — successes are saved, failures are
-    // collected so the admin sees exactly which ones had problems.
-    const errors: { url: string; message: string }[] = [];
-    let added = 0;
-
-    for (const raw of rawUrls) {
-      try {
+    // Ingest all URLs concurrently — each fetch is independent.
+    const results = await Promise.allSettled(
+      rawUrls.map(async (raw) => {
         const { label, text } = await ingestUrl(raw);
         await createSource(db, { leagueId: league.id, kind: "url", label, text });
-        added++;
-      } catch (err) {
-        const message =
-          err instanceof IngestError ? err.message : "Couldn't ingest this URL.";
-        errors.push({ url: raw, message });
-      }
-    }
+      }),
+    );
+    const errors = results
+      .map((r, i) =>
+        r.status === "rejected"
+          ? {
+              url: rawUrls[i],
+              message:
+                r.reason instanceof IngestError
+                  ? r.reason.message
+                  : "Couldn't ingest this URL.",
+            }
+          : null,
+      )
+      .filter((e): e is { url: string; message: string } => e !== null);
+    const added = results.filter((r) => r.status === "fulfilled").length;
 
-    // If everything succeeded, redirect so the page refreshes with the new
-    // sources. If some failed, stay on the page and show what went wrong
-    // (the successes are already saved).
     if (errors.length === 0) {
       throw redirect(`/league/${league.code}/sources`);
     }
-    return { errors, added };
+    return { intent: "add" as const, errors, added };
+  }
+
+  if (intent === "add-pdf") {
+    const files = form.getAll("pdf").filter((f): f is File => f instanceof File && f.size > 0);
+    if (files.length === 0) {
+      return { intent: "add-pdf" as const, errors: [{ name: "", message: "Select at least one PDF file." }], added: 0 };
+    }
+
+    const results = await Promise.allSettled(
+      files.map(async (file) => {
+        const buffer = await file.arrayBuffer();
+        const { label, text } = await ingestPdf(buffer, file.name);
+        await createSource(db, { leagueId: league.id, kind: "pdf", label, text });
+      }),
+    );
+    const errors = results
+      .map((r, i) =>
+        r.status === "rejected"
+          ? {
+              name: files[i].name,
+              message:
+                r.reason instanceof IngestError
+                  ? r.reason.message
+                  : "Couldn't parse this PDF.",
+            }
+          : null,
+      )
+      .filter((e): e is { name: string; message: string } => e !== null);
+    const added = results.filter((r) => r.status === "fulfilled").length;
+
+    if (errors.length === 0) {
+      throw redirect(`/league/${league.code}/sources`);
+    }
+    return { intent: "add-pdf" as const, errors, added };
   }
 
   return null;
@@ -91,6 +133,9 @@ export default function Sources({ loaderData, actionData }: Route.ComponentProps
   const adding =
     navigation.state === "submitting" &&
     navigation.formData?.get("intent") === "add";
+  const addingPdf =
+    navigation.state === "submitting" &&
+    navigation.formData?.get("intent") === "add-pdf";
 
   // Dynamic URL input list — starts with one field.
   const [urlFields, setUrlFields] = useState([crypto.randomUUID()]);
@@ -103,6 +148,9 @@ export default function Sources({ loaderData, actionData }: Route.ComponentProps
     setUrlFields((prev) => (prev.length > 1 ? prev.filter((f) => f !== id) : prev));
   }
 
+  const urlErrors = actionData?.intent === "add" ? actionData.errors : null;
+  const pdfErrors = actionData?.intent === "add-pdf" ? actionData.errors : null;
+
   return (
     <main className="min-h-screen bg-gray-950 text-gray-100">
       <div className="mx-auto max-w-2xl px-6 py-12">
@@ -114,12 +162,14 @@ export default function Sources({ loaderData, actionData }: Route.ComponentProps
         </Link>
         <h1 className="mt-2 text-2xl font-bold">Sources</h1>
         <p className="mt-1 text-sm text-gray-400">
-          Add web pages to generate quizzes from. We extract the readable text and
-          store it.
+          Add web pages or PDF documents to generate quizzes from. We extract the
+          readable text and store it.
         </p>
 
+        {/* URL ingestion */}
         <Form method="post" className="mt-6">
           <input type="hidden" name="intent" value="add" />
+          <p className="mb-2 text-sm font-medium text-gray-300">Web pages</p>
           <div className="space-y-2">
             {urlFields.map((id, i) => (
               <div key={id} className="flex gap-2">
@@ -162,44 +212,77 @@ export default function Sources({ loaderData, actionData }: Route.ComponentProps
               {adding
                 ? "Adding…"
                 : urlFields.length === 1
-                  ? "Add source"
-                  : `Add ${urlFields.length} sources`}
+                  ? "Add page"
+                  : `Add ${urlFields.length} pages`}
             </button>
           </div>
         </Form>
 
-        {/* Per-URL error feedback */}
-        {actionData?.errors && (
+        {urlErrors && (
           <div className="mt-3 space-y-2">
-            {(actionData.added ?? 0) > 0 && (
+            {(actionData?.added ?? 0) > 0 && (
               <p className="rounded-lg border border-green-500/40 bg-green-500/10 px-4 py-2 text-sm text-green-300">
-                {actionData.added} source{actionData.added !== 1 ? "s" : ""} added
-                successfully.
+                {actionData!.added} page{actionData!.added !== 1 ? "s" : ""} added successfully.
               </p>
             )}
-            {actionData.errors.map(
-              (e: { url: string; message: string }, i: number) => (
-                <p
-                  key={i}
-                  className="rounded-lg border border-red-500/40 bg-red-500/10 px-4 py-2 text-sm text-red-300"
-                >
-                  {e.url ? (
-                    <>
-                      <span className="font-medium text-red-200">{e.url}</span>
-                      {" — "}
-                    </>
-                  ) : null}
-                  {e.message}
-                </p>
-              ),
-            )}
+            {urlErrors.map((e, i) => (
+              <p key={i} className="rounded-lg border border-red-500/40 bg-red-500/10 px-4 py-2 text-sm text-red-300">
+                {"url" in e && e.url ? (
+                  <><span className="font-medium text-red-200">{e.url}</span>{" — "}</>
+                ) : null}
+                {e.message}
+              </p>
+            ))}
           </div>
         )}
 
+        {/* PDF upload */}
+        <Form method="post" encType="multipart/form-data" className="mt-6">
+          <input type="hidden" name="intent" value="add-pdf" />
+          <p className="mb-2 text-sm font-medium text-gray-300">PDF documents</p>
+          <div className="flex items-center gap-3">
+            <label className="flex-1 cursor-pointer rounded-lg border border-dashed border-gray-700 px-4 py-3 text-sm text-gray-400 hover:border-gray-500 hover:text-gray-300">
+              <input
+                name="pdf"
+                type="file"
+                accept=".pdf,application/pdf"
+                multiple
+                className="sr-only"
+              />
+              Click to select PDF files (max 20 MB each)
+            </label>
+            <button
+              disabled={addingPdf}
+              className="rounded-lg bg-indigo-600 px-5 py-3 font-semibold text-white hover:bg-indigo-500 disabled:opacity-60"
+            >
+              {addingPdf ? "Uploading…" : "Upload PDFs"}
+            </button>
+          </div>
+        </Form>
+
+        {pdfErrors && (
+          <div className="mt-3 space-y-2">
+            {(actionData?.added ?? 0) > 0 && (
+              <p className="rounded-lg border border-green-500/40 bg-green-500/10 px-4 py-2 text-sm text-green-300">
+                {actionData!.added} PDF{actionData!.added !== 1 ? "s" : ""} added successfully.
+              </p>
+            )}
+            {pdfErrors.map((e, i) => (
+              <p key={i} className="rounded-lg border border-red-500/40 bg-red-500/10 px-4 py-2 text-sm text-red-300">
+                {"name" in e && e.name ? (
+                  <><span className="font-medium text-red-200">{e.name}</span>{" — "}</>
+                ) : null}
+                {e.message}
+              </p>
+            ))}
+          </div>
+        )}
+
+        {/* Source list */}
         <div className="mt-8 space-y-3">
           {loaderData.sources.length === 0 && (
             <p className="rounded-xl border border-gray-800 px-4 py-8 text-center text-gray-500">
-              No sources yet. Add a page above.
+              No sources yet. Add a page or PDF above.
             </p>
           )}
           {loaderData.sources.map((s) => (

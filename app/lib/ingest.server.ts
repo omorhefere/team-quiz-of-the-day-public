@@ -1,20 +1,19 @@
 /**
- * Step 3b — website ingestion: turn a URL into clean, readable text.
+ * Source ingestion: turn a URL or PDF into clean, stored text.
  *
- * Server-only (`.server`). It does two separable jobs, kept apart on purpose:
- *   - `extractReadableText(html)` — PURE (no network). Given HTML, return the
- *     main readable text. Pure = unit-testable without hitting the internet.
- *   - `ingestUrl(url)` — fetch the page (with safety guards), then extract.
+ * Server-only (`.server`). Two ingestion paths, same output contract:
+ *   - `ingestUrl(raw)`  — fetch a web page, extract its readable text.
+ *   - `ingestPdf(buf, filename)` — parse a PDF buffer, extract its text.
  *
- * WHY Mozilla Readability (not a naive tag-strip): a company page is mostly
- * chrome — nav bars, cookie banners, footers, "related posts". Feeding that junk
- * to the quiz generator produces junk questions. Readability is the same
- * algorithm as Firefox's "Reader View": it isolates the main article content and
- * drops the boilerplate, so the stored text is the stuff that actually matters.
+ * Both return `{ label, text }` and throw `IngestError` on failure.
+ * The extracted text is stored in the `source` table; generation reads it
+ * later without ever re-fetching — so a flaky URL or slow PDF parse can't
+ * break the paid quiz-generation flow.
  */
 
 import { Readability } from "@mozilla/readability";
 import { JSDOM } from "jsdom";
+import { PDFParse } from "pdf-parse";
 
 /** Cap stored text so one huge page can't blow out the generation context. */
 const MAX_TEXT_CHARS = 100_000; // ~25k tokens — plenty for a page, bounded.
@@ -45,7 +44,8 @@ function normalize(text: string): string {
  * page), so we always get *something* rather than failing.
  */
 export function extractReadableText(html: string, url = "https://example.com"): string {
-  const doc = new JSDOM(html, { url }).window.document;
+  // Truncate before JSDOM to bound synchronous CPU/memory on the event loop.
+  const doc = new JSDOM(html.slice(0, 2_000_000), { url }).window.document;
   let text = "";
   try {
     // Readability mutates the document, so this runs on a throwaway parse.
@@ -61,19 +61,17 @@ export function extractReadableText(html: string, url = "https://example.com"): 
 }
 
 /**
- * Validates a user-supplied URL before we fetch it server-side.
+ * Validates a URL before the server fetches it (SSRF guard).
  *
- * WHY: the server fetching an arbitrary URL the user typed is a classic SSRF
- * risk — someone could point it at `localhost`, a private IP, or a cloud
- * metadata endpoint (169.254.169.254) to make our server reach internal
- * services. We allow only http(s) and block loopback/private/link-local hosts.
- * (A hardened version would also resolve DNS and re-check the resolved IP; noted
- * for later.)
+ * Blocks loopback/private/link-local hosts by hostname string. This is a
+ * first-line defence; it doesn't cover DNS rebinding (noted for later).
+ * Callers must use redirect:"manual" and re-call this on every Location
+ * header so a 302 to an internal IP can't bypass the check.
  */
 function assertSafeUrl(raw: string): URL {
   let url: URL;
   try {
-    url = new URL(raw.trim());
+    url = new URL(typeof raw === "string" ? raw.trim() : raw);
   } catch {
     throw new IngestError("That doesn't look like a valid URL.");
   }
@@ -83,6 +81,8 @@ function assertSafeUrl(raw: string): URL {
   const host = url.hostname.toLowerCase();
   const blocked =
     host === "localhost" ||
+    host === "[::1]" ||   // IPv6 loopback with brackets (Node's URL.hostname)
+    host === "::1" ||     // IPv6 loopback without brackets (normalisation edge)
     host.endsWith(".local") ||
     /^(127\.|10\.|0\.|169\.254\.|192\.168\.)/.test(host) ||
     /^172\.(1[6-9]|2\d|3[01])\./.test(host);
@@ -90,6 +90,74 @@ function assertSafeUrl(raw: string): URL {
     throw new IngestError("That address isn't allowed.");
   }
   return url;
+}
+
+/** Max redirects to follow when fetching a page. */
+const MAX_REDIRECTS = 5;
+
+/**
+ * Fetches `url`, following redirects manually so every hop is re-validated
+ * by assertSafeUrl. Using redirect:"follow" would let a 302 to an internal
+ * IP bypass the SSRF check on the original URL.
+ */
+async function fetchSafe(
+  url: URL,
+  signal: AbortSignal,
+): Promise<Response> {
+  const HEADERS = {
+    "user-agent": "OfficeTriviaLeagueBot/1.0 (+quiz ingestion)",
+    accept: "text/html,application/xhtml+xml",
+  };
+
+  let current = url;
+  for (let hop = 0; hop <= MAX_REDIRECTS; hop++) {
+    const res = await fetch(current, { signal, redirect: "manual", headers: HEADERS });
+    if (res.status >= 300 && res.status < 400) {
+      const location = res.headers.get("location");
+      if (!location) throw new IngestError("Got a redirect with no Location header.");
+      // Re-assert the redirect target — this is the key SSRF defence.
+      current = assertSafeUrl(new URL(location, current).toString());
+      continue;
+    }
+    return res;
+  }
+  throw new IngestError("Too many redirects.");
+}
+
+/** Max PDF upload size — 20 MB is generous for a company doc. */
+const MAX_PDF_BYTES = 20 * 1024 * 1024;
+
+/**
+ * Extracts text from a PDF buffer. The filename becomes the source label.
+ * Throws IngestError if the file isn't a valid PDF, is too large, or has no
+ * extractable text (e.g. a scanned-image PDF without OCR).
+ */
+export async function ingestPdf(
+  buffer: ArrayBuffer,
+  filename: string,
+): Promise<{ label: string; text: string }> {
+  if (buffer.byteLength > MAX_PDF_BYTES) {
+    throw new IngestError("That PDF is too large (max 20 MB).");
+  }
+
+  let rawText: string;
+  try {
+    const parser = new PDFParse({ data: Buffer.from(buffer) });
+    const result = await parser.getText();
+    await parser.destroy();
+    rawText = result.text;
+  } catch (err) {
+    if (err instanceof IngestError) throw err;
+    throw new IngestError("Couldn't parse that PDF — is it a valid, unencrypted PDF?");
+  }
+
+  const text = normalize(rawText);
+  if (text.length < 50) {
+    throw new IngestError(
+      "Couldn't find readable text in that PDF. Scanned-image PDFs aren't supported.",
+    );
+  }
+  return { label: filename, text };
 }
 
 /** Fetches a URL and returns its readable text (or throws IngestError). */
@@ -100,15 +168,9 @@ export async function ingestUrl(raw: string): Promise<{ label: string; text: str
   const timeout = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
   let res: Response;
   try {
-    res = await fetch(url, {
-      signal: controller.signal,
-      redirect: "follow",
-      headers: {
-        "user-agent": "OfficeTriviaLeagueBot/1.0 (+quiz ingestion)",
-        accept: "text/html,application/xhtml+xml",
-      },
-    });
-  } catch {
+    res = await fetchSafe(url, controller.signal);
+  } catch (err) {
+    if (err instanceof IngestError) throw err;
     throw new IngestError("Couldn't reach that page.");
   } finally {
     clearTimeout(timeout);
@@ -118,6 +180,15 @@ export async function ingestUrl(raw: string): Promise<{ label: string; text: str
   const contentType = res.headers.get("content-type") ?? "";
   if (!contentType.includes("html")) {
     throw new IngestError("That URL isn't an HTML page.");
+  }
+
+  // Reject implausibly large responses before buffering them into memory.
+  // A 10 MB HTML page is almost certainly mostly boilerplate; Readability
+  // will reduce it anyway, but we don't want to buffer 100 MB first.
+  const MAX_HTML_BYTES = 10 * 1024 * 1024; // 10 MB
+  const contentLength = Number(res.headers.get("content-length") ?? 0);
+  if (contentLength > MAX_HTML_BYTES) {
+    throw new IngestError("That page is too large to ingest (> 10 MB).");
   }
 
   const text = extractReadableText(await res.text(), url.toString());

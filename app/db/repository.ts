@@ -603,6 +603,56 @@ export function isLeaguePro(league: League): boolean {
   return league.plan === "pro";
 }
 
+export async function renameLeague(
+  db: DB,
+  leagueId: string,
+  name: string,
+): Promise<void> {
+  await db
+    .update(leagues)
+    .set({ name: name.trim() })
+    .where(eq(leagues.id, leagueId));
+}
+
+/** Permanently deletes a league and all its data (cascade handles children). */
+export async function deleteLeague(db: DB, leagueId: string): Promise<void> {
+  await db.delete(leagues).where(eq(leagues.id, leagueId));
+}
+
+/** Removes a single team from a league (used by admin to kick, or by member to leave). */
+export async function removeTeamFromLeague(
+  db: DB,
+  leagueId: string,
+  teamId: string,
+): Promise<void> {
+  await db
+    .delete(leagueMemberships)
+    .where(
+      and(
+        eq(leagueMemberships.leagueId, leagueId),
+        eq(leagueMemberships.teamId, teamId),
+      ),
+    );
+}
+
+/** All members of a league with their display name and join date. */
+export async function getLeagueMembers(
+  db: DB,
+  leagueId: string,
+): Promise<{ teamId: string; displayName: string; joinedAt: Date }[]> {
+  const rows = await db
+    .select({
+      teamId: leagueMemberships.teamId,
+      displayName: teams.displayName,
+      joinedAt: leagueMemberships.joinedAt,
+    })
+    .from(leagueMemberships)
+    .innerJoin(teams, eq(teams.id, leagueMemberships.teamId))
+    .where(eq(leagueMemberships.leagueId, leagueId))
+    .orderBy(asc(leagueMemberships.joinedAt));
+  return rows;
+}
+
 /** Test/admin helper to flip a league's plan (real billing wires in later). */
 export async function setLeaguePlan(
   db: DB,
@@ -807,9 +857,18 @@ export async function createSource(
   return source;
 }
 
-export async function listSources(db: DB, leagueId: string): Promise<Source[]> {
+export async function listSources(db: DB, leagueId: string) {
   return db
-    .select()
+    .select({
+      id: sources.id,
+      kind: sources.kind,
+      label: sources.label,
+      status: sources.status,
+      error: sources.error,
+      createdAt: sources.createdAt,
+      chars: sql<number>`length(${sources.text})`,
+      preview: sql<string>`substr(${sources.text}, 1, 240)`,
+    })
     .from(sources)
     .where(eq(sources.leagueId, leagueId))
     .orderBy(desc(sources.createdAt));
@@ -830,8 +889,14 @@ export async function getReadySources(
     .orderBy(desc(sources.createdAt));
 }
 
-export async function deleteSource(db: DB, sourceId: string): Promise<void> {
-  await db.delete(sources).where(eq(sources.id, sourceId));
+export async function deleteSource(
+  db: DB,
+  leagueId: string,
+  sourceId: string,
+): Promise<void> {
+  await db
+    .delete(sources)
+    .where(and(eq(sources.id, sourceId), eq(sources.leagueId, leagueId)));
 }
 
 // Re-export so route modules import a single barrel.

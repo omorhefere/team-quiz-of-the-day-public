@@ -2,6 +2,7 @@ import { Form, Link, redirect } from "react-router";
 import type { Route } from "./+types/league.manage";
 import {
   deleteCustomQuiz,
+  getCustomQuiz,
   listCustomQuizzes,
   setActiveCustomQuiz,
   setLeaguePlan,
@@ -33,11 +34,19 @@ export async function action({ request, params }: Route.ActionArgs) {
   const quizId = form.get("quizId");
 
   if (intent === "setActive" && typeof quizId === "string") {
-    await setActiveCustomQuiz(db, league.id, quizId);
+    // Ownership check: verify the quiz belongs to THIS league before acting.
+    // Without this, an admin could set/delete quizzes from other leagues (IDOR).
+    const quiz = await getCustomQuiz(db, quizId);
+    if (quiz && quiz.leagueId === league.id) {
+      await setActiveCustomQuiz(db, league.id, quizId);
+    }
   } else if (intent === "clearActive") {
     await setActiveCustomQuiz(db, league.id, null);
   } else if (intent === "delete" && typeof quizId === "string") {
-    await deleteCustomQuiz(db, quizId);
+    const quiz = await getCustomQuiz(db, quizId);
+    if (quiz && quiz.leagueId === league.id) {
+      await deleteCustomQuiz(db, quizId);
+    }
   } else if (intent === "setPlan") {
     const plan = form.get("plan") === "pro" ? "pro" : "free";
     await setLeaguePlan(db, league.id, plan);
@@ -83,6 +92,12 @@ export default function ManageLeague({ loaderData }: Route.ComponentProps) {
             className="rounded-lg border border-gray-700 px-4 py-2 font-semibold text-gray-200 hover:bg-gray-900"
           >
             Sources
+          </Link>
+          <Link
+            to={`/league/${league.code}/settings`}
+            className="rounded-lg border border-gray-700 px-4 py-2 font-semibold text-gray-200 hover:bg-gray-900"
+          >
+            Settings
           </Link>
           {activeQuizId && (
             <Form method="post">
