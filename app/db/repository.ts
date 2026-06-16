@@ -21,13 +21,18 @@
 import { and, asc, desc, eq, gte, inArray, lte, sql } from "drizzle-orm";
 import type { DB } from "./client";
 import {
+  customQuizSubmissions,
+  customQuizzes,
   dailySubmissions,
   decks,
   leagueMemberships,
   leagues,
+  sources,
   teams,
+  type CustomQuiz,
   type Deck,
   type League,
+  type Source,
   type Team,
 } from "./schema";
 import { generateTeamCode, normalizeTeamCode } from "~/lib/code";
@@ -582,6 +587,316 @@ export async function getTeamHistory(
     .orderBy(desc(dailySubmissions.deckDate))
     .limit(limit);
   return rows.map((r) => ({ deckDate: r.deckDate, score: r.score }));
+}
+
+// ---------------------------------------------------------------------------
+// Custom quizzes (league-owned)
+// ---------------------------------------------------------------------------
+
+/** v1 "light admin": the league's creator is its admin. */
+export function isLeagueAdmin(league: League, teamId: string | null): boolean {
+  return !!teamId && league.createdByTeamId === teamId;
+}
+
+/** Whether a league is on the paid tier (gates AI generation later). */
+export function isLeaguePro(league: League): boolean {
+  return league.plan === "pro";
+}
+
+export async function renameLeague(
+  db: DB,
+  leagueId: string,
+  name: string,
+): Promise<void> {
+  await db
+    .update(leagues)
+    .set({ name: name.trim() })
+    .where(eq(leagues.id, leagueId));
+}
+
+/** Permanently deletes a league and all its data (cascade handles children). */
+export async function deleteLeague(db: DB, leagueId: string): Promise<void> {
+  await db.delete(leagues).where(eq(leagues.id, leagueId));
+}
+
+/** Removes a single team from a league (used by admin to kick, or by member to leave). */
+export async function removeTeamFromLeague(
+  db: DB,
+  leagueId: string,
+  teamId: string,
+): Promise<void> {
+  await db
+    .delete(leagueMemberships)
+    .where(
+      and(
+        eq(leagueMemberships.leagueId, leagueId),
+        eq(leagueMemberships.teamId, teamId),
+      ),
+    );
+}
+
+/** All members of a league with their display name and join date. */
+export async function getLeagueMembers(
+  db: DB,
+  leagueId: string,
+): Promise<{ teamId: string; displayName: string; joinedAt: Date }[]> {
+  const rows = await db
+    .select({
+      teamId: leagueMemberships.teamId,
+      displayName: teams.displayName,
+      joinedAt: leagueMemberships.joinedAt,
+    })
+    .from(leagueMemberships)
+    .innerJoin(teams, eq(teams.id, leagueMemberships.teamId))
+    .where(eq(leagueMemberships.leagueId, leagueId))
+    .orderBy(asc(leagueMemberships.joinedAt));
+  return rows;
+}
+
+/** Test/admin helper to flip a league's plan (real billing wires in later). */
+export async function setLeaguePlan(
+  db: DB,
+  leagueId: string,
+  plan: "free" | "pro",
+): Promise<void> {
+  await db.update(leagues).set({ plan }).where(eq(leagues.id, leagueId));
+}
+
+export async function createCustomQuiz(
+  db: DB,
+  params: { leagueId: string; title: string; questions: ValidQuestion[] },
+): Promise<CustomQuiz> {
+  const [quiz] = await db
+    .insert(customQuizzes)
+    .values({
+      leagueId: params.leagueId,
+      title: params.title.trim(),
+      questions: params.questions,
+    })
+    .returning();
+  return quiz;
+}
+
+export async function updateCustomQuiz(
+  db: DB,
+  quizId: string,
+  params: { title: string; questions: ValidQuestion[] },
+): Promise<void> {
+  await db
+    .update(customQuizzes)
+    .set({
+      title: params.title.trim(),
+      questions: params.questions,
+      updatedAt: new Date(),
+    })
+    .where(eq(customQuizzes.id, quizId));
+}
+
+export async function getCustomQuiz(
+  db: DB,
+  quizId: string,
+): Promise<CustomQuiz | null> {
+  const [quiz] = await db
+    .select()
+    .from(customQuizzes)
+    .where(eq(customQuizzes.id, quizId))
+    .limit(1);
+  return quiz ?? null;
+}
+
+export async function listCustomQuizzes(
+  db: DB,
+  leagueId: string,
+): Promise<CustomQuiz[]> {
+  return db
+    .select()
+    .from(customQuizzes)
+    .where(eq(customQuizzes.leagueId, leagueId))
+    .orderBy(desc(customQuizzes.createdAt));
+}
+
+export async function deleteCustomQuiz(db: DB, quizId: string): Promise<void> {
+  // Clear it as any league's active quiz first, then delete.
+  await db
+    .update(leagues)
+    .set({ activeCustomQuizId: null })
+    .where(eq(leagues.activeCustomQuizId, quizId));
+  await db.delete(customQuizzes).where(eq(customQuizzes.id, quizId));
+}
+
+/** Sets (or clears, with null) the league's "quiz of the day". */
+export async function setActiveCustomQuiz(
+  db: DB,
+  leagueId: string,
+  quizId: string | null,
+): Promise<void> {
+  await db
+    .update(leagues)
+    .set({ activeCustomQuizId: quizId })
+    .where(eq(leagues.id, leagueId));
+}
+
+export async function getActiveCustomQuiz(
+  db: DB,
+  league: League,
+): Promise<CustomQuiz | null> {
+  if (!league.activeCustomQuizId) return null;
+  return getCustomQuiz(db, league.activeCustomQuizId);
+}
+
+export async function getCustomQuizSubmission(
+  db: DB,
+  quizId: string,
+  teamId: string,
+) {
+  const [row] = await db
+    .select()
+    .from(customQuizSubmissions)
+    .where(
+      and(
+        eq(customQuizSubmissions.customQuizId, quizId),
+        eq(customQuizSubmissions.teamId, teamId),
+      ),
+    )
+    .limit(1);
+  return row ?? null;
+}
+
+/**
+ * Scores and records a one-shot custom-quiz play. Mirrors `submitAnswers`:
+ * server-side scoring, one play per team per quiz (unique index →
+ * AlreadySubmittedError), snapshot rank.
+ */
+export async function submitCustomQuizAnswers(
+  db: DB,
+  params: { quiz: CustomQuiz; teamId: string; answers: number[] },
+): Promise<{ score: number; rank: number }> {
+  const questions = params.quiz.questions as ValidQuestion[];
+  const score = scoreAnswers(questions, params.answers);
+
+  let inserted;
+  try {
+    [inserted] = await db
+      .insert(customQuizSubmissions)
+      .values({
+        customQuizId: params.quiz.id,
+        teamId: params.teamId,
+        answers: params.answers,
+        score,
+      })
+      .returning();
+  } catch (err) {
+    if (isUniqueViolation(err)) throw new AlreadySubmittedError();
+    throw err;
+  }
+
+  const [{ ahead }] = await db
+    .select({ ahead: sql<number>`count(*)::int` })
+    .from(customQuizSubmissions)
+    .where(
+      and(
+        eq(customQuizSubmissions.customQuizId, params.quiz.id),
+        sql`(${customQuizSubmissions.score} > ${score} or (${customQuizSubmissions.score} = ${score} and ${customQuizSubmissions.submittedAt} < ${inserted.submittedAt}))`,
+      ),
+    );
+  const rank = Number(ahead) + 1;
+  await db
+    .update(customQuizSubmissions)
+    .set({ rankSnapshot: rank })
+    .where(eq(customQuizSubmissions.id, inserted.id));
+
+  return { score, rank };
+}
+
+export async function getCustomQuizLeaderboard(
+  db: DB,
+  quizId: string,
+  limit = 100,
+): Promise<LeaderboardRow[]> {
+  const rows = await db
+    .select({
+      teamId: customQuizSubmissions.teamId,
+      displayName: teams.displayName,
+      score: customQuizSubmissions.score,
+      submittedAt: customQuizSubmissions.submittedAt,
+    })
+    .from(customQuizSubmissions)
+    .innerJoin(teams, eq(teams.id, customQuizSubmissions.teamId))
+    .where(eq(customQuizSubmissions.customQuizId, quizId))
+    .orderBy(desc(customQuizSubmissions.score), asc(customQuizSubmissions.submittedAt))
+    .limit(limit);
+  return rows.map((r, i) => ({ rank: i + 1, ...r }));
+}
+
+// ---------------------------------------------------------------------------
+// Sources (ingested documents a league generates quizzes from)
+// ---------------------------------------------------------------------------
+
+export async function createSource(
+  db: DB,
+  params: {
+    leagueId: string;
+    kind: "url" | "pdf";
+    label: string;
+    text: string;
+    status?: "ready" | "error";
+    error?: string | null;
+  },
+): Promise<Source> {
+  const [source] = await db
+    .insert(sources)
+    .values({
+      leagueId: params.leagueId,
+      kind: params.kind,
+      label: params.label,
+      text: params.text,
+      status: params.status ?? "ready",
+      error: params.error ?? null,
+    })
+    .returning();
+  return source;
+}
+
+export async function listSources(db: DB, leagueId: string) {
+  return db
+    .select({
+      id: sources.id,
+      kind: sources.kind,
+      label: sources.label,
+      status: sources.status,
+      error: sources.error,
+      createdAt: sources.createdAt,
+      chars: sql<number>`length(${sources.text})`,
+      preview: sql<string>`substr(${sources.text}, 1, 240)`,
+    })
+    .from(sources)
+    .where(eq(sources.leagueId, leagueId))
+    .orderBy(desc(sources.createdAt));
+}
+
+/**
+ * Ready sources only — what quiz generation will feed to the model. A source
+ * that errored during ingestion is excluded so it can't poison generation.
+ */
+export async function getReadySources(
+  db: DB,
+  leagueId: string,
+): Promise<Source[]> {
+  return db
+    .select()
+    .from(sources)
+    .where(and(eq(sources.leagueId, leagueId), eq(sources.status, "ready")))
+    .orderBy(desc(sources.createdAt));
+}
+
+export async function deleteSource(
+  db: DB,
+  leagueId: string,
+  sourceId: string,
+): Promise<void> {
+  await db
+    .delete(sources)
+    .where(and(eq(sources.id, sourceId), eq(sources.leagueId, leagueId)));
 }
 
 // Re-export so route modules import a single barrel.

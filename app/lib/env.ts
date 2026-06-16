@@ -45,6 +45,24 @@ export const env = {
 
   /** Public base URL, used for absolute OG image URLs. */
   appUrl: read("APP_URL") ?? "http://localhost:5173",
+
+  /**
+   * Anthropic API key for AI quiz generation. Read lazily (getter) so it's
+   * picked up after `.env` loads at boot. Absent = generation is unavailable.
+   */
+  get anthropicApiKey(): string | undefined {
+    return read("ANTHROPIC_API_KEY");
+  },
+
+  /**
+   * Model used for quiz generation. Defaults to Sonnet 4.6 — a strong, cheaper
+   * model that's plenty for grounded generation (the quality is enforced by the
+   * prompt + source_quote + human review, not raw model horsepower). Override
+   * with LLM_MODEL=claude-opus-4-8 for max quality.
+   */
+  get llmModel(): string {
+    return read("LLM_MODEL") ?? "claude-sonnet-4-6";
+  },
 };
 
 /**

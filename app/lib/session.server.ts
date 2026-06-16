@@ -15,7 +15,12 @@ type SessionData = {
   teamId: string;
 };
 
-const storage = createCookieSessionStorage<SessionData>({
+type FlashData = {
+  /** One-time error message shown on the next page load (consumed on read). */
+  error: string;
+};
+
+const storage = createCookieSessionStorage<SessionData, FlashData>({
   cookie: {
     name: "otl_team",
     httpOnly: true,
@@ -47,4 +52,28 @@ export async function commitTeamId(
 export async function clearTeam(request: Request): Promise<string> {
   const session = await storage.getSession(request.headers.get("Cookie"));
   return storage.destroySession(session);
+}
+
+/**
+ * Writes a flash error into the session and returns a Set-Cookie header value.
+ * The error is consumed (cleared) on the next read via `getFlashError`.
+ */
+export async function flashError(request: Request, message: string): Promise<string> {
+  const session = await storage.getSession(request.headers.get("Cookie"));
+  session.flash("error", message.slice(0, 500));
+  return storage.commitSession(session);
+}
+
+/**
+ * Reads and clears the flash error from the session.
+ * Returns `[error | null, Set-Cookie header]` — the caller must include
+ * the Set-Cookie header in the response so the flash is consumed.
+ */
+export async function getFlashError(
+  request: Request,
+): Promise<[string | null, string]> {
+  const session = await storage.getSession(request.headers.get("Cookie"));
+  const error = session.get("error") ?? null;
+  const cookie = await storage.commitSession(session);
+  return [error, cookie];
 }
