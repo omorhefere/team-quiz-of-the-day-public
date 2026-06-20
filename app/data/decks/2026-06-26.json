@@ -1,0 +1,56 @@
+{
+  "deck_date": "2026-06-26",
+  "curator_notes": "Sports edition.",
+  "questions": [
+    {
+      "q": "How many players are on a standard soccer/football team on the pitch?",
+      "choices": ["9", "10", "11", "12"],
+      "correct_idx": 2
+    },
+    {
+      "q": "In which city are the LA Lakers NBA team based?",
+      "choices": ["San Francisco", "Los Angeles", "Las Vegas", "San Diego"],
+      "correct_idx": 1
+    },
+    {
+      "q": "How often are the Summer Olympic Games held?",
+      "choices": ["Every 2 years", "Every 3 years", "Every 4 years", "Every 5 years"],
+      "correct_idx": 2
+    },
+    {
+      "q": "What is the maximum score in a single game of ten-pin bowling?",
+      "choices": ["200", "250", "300", "350"],
+      "correct_idx": 2
+    },
+    {
+      "q": "In tennis, what term describes a score of 40-40?",
+      "choices": ["Tie", "Advantage", "Deuce", "Love"],
+      "correct_idx": 2
+    },
+    {
+      "q": "Which country has won the most FIFA World Cup titles?",
+      "choices": ["Germany", "Argentina", "Italy", "Brazil"],
+      "correct_idx": 3
+    },
+    {
+      "q": "How many holes are played in a standard round of golf?",
+      "choices": ["9", "12", "18", "24"],
+      "correct_idx": 2
+    },
+    {
+      "q": "In which sport would you perform a 'slam dunk'?",
+      "choices": ["Volleyball", "Basketball", "Handball", "Water polo"],
+      "correct_idx": 1
+    },
+    {
+      "q": "The Tour de France is a race involving which mode of transport?",
+      "choices": ["Running", "Swimming", "Cycling", "Rowing"],
+      "correct_idx": 2
+    },
+    {
+      "q": "What is the diameter of a basketball hoop in inches?",
+      "choices": ["14 inches", "16 inches", "18 inches", "20 inches"],
+      "correct_idx": 2
+    }
+  ]
+}

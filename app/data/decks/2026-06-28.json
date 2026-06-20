@@ -1,0 +1,56 @@
+{
+  "deck_date": "2026-06-28",
+  "curator_notes": "Space & astronomy edition.",
+  "questions": [
+    {
+      "q": "How many planets are in our solar system?",
+      "choices": ["7", "8", "9", "10"],
+      "correct_idx": 1
+    },
+    {
+      "q": "What is the name of the galaxy containing our solar system?",
+      "choices": ["Andromeda", "Triangulum", "Milky Way", "Whirlpool"],
+      "correct_idx": 2
+    },
+    {
+      "q": "Which planet has the most moons in our solar system?",
+      "choices": ["Jupiter", "Saturn", "Uranus", "Neptune"],
+      "correct_idx": 1
+    },
+    {
+      "q": "What is a light-year a measurement of?",
+      "choices": ["Time", "Speed", "Distance", "Brightness"],
+      "correct_idx": 2
+    },
+    {
+      "q": "Who was the first human to travel to space?",
+      "choices": ["Alan Shepard", "John Glenn", "Yuri Gagarin", "Neil Armstrong"],
+      "correct_idx": 2
+    },
+    {
+      "q": "What is the closest star to Earth (after the Sun)?",
+      "choices": ["Sirius", "Betelgeuse", "Proxima Centauri", "Vega"],
+      "correct_idx": 2
+    },
+    {
+      "q": "What phenomenon occurs when the Moon passes between the Sun and Earth?",
+      "choices": ["Lunar eclipse", "Solar eclipse", "Transit", "Occultation"],
+      "correct_idx": 1
+    },
+    {
+      "q": "What is the name of NASA's famous space telescope launched in 1990?",
+      "choices": ["Kepler", "Hubble", "Chandra", "Spitzer"],
+      "correct_idx": 1
+    },
+    {
+      "q": "Which planet rotates on its side (axis nearly parallel to its orbit)?",
+      "choices": ["Neptune", "Saturn", "Uranus", "Venus"],
+      "correct_idx": 2
+    },
+    {
+      "q": "What is the term for a rocky body orbiting the Sun, mainly found between Mars and Jupiter?",
+      "choices": ["Comet", "Meteoroid", "Asteroid", "Dwarf planet"],
+      "correct_idx": 2
+    }
+  ]
+}

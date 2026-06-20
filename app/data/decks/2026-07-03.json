@@ -1,0 +1,56 @@
+{
+  "deck_date": "2026-07-03",
+  "curator_notes": "Music edition.",
+  "questions": [
+    {
+      "q": "How many strings does a standard guitar have?",
+      "choices": ["4", "5", "6", "7"],
+      "correct_idx": 2
+    },
+    {
+      "q": "Which composer wrote 'Für Elise'?",
+      "choices": ["Wolfgang Amadeus Mozart", "Johann Sebastian Bach", "Ludwig van Beethoven", "Franz Schubert"],
+      "correct_idx": 2
+    },
+    {
+      "q": "What does 'BPM' stand for in music?",
+      "choices": ["Bass Per Minute", "Beats Per Measure", "Beats Per Minute", "Bar Per Movement"],
+      "correct_idx": 2
+    },
+    {
+      "q": "Which band released 'Abbey Road' in 1969?",
+      "choices": ["The Rolling Stones", "The Who", "The Beatles", "Led Zeppelin"],
+      "correct_idx": 2
+    },
+    {
+      "q": "What is the lowest-pitched brass instrument in a standard orchestra?",
+      "choices": ["Trombone", "Tuba", "French Horn", "Euphonium"],
+      "correct_idx": 1
+    },
+    {
+      "q": "How many notes are in a standard Western musical scale (one octave)?",
+      "choices": ["5", "7", "8", "12"],
+      "correct_idx": 1
+    },
+    {
+      "q": "Which singer is known as the 'Queen of Pop'?",
+      "choices": ["Beyoncé", "Whitney Houston", "Madonna", "Mariah Carey"],
+      "correct_idx": 2
+    },
+    {
+      "q": "What is the name of the symbol placed at the beginning of a musical staff?",
+      "choices": ["Time signature", "Key signature", "Clef", "Bar line"],
+      "correct_idx": 2
+    },
+    {
+      "q": "Reggae music originated in which country?",
+      "choices": ["Cuba", "Trinidad", "Haiti", "Jamaica"],
+      "correct_idx": 3
+    },
+    {
+      "q": "Which instrument does a 'percussionist' play?",
+      "choices": ["Stringed instruments", "Wind instruments", "Keyboard instruments", "Drums and rhythm instruments"],
+      "correct_idx": 3
+    }
+  ]
+}

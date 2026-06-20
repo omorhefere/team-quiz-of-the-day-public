@@ -1,0 +1,56 @@
+{
+  "deck_date": "2026-06-24",
+  "curator_notes": "Food & drink edition.",
+  "questions": [
+    {
+      "q": "Which country is the origin of sushi?",
+      "choices": ["China", "South Korea", "Japan", "Thailand"],
+      "correct_idx": 2
+    },
+    {
+      "q": "What is the main ingredient in guacamole?",
+      "choices": ["Tomato", "Avocado", "Cucumber", "Lime"],
+      "correct_idx": 1
+    },
+    {
+      "q": "Champagne can only officially come from which country?",
+      "choices": ["Italy", "Spain", "Germany", "France"],
+      "correct_idx": 3
+    },
+    {
+      "q": "What type of pasta is shaped like small rice grains?",
+      "choices": ["Fusilli", "Orzo", "Penne", "Farfalle"],
+      "correct_idx": 1
+    },
+    {
+      "q": "Which spice is derived from the Crocus flower?",
+      "choices": ["Turmeric", "Cardamom", "Saffron", "Paprika"],
+      "correct_idx": 2
+    },
+    {
+      "q": "What is the primary grain used to make traditional Japanese sake?",
+      "choices": ["Barley", "Wheat", "Rice", "Corn"],
+      "correct_idx": 2
+    },
+    {
+      "q": "Gouda cheese originates from which country?",
+      "choices": ["Belgium", "Switzerland", "France", "Netherlands"],
+      "correct_idx": 3
+    },
+    {
+      "q": "What cocktail is made with vodka, lime juice, and ginger beer?",
+      "choices": ["Mojito", "Moscow Mule", "Dark and Stormy", "Tom Collins"],
+      "correct_idx": 1
+    },
+    {
+      "q": "Which fruit is used to make traditional Thai green curry its colour?",
+      "choices": ["Lime", "Green mango", "Green chilli", "Kaffir lime"],
+      "correct_idx": 2
+    },
+    {
+      "q": "What is the Italian term for 'before the meal' appetizers?",
+      "choices": ["Dolci", "Antipasto", "Primo", "Contorno"],
+      "correct_idx": 1
+    }
+  ]
+}

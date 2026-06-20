@@ -1,0 +1,56 @@
+{
+  "deck_date": "2026-06-29",
+  "curator_notes": "Business & economics edition.",
+  "questions": [
+    {
+      "q": "What does 'IPO' stand for?",
+      "choices": ["Internal Profit Operation", "Initial Public Offering", "Integrated Price Order", "International Purchase Option"],
+      "correct_idx": 1
+    },
+    {
+      "q": "Which company was the first to reach a $1 trillion market capitalisation?",
+      "choices": ["Microsoft", "Amazon", "Google", "Apple"],
+      "correct_idx": 3
+    },
+    {
+      "q": "What does GDP stand for?",
+      "choices": ["Gross Domestic Product", "General Demand Price", "Global Development Plan", "Gross Dividend Payment"],
+      "correct_idx": 0
+    },
+    {
+      "q": "Who wrote 'The Wealth of Nations'?",
+      "choices": ["John Maynard Keynes", "Milton Friedman", "Adam Smith", "Karl Marx"],
+      "correct_idx": 2
+    },
+    {
+      "q": "What is the term for the interest calculated on the initial principal and accumulated interest?",
+      "choices": ["Simple interest", "Compound interest", "Fixed interest", "Variable interest"],
+      "correct_idx": 1
+    },
+    {
+      "q": "Which stock exchange is the largest in the world by market capitalisation?",
+      "choices": ["London Stock Exchange", "Tokyo Stock Exchange", "Shanghai Stock Exchange", "New York Stock Exchange"],
+      "correct_idx": 3
+    },
+    {
+      "q": "What does B2B mean in business?",
+      "choices": ["Back to Basics", "Business to Business", "Budget to Budget", "Build to Buy"],
+      "correct_idx": 1
+    },
+    {
+      "q": "What type of company structure limits owner liability to their investment?",
+      "choices": ["Sole Proprietorship", "General Partnership", "Limited Liability Company", "Cooperative"],
+      "correct_idx": 2
+    },
+    {
+      "q": "What is the term for a period of economic decline lasting at least two consecutive quarters?",
+      "choices": ["Depression", "Stagflation", "Recession", "Deflation"],
+      "correct_idx": 2
+    },
+    {
+      "q": "Who is known as the 'Oracle of Omaha'?",
+      "choices": ["George Soros", "Warren Buffett", "Charlie Munger", "Ray Dalio"],
+      "correct_idx": 1
+    }
+  ]
+}

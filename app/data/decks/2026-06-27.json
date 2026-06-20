@@ -1,0 +1,56 @@
+{
+  "deck_date": "2026-06-27",
+  "curator_notes": "Language & words edition.",
+  "questions": [
+    {
+      "q": "What is the most widely spoken language in the world by native speakers?",
+      "choices": ["English", "Spanish", "Hindi", "Mandarin Chinese"],
+      "correct_idx": 3
+    },
+    {
+      "q": "What is a word that reads the same forwards and backwards called?",
+      "choices": ["Anagram", "Palindrome", "Homophone", "Acronym"],
+      "correct_idx": 1
+    },
+    {
+      "q": "Which language has the most words according to most estimates?",
+      "choices": ["French", "German", "English", "Japanese"],
+      "correct_idx": 2
+    },
+    {
+      "q": "What does the Latin phrase 'carpe diem' mean?",
+      "choices": ["Live forever", "Seize the day", "Love all", "Know thyself"],
+      "correct_idx": 1
+    },
+    {
+      "q": "How many letters are in the Spanish alphabet?",
+      "choices": ["26", "27", "28", "29"],
+      "correct_idx": 1
+    },
+    {
+      "q": "What do you call a word that means the opposite of another word?",
+      "choices": ["Synonym", "Homonym", "Antonym", "Acronym"],
+      "correct_idx": 2
+    },
+    {
+      "q": "Which punctuation mark is used to show possession in English?",
+      "choices": ["Comma", "Colon", "Apostrophe", "Hyphen"],
+      "correct_idx": 2
+    },
+    {
+      "q": "What language is the word 'ketchup' originally derived from?",
+      "choices": ["Dutch", "Malay/Chinese", "French", "Spanish"],
+      "correct_idx": 1
+    },
+    {
+      "q": "How many official languages does Switzerland have?",
+      "choices": ["2", "3", "4", "5"],
+      "correct_idx": 2
+    },
+    {
+      "q": "What is the name for a word that sounds like the noise it describes (e.g. 'buzz')?",
+      "choices": ["Alliteration", "Onomatopoeia", "Assonance", "Hyperbole"],
+      "correct_idx": 1
+    }
+  ]
+}

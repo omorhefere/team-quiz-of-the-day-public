@@ -1,4 +1,4 @@
-import { Form, Link, data, useActionData } from "react-router";
+import { Form, Link, data, useActionData, useNavigation } from "react-router";
 import type { Route } from "./+types/register";
 import { getDb } from "~/db/client";
 import { createTeam } from "~/db/repository";
@@ -73,6 +73,9 @@ export default function Register() {
     );
   }
 
+  const navigation = useNavigation();
+  const submitting = navigation.state === "submitting";
+
   // No action data (shouldn't normally render): offer the form.
   return (
     <Centered>
@@ -82,10 +85,14 @@ export default function Register() {
           required
           maxLength={30}
           placeholder="Team name"
-          className="w-full rounded-lg border border-gray-700 bg-gray-900 px-4 py-3"
+          disabled={submitting}
+          className="w-full rounded-lg border border-gray-700 bg-gray-900 px-4 py-3 disabled:opacity-50"
         />
-        <button className="w-full rounded-lg bg-indigo-600 px-4 py-3 font-semibold">
-          Get our team code
+        <button
+          disabled={submitting}
+          className="w-full rounded-lg bg-indigo-600 px-4 py-3 font-semibold disabled:opacity-60"
+        >
+          {submitting ? "Creating your team…" : "Get our team code"}
         </button>
       </Form>
     </Centered>

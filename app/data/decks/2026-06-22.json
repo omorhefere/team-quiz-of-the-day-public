@@ -1,0 +1,56 @@
+{
+  "deck_date": "2026-06-22",
+  "curator_notes": "Tech & computing edition.",
+  "questions": [
+    {
+      "q": "What does 'HTTP' stand for?",
+      "choices": ["HyperText Transfer Protocol", "High Transfer Text Protocol", "HyperText Transmission Process", "Home Tool Transfer Protocol"],
+      "correct_idx": 0
+    },
+    {
+      "q": "Which company developed the Android operating system?",
+      "choices": ["Apple", "Microsoft", "Google", "Samsung"],
+      "correct_idx": 2
+    },
+    {
+      "q": "What does 'CPU' stand for?",
+      "choices": ["Central Processing Unit", "Computer Power Unit", "Core Processing Utility", "Central Program Uploader"],
+      "correct_idx": 0
+    },
+    {
+      "q": "In what year was the World Wide Web invented?",
+      "choices": ["1983", "1989", "1993", "1997"],
+      "correct_idx": 1
+    },
+    {
+      "q": "Which programming language is known for its use in data science and machine learning?",
+      "choices": ["Ruby", "Swift", "Python", "Kotlin"],
+      "correct_idx": 2
+    },
+    {
+      "q": "What does 'RAM' stand for?",
+      "choices": ["Random Access Memory", "Read-Anywhere Module", "Rapid Application Memory", "Remote Access Module"],
+      "correct_idx": 0
+    },
+    {
+      "q": "Who co-founded Apple with Steve Jobs and Ronald Wayne?",
+      "choices": ["Bill Gates", "Steve Wozniak", "Paul Allen", "Larry Ellison"],
+      "correct_idx": 1
+    },
+    {
+      "q": "What is the name of the open-source version control system created by Linus Torvalds?",
+      "choices": ["SVN", "Mercurial", "Git", "Perforce"],
+      "correct_idx": 2
+    },
+    {
+      "q": "Which company made the first commercially successful smartphone?",
+      "choices": ["Nokia", "BlackBerry", "Apple", "Motorola"],
+      "correct_idx": 2
+    },
+    {
+      "q": "What does 'SSD' stand for?",
+      "choices": ["Super Speed Drive", "Solid State Drive", "System Storage Device", "Static Sector Disk"],
+      "correct_idx": 1
+    }
+  ]
+}

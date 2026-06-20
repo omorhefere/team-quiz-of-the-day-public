@@ -1,0 +1,56 @@
+{
+  "deck_date": "2026-06-30",
+  "curator_notes": "Art & literature edition.",
+  "questions": [
+    {
+      "q": "Who painted the Mona Lisa?",
+      "choices": ["Raphael", "Michelangelo", "Leonardo da Vinci", "Caravaggio"],
+      "correct_idx": 2
+    },
+    {
+      "q": "In which novel would you find the character Atticus Finch?",
+      "choices": ["Of Mice and Men", "To Kill a Mockingbird", "The Great Gatsby", "1984"],
+      "correct_idx": 1
+    },
+    {
+      "q": "Which art movement is Salvador Dalí associated with?",
+      "choices": ["Cubism", "Impressionism", "Surrealism", "Expressionism"],
+      "correct_idx": 2
+    },
+    {
+      "q": "Who wrote '1984'?",
+      "choices": ["Aldous Huxley", "H.G. Wells", "George Orwell", "Ray Bradbury"],
+      "correct_idx": 2
+    },
+    {
+      "q": "The painting 'The Starry Night' was created by which artist?",
+      "choices": ["Paul Gauguin", "Vincent van Gogh", "Claude Monet", "Edgar Degas"],
+      "correct_idx": 1
+    },
+    {
+      "q": "Which Shakespeare play features the characters Rosencrantz and Guildenstern?",
+      "choices": ["Macbeth", "Othello", "King Lear", "Hamlet"],
+      "correct_idx": 3
+    },
+    {
+      "q": "What nationality was the painter Frida Kahlo?",
+      "choices": ["Colombian", "Brazilian", "Argentinian", "Mexican"],
+      "correct_idx": 3
+    },
+    {
+      "q": "Which author created the detective character Sherlock Holmes?",
+      "choices": ["Agatha Christie", "Arthur Conan Doyle", "Raymond Chandler", "Dashiell Hammett"],
+      "correct_idx": 1
+    },
+    {
+      "q": "What style of art is characterised by depicting everyday life in small, visible brushstrokes?",
+      "choices": ["Baroque", "Impressionism", "Abstract Expressionism", "Romanticism"],
+      "correct_idx": 1
+    },
+    {
+      "q": "In which country was the poet Pablo Neruda born?",
+      "choices": ["Argentina", "Spain", "Chile", "Peru"],
+      "correct_idx": 2
+    }
+  ]
+}

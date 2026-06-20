@@ -221,7 +221,7 @@ async function rankOf(
     .where(
       and(
         eq(dailySubmissions.deckDate, deckDate),
-        sql`(${dailySubmissions.score} > ${score} or (${dailySubmissions.score} = ${score} and ${dailySubmissions.submittedAt} < ${submittedAt}))`,
+        sql`(${dailySubmissions.score} > ${score} or (${dailySubmissions.score} = ${score} and ${dailySubmissions.submittedAt} < ${submittedAt.toISOString()}))`,
       ),
     );
   return Number(ahead) + 1;
@@ -796,7 +796,7 @@ export async function submitCustomQuizAnswers(
     .where(
       and(
         eq(customQuizSubmissions.customQuizId, params.quiz.id),
-        sql`(${customQuizSubmissions.score} > ${score} or (${customQuizSubmissions.score} = ${score} and ${customQuizSubmissions.submittedAt} < ${inserted.submittedAt}))`,
+        sql`(${customQuizSubmissions.score} > ${score} or (${customQuizSubmissions.score} = ${score} and ${customQuizSubmissions.submittedAt} < ${inserted.submittedAt.toISOString()}))`,
       ),
     );
   const rank = Number(ahead) + 1;

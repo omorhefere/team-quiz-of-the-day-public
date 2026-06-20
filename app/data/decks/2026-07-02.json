@@ -1,0 +1,56 @@
+{
+  "deck_date": "2026-07-02",
+  "curator_notes": "Math & logic edition.",
+  "questions": [
+    {
+      "q": "What is the value of Pi to two decimal places?",
+      "choices": ["3.12", "3.14", "3.16", "3.18"],
+      "correct_idx": 1
+    },
+    {
+      "q": "What is the next prime number after 7?",
+      "choices": ["9", "10", "11", "13"],
+      "correct_idx": 2
+    },
+    {
+      "q": "How many degrees are in a right angle?",
+      "choices": ["45", "60", "90", "180"],
+      "correct_idx": 2
+    },
+    {
+      "q": "What is 15% of 200?",
+      "choices": ["25", "30", "35", "40"],
+      "correct_idx": 1
+    },
+    {
+      "q": "What is the square root of 144?",
+      "choices": ["10", "11", "12", "13"],
+      "correct_idx": 2
+    },
+    {
+      "q": "In the Fibonacci sequence, what comes after 8?",
+      "choices": ["11", "12", "13", "14"],
+      "correct_idx": 2
+    },
+    {
+      "q": "How many sides does a dodecagon have?",
+      "choices": ["10", "11", "12", "14"],
+      "correct_idx": 2
+    },
+    {
+      "q": "What is 2 to the power of 10?",
+      "choices": ["512", "1024", "2048", "256"],
+      "correct_idx": 1
+    },
+    {
+      "q": "What branch of mathematics deals with rates of change?",
+      "choices": ["Algebra", "Geometry", "Statistics", "Calculus"],
+      "correct_idx": 3
+    },
+    {
+      "q": "If a triangle has angles of 60°, 60°, and 60°, what type of triangle is it?",
+      "choices": ["Isosceles", "Scalene", "Equilateral", "Right-angled"],
+      "correct_idx": 2
+    }
+  ]
+}

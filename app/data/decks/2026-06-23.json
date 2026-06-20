@@ -1,0 +1,56 @@
+{
+  "deck_date": "2026-06-23",
+  "curator_notes": "History & culture edition.",
+  "questions": [
+    {
+      "q": "In which year did World War II end?",
+      "choices": ["1943", "1944", "1945", "1946"],
+      "correct_idx": 2
+    },
+    {
+      "q": "Who was the first person to walk on the moon?",
+      "choices": ["Buzz Aldrin", "Yuri Gagarin", "Neil Armstrong", "John Glenn"],
+      "correct_idx": 2
+    },
+    {
+      "q": "The Renaissance period originated in which country?",
+      "choices": ["France", "Spain", "Germany", "Italy"],
+      "correct_idx": 3
+    },
+    {
+      "q": "Which ancient wonder was located in Alexandria, Egypt?",
+      "choices": ["The Colossus of Rhodes", "The Lighthouse of Alexandria", "The Hanging Gardens", "The Temple of Artemis"],
+      "correct_idx": 1
+    },
+    {
+      "q": "Who wrote 'The Communist Manifesto'?",
+      "choices": ["Vladimir Lenin", "Friedrich Engels and Karl Marx", "Leon Trotsky", "Joseph Stalin"],
+      "correct_idx": 1
+    },
+    {
+      "q": "The Berlin Wall fell in which year?",
+      "choices": ["1987", "1988", "1989", "1991"],
+      "correct_idx": 2
+    },
+    {
+      "q": "Which empire was ruled by Genghis Khan?",
+      "choices": ["Ottoman Empire", "Mongol Empire", "Roman Empire", "Persian Empire"],
+      "correct_idx": 1
+    },
+    {
+      "q": "In what year did the Titanic sink?",
+      "choices": ["1908", "1910", "1912", "1914"],
+      "correct_idx": 2
+    },
+    {
+      "q": "Who painted the Sistine Chapel ceiling?",
+      "choices": ["Leonardo da Vinci", "Raphael", "Donatello", "Michelangelo"],
+      "correct_idx": 3
+    },
+    {
+      "q": "The ancient city of Troy is believed to have been located in modern-day which country?",
+      "choices": ["Greece", "Turkey", "Lebanon", "Syria"],
+      "correct_idx": 1
+    }
+  ]
+}

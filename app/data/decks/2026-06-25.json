@@ -1,0 +1,56 @@
+{
+  "deck_date": "2026-06-25",
+  "curator_notes": "Pop culture & entertainment edition.",
+  "questions": [
+    {
+      "q": "Which film won the first-ever Academy Award for Best Picture?",
+      "choices": ["All Quiet on the Western Front", "Wings", "It Happened One Night", "Cavalcade"],
+      "correct_idx": 1
+    },
+    {
+      "q": "Who played Iron Man in the Marvel Cinematic Universe?",
+      "choices": ["Chris Evans", "Chris Hemsworth", "Robert Downey Jr.", "Mark Ruffalo"],
+      "correct_idx": 2
+    },
+    {
+      "q": "Which TV show features the fictional paper company Dunder Mifflin?",
+      "choices": ["Parks and Recreation", "Brooklyn Nine-Nine", "The Office", "Arrested Development"],
+      "correct_idx": 2
+    },
+    {
+      "q": "How many Harry Potter books are in the main series?",
+      "choices": ["5", "6", "7", "8"],
+      "correct_idx": 2
+    },
+    {
+      "q": "Which artist released the album 'Thriller' in 1982?",
+      "choices": ["Prince", "Michael Jackson", "David Bowie", "Elton John"],
+      "correct_idx": 1
+    },
+    {
+      "q": "In 'The Lion King', what is the name of Simba's father?",
+      "choices": ["Rafiki", "Scar", "Mufasa", "Zazu"],
+      "correct_idx": 2
+    },
+    {
+      "q": "Which streaming service produced 'Stranger Things'?",
+      "choices": ["HBO", "Amazon Prime", "Disney+", "Netflix"],
+      "correct_idx": 3
+    },
+    {
+      "q": "What sport is played in the film 'Space Jam'?",
+      "choices": ["Baseball", "Football", "Basketball", "Tennis"],
+      "correct_idx": 2
+    },
+    {
+      "q": "Which band performed 'Bohemian Rhapsody'?",
+      "choices": ["The Beatles", "Led Zeppelin", "Queen", "Pink Floyd"],
+      "correct_idx": 2
+    },
+    {
+      "q": "In 'Friends', what is the name of Ross's second wife (married in Vegas)?",
+      "choices": ["Rachel", "Carol", "Emily", "Elizabeth"],
+      "correct_idx": 2
+    }
+  ]
+}

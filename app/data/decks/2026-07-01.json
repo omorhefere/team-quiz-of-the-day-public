@@ -1,0 +1,56 @@
+{
+  "deck_date": "2026-07-01",
+  "curator_notes": "Animals & nature edition.",
+  "questions": [
+    {
+      "q": "What is the fastest land animal?",
+      "choices": ["Lion", "Pronghorn", "Cheetah", "Greyhound"],
+      "correct_idx": 2
+    },
+    {
+      "q": "How many hearts does an octopus have?",
+      "choices": ["1", "2", "3", "4"],
+      "correct_idx": 2
+    },
+    {
+      "q": "Which mammal is capable of true flight?",
+      "choices": ["Flying squirrel", "Bat", "Sugar glider", "Colugo"],
+      "correct_idx": 1
+    },
+    {
+      "q": "What is the largest land animal?",
+      "choices": ["Hippopotamus", "White Rhinoceros", "African Elephant", "Giraffe"],
+      "correct_idx": 2
+    },
+    {
+      "q": "A group of flamingos is called a what?",
+      "choices": ["Flock", "Flamboyance", "Colony", "Congregation"],
+      "correct_idx": 1
+    },
+    {
+      "q": "Which animal has the longest gestation period?",
+      "choices": ["Elephant", "Rhinoceros", "Giraffe", "Whale"],
+      "correct_idx": 0
+    },
+    {
+      "q": "What is the only continent with no native snake species?",
+      "choices": ["Greenland", "Iceland", "Antarctica", "Ireland"],
+      "correct_idx": 2
+    },
+    {
+      "q": "How many legs does a spider have?",
+      "choices": ["6", "8", "10", "12"],
+      "correct_idx": 1
+    },
+    {
+      "q": "What do you call an animal that eats both plants and meat?",
+      "choices": ["Herbivore", "Carnivore", "Omnivore", "Detritivore"],
+      "correct_idx": 2
+    },
+    {
+      "q": "Which bird lays the largest egg relative to its body size?",
+      "choices": ["Ostrich", "Emperor Penguin", "Kiwi", "Emu"],
+      "correct_idx": 2
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 # Fly.io deployment config. Rename `app` and set `primary_region` before first
 # deploy: `fly launch --no-deploy` then `fly deploy`.
-app = "office-trivia-league"
+app = "team-quiz-of-the-day"
 primary_region = "lhr"
 
 [build]
@@ -15,6 +15,7 @@ primary_region = "lhr"
 
 [env]
   PORT = "3000"
+  HOST = "0.0.0.0"
   NODE_ENV = "production"
 
 [[vm]]

@@ -1,0 +1,56 @@
+{
+  "deck_date": "2026-06-21",
+  "curator_notes": "World geography edition.",
+  "questions": [
+    {
+      "q": "What is the longest river in the world?",
+      "choices": ["Amazon", "Yangtze", "Mississippi", "Nile"],
+      "correct_idx": 3
+    },
+    {
+      "q": "Which country has the most natural lakes?",
+      "choices": ["Russia", "Canada", "USA", "Finland"],
+      "correct_idx": 1
+    },
+    {
+      "q": "What is the capital of Japan?",
+      "choices": ["Osaka", "Kyoto", "Tokyo", "Hiroshima"],
+      "correct_idx": 2
+    },
+    {
+      "q": "The Sahara Desert is primarily located on which continent?",
+      "choices": ["Asia", "South America", "Africa", "Australia"],
+      "correct_idx": 2
+    },
+    {
+      "q": "Which is the smallest country in the world by area?",
+      "choices": ["Monaco", "San Marino", "Liechtenstein", "Vatican City"],
+      "correct_idx": 3
+    },
+    {
+      "q": "Mount Kilimanjaro is located in which country?",
+      "choices": ["Kenya", "Tanzania", "Uganda", "Ethiopia"],
+      "correct_idx": 1
+    },
+    {
+      "q": "What is the capital of Canada?",
+      "choices": ["Toronto", "Vancouver", "Ottawa", "Montreal"],
+      "correct_idx": 2
+    },
+    {
+      "q": "The Amazon rainforest spans across how many countries?",
+      "choices": ["4", "6", "9", "12"],
+      "correct_idx": 2
+    },
+    {
+      "q": "Which ocean is the smallest?",
+      "choices": ["Indian", "Arctic", "Southern", "Atlantic"],
+      "correct_idx": 1
+    },
+    {
+      "q": "What country has the longest coastline in the world?",
+      "choices": ["Russia", "Norway", "Australia", "Canada"],
+      "correct_idx": 3
+    }
+  ]
+}
