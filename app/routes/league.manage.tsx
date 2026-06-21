@@ -11,7 +11,7 @@ import {
 import { requireLeagueAdmin } from "~/lib/custom-quiz.server";
 
 export function meta() {
-  return [{ title: "Manage quizzes · Office Trivia League" }];
+  return [{ title: "Manage quizzes · Team Quiz of the Day" }];
 }
 
 export async function loader({ request, params }: Route.LoaderArgs) {

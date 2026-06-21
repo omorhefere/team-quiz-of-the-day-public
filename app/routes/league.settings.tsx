@@ -9,7 +9,7 @@ import {
 import { requireLeagueAdmin } from "~/lib/custom-quiz.server";
 
 export function meta() {
-  return [{ title: "League settings · Office Trivia League" }];
+  return [{ title: "League settings · Team Quiz of the Day" }];
 }
 
 export async function loader({ request, params }: Route.LoaderArgs) {

@@ -16,7 +16,7 @@ import { MAX_SCORE } from "~/lib/quiz";
 
 export function meta(_: Route.MetaArgs) {
   return [
-    { title: "Office Trivia League" },
+    { title: "Team Quiz of the Day" },
     {
       name: "description",
       content:
@@ -271,7 +271,7 @@ function Landing() {
     <main className="min-h-screen bg-gray-950 text-gray-100">
       <div className="mx-auto flex max-w-2xl flex-col items-center px-6 py-20 text-center">
         <p className="mb-4 text-sm font-semibold uppercase tracking-widest text-indigo-400">
-          Office Trivia League
+          Team Quiz of the Day
         </p>
         <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
           One quiz a day.

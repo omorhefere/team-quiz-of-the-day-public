@@ -14,7 +14,7 @@ import { isRealLLMConfigured } from "~/lib/llm/index.server";
 import { getFlashError } from "~/lib/session.server";
 
 export function meta() {
-  return [{ title: "Sources · Office Trivia League" }];
+  return [{ title: "Sources · Team Quiz of the Day" }];
 }
 
 export async function loader({ request, params }: Route.LoaderArgs) {
