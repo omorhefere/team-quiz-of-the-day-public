@@ -37,6 +37,17 @@ export const env = {
     return "dev-insecure-session-secret";
   },
 
+  get adminSessionSecret(): string {
+    const value = read("ADMIN_SESSION_SECRET");
+    if (value) return value;
+    if (this.isProduction) {
+      throw new Error(
+        "ADMIN_SESSION_SECRET is required in production — refusing to sign admin cookies with a public default.",
+      );
+    }
+    return "dev-insecure-admin-session-secret";
+  },
+
   /** Sentry DSN. When absent, Sentry is a no-op. */
   sentryDsn: read("SENTRY_DSN"),
 

@@ -9,31 +9,39 @@ import { getLeagueByCode, getTeamById, isLeagueAdmin } from "~/db/repository";
 import type { DB } from "~/db/client";
 import type { League } from "~/db/schema";
 import { getTeamId } from "~/lib/session.server";
+import { getAdminSession } from "~/lib/admin-session.server";
 import { customQuizInputSchema, type CustomQuizInput } from "~/lib/quiz";
 
 /**
- * Loads the league for `code` and requires the current team to be its admin.
- * Throws a redirect (to the league page, or home) otherwise.
+ * Loads the league for `code` and requires the caller to be its admin.
+ * Accepts either an admin session (email/password auth) or the legacy team
+ * cookie (for leagues created before admin auth was introduced).
+ * Redirects to the admin login page if neither check passes.
  */
 export async function requireLeagueAdmin(
   request: Request,
   code: string,
-): Promise<{ db: DB; league: League; teamId: string }> {
-  const teamId = await getTeamId(request);
-  if (!teamId) throw redirect("/");
-
+): Promise<{ db: DB; league: League; teamId: string | null }> {
   const db = await getDb();
-  const team = await getTeamById(db, teamId);
-  if (!team) throw redirect("/");
-
   const league = await getLeagueByCode(db, code);
   if (!league) throw new Response("League not found", { status: 404 });
 
-  if (!isLeagueAdmin(league, teamId)) {
-    // Not the admin — bounce to the public league page.
-    throw redirect(`/league/${league.code}`);
+  // Primary: admin session cookie (email/password auth)
+  const adminSession = await getAdminSession(request);
+  if (adminSession?.leagueId === league.id) {
+    return { db, league, teamId: null };
   }
-  return { db, league, teamId };
+
+  // Fallback: legacy team-cookie admin (for pre-auth leagues)
+  const teamId = await getTeamId(request);
+  if (teamId) {
+    const team = await getTeamById(db, teamId);
+    if (team && isLeagueAdmin(league, teamId)) {
+      return { db, league, teamId };
+    }
+  }
+
+  throw redirect(`/league/${league.code}/admin/login`);
 }
 
 /** Parses the builder's hidden `payload` field and validates it. */

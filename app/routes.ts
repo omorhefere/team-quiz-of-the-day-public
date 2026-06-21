@@ -17,6 +17,10 @@ export default [
   route("league/:code/quizzes/new", "routes/league.quiz-new.tsx"),
   route("league/:code/quizzes/:quizId/edit", "routes/league.quiz-edit.tsx"),
   route("league/:code/play", "routes/league.play.tsx"),
+  // League admin auth.
+  route("league/:code/admin/setup", "routes/league.admin.setup.tsx"),
+  route("league/:code/admin/login", "routes/league.admin.login.tsx"),
+  route("league/:code/admin/logout", "routes/league.admin.logout.tsx"),
   route("logout", "routes/logout.tsx"),
   // OG share card (dynamic image). T7.
   route("og/team/:teamId/:deckDate", "routes/og.team.tsx"),
