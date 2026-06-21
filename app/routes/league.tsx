@@ -60,7 +60,6 @@ export async function action({ request, params }: Route.ActionArgs) {
   const league = await getLeagueByCode(db, params.code);
   if (!league) throw new Response("League not found", { status: 404 });
 
-  const { getTeamId } = await import("~/lib/session.server");
   const teamId = await getTeamId(request);
   if (!teamId) throw redirect("/");
 

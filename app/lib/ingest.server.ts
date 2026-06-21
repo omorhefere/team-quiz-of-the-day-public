@@ -85,7 +85,8 @@ function assertSafeUrl(raw: string): URL {
     host === "::1" ||     // IPv6 loopback without brackets (normalisation edge)
     host.endsWith(".local") ||
     /^(127\.|10\.|0\.|169\.254\.|192\.168\.)/.test(host) ||
-    /^172\.(1[6-9]|2\d|3[01])\./.test(host);
+    /^172\.(1[6-9]|2\d|3[01])\./.test(host) ||
+    /^100\./.test(host);  // RFC 6598 shared address + Fly.io internal metadata
   if (blocked) {
     throw new IngestError("That address isn't allowed.");
   }
@@ -182,16 +183,35 @@ export async function ingestUrl(raw: string): Promise<{ label: string; text: str
     throw new IngestError("That URL isn't an HTML page.");
   }
 
-  // Reject implausibly large responses before buffering them into memory.
-  // A 10 MB HTML page is almost certainly mostly boilerplate; Readability
-  // will reduce it anyway, but we don't want to buffer 100 MB first.
   const MAX_HTML_BYTES = 10 * 1024 * 1024; // 10 MB
+
+  // Reject via Content-Length when present (fast path).
   const contentLength = Number(res.headers.get("content-length") ?? 0);
   if (contentLength > MAX_HTML_BYTES) {
     throw new IngestError("That page is too large to ingest (> 10 MB).");
   }
 
-  const text = extractReadableText(await res.text(), url.toString());
+  // Stream the body and abort if it exceeds the cap, so a server that omits
+  // Content-Length can't force us to buffer an arbitrarily large response.
+  if (!res.body) throw new IngestError("The page returned an empty body.");
+  const chunks: Uint8Array[] = [];
+  let totalBytes = 0;
+  const reader = res.body.getReader();
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    totalBytes += value.byteLength;
+    if (totalBytes > MAX_HTML_BYTES) {
+      await reader.cancel();
+      throw new IngestError("That page is too large to ingest (> 10 MB).");
+    }
+    chunks.push(value);
+  }
+  const html = new TextDecoder().decode(
+    chunks.reduce((acc, c) => { const m = new Uint8Array(acc.byteLength + c.byteLength); m.set(acc); m.set(c, acc.byteLength); return m; }, new Uint8Array(0)),
+  );
+
+  const text = extractReadableText(html, url.toString());
   if (text.length < 50) {
     throw new IngestError("Couldn't find readable text on that page.");
   }

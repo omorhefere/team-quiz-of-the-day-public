@@ -35,9 +35,9 @@ export type DeckInput = z.infer<typeof deckInputSchema>;
 export type ValidQuestion = z.infer<typeof questionSchema>;
 
 // --- Custom quizzes (league-owned; built by hand or AI-generated) -----------
-// Same question shape as the daily deck, but a variable number of questions.
+// Custom quizzes are fixed at 10 questions (same as the daily deck).
 export const MIN_CUSTOM_QUESTIONS = 1;
-export const MAX_CUSTOM_QUESTIONS = 20;
+export const MAX_CUSTOM_QUESTIONS = 10;
 export const CUSTOM_QUIZ_TITLE_MAX = 80;
 
 export const customQuizQuestionsSchema = z

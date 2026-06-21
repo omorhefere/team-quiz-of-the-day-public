@@ -67,7 +67,7 @@ export class AnthropicLLMService implements LLMService {
 
     const response = await this.client.messages.parse({
       model: this.model,
-      max_tokens: 16000,
+      max_tokens: 32000,
       thinking: { type: "adaptive" },
       system: [
         { type: "text", text: SYSTEM_INSTRUCTIONS },

@@ -292,15 +292,11 @@ export default function Sources({ loaderData, actionData }: Route.ComponentProps
             )}
             {loaderData.isPro ? (
               <Form method="post" action={`/league/${loaderData.code}/generate`} className="mt-4 space-y-3">
-                <div className="flex flex-wrap gap-3">
-                  <input name="count" type="number" min={1} max={20} defaultValue={5}
-                    className="w-24 rounded-lg border border-gray-700 bg-gray-900 px-3 py-2 text-sm"
-                    aria-label="Number of questions" />
-                  <input name="topic" placeholder="Optional topic focus, e.g. refund policy"
-                    className="flex-1 rounded-lg border border-gray-700 bg-gray-900 px-3 py-2 text-sm" />
-                </div>
+                <input type="hidden" name="count" value="10" />
+                <input name="topic" placeholder="Optional topic focus, e.g. refund policy"
+                  className="w-full rounded-lg border border-gray-700 bg-gray-900 px-3 py-2 text-sm" />
                 <button className="rounded-lg bg-indigo-600 px-5 py-2 font-semibold text-white hover:bg-indigo-500">
-                  Generate quiz with AI →
+                  Generate 10 questions →
                 </button>
               </Form>
             ) : (
