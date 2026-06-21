@@ -1,4 +1,5 @@
 import { Form, Link, redirect } from "react-router";
+import { LeagueNav } from "~/components/Nav";
 import type { Route } from "./+types/league";
 import { getDb } from "~/db/client";
 import {
@@ -78,26 +79,8 @@ export default function LeaguePage({ loaderData }: Route.ComponentProps) {
     loaderData;
   return (
     <main className="min-h-screen bg-gray-950 text-gray-100">
+      <LeagueNav code={league.code} isAdmin={isAdmin} />
       <div className="mx-auto max-w-2xl px-6 py-12">
-        <div className="mb-2 flex items-center justify-between">
-          <Link to="/" className="text-sm text-indigo-400 hover:underline">
-            ← Home
-          </Link>
-          <div className="flex gap-4">
-            {isAdmin && (
-              <Link
-                to={`/league/${league.code}/manage`}
-                className="text-sm text-indigo-400 hover:underline"
-              >
-                Manage quizzes
-              </Link>
-            )}
-            <Link to="/leaderboard" className="text-sm text-gray-500 hover:underline">
-              Global leaderboard
-            </Link>
-          </div>
-        </div>
-
         <h1 className="text-3xl font-bold">{league.name}</h1>
         <p className="mt-1 text-sm text-gray-400">
           Private league · invite code{" "}

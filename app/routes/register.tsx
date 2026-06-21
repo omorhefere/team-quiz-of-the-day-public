@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Form, Link, data, useActionData, useNavigation } from "react-router";
 import type { Route } from "./+types/register";
 import { getDb } from "~/db/client";
@@ -34,6 +35,24 @@ export async function action({ request }: Route.ActionArgs) {
   );
 }
 
+function CopyButton({ text }: { text: string }) {
+  const [copied, setCopied] = useState(false);
+  function copy() {
+    navigator.clipboard.writeText(text).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
+  }
+  return (
+    <button
+      onClick={copy}
+      className="mt-3 rounded-lg border border-gray-700 px-4 py-2 text-sm text-gray-400 hover:border-indigo-500/50 hover:text-indigo-300"
+    >
+      {copied ? "Copied!" : "Copy code"}
+    </button>
+  );
+}
+
 export default function Register() {
   const result = useActionData<typeof action>();
 
@@ -59,6 +78,7 @@ export default function Register() {
         <p className="mt-6 select-all rounded-xl border border-indigo-500/40 bg-indigo-500/10 px-6 py-4 text-3xl font-bold tracking-widest text-indigo-300">
           {result.code}
         </p>
+        <CopyButton text={result.code} />
         <p className="mt-6 max-w-sm text-gray-400">
           📌 Pin this code in your team&rsquo;s Slack channel so anyone can start
           the quiz tomorrow. This device is already saved as your team.

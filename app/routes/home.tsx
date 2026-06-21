@@ -1,4 +1,5 @@
-import { Form, Link } from "react-router";
+import { Form, Link, useNavigation } from "react-router";
+import { Nav } from "~/components/Nav";
 import type { Route } from "./+types/home";
 import { getDb } from "~/db/client";
 import {
@@ -76,19 +77,22 @@ function Dashboard({
 }: {
   data: Extract<Route.ComponentProps["loaderData"], { state: "dashboard" }>;
 }) {
+  const navigation = useNavigation();
+  const navigatingToPlay =
+    navigation.state === "loading" && navigation.location?.pathname === "/play";
   return (
     <main className="min-h-screen bg-gray-950 text-gray-100">
+      <Nav
+        items={[
+          { to: "/play", label: "Play" },
+          { to: "/leaderboard", label: "Leaderboard" },
+        ]}
+        showSignOut
+      />
       <div className="mx-auto max-w-2xl px-6 py-10">
-        <div className="mb-8 flex items-center justify-between">
-          <div>
-            <h1 className="text-2xl font-bold">{data.team.displayName}</h1>
-            <p className="font-mono text-sm text-gray-500">{data.team.code}</p>
-          </div>
-          <Form method="post" action="/logout">
-            <button className="text-xs text-gray-500 hover:text-gray-300">
-              Sign out
-            </button>
-          </Form>
+        <div className="mb-8">
+          <h1 className="text-2xl font-bold">{data.team.displayName}</h1>
+          <p className="font-mono text-sm text-gray-500">{data.team.code}</p>
         </div>
 
         {/* Today */}
@@ -101,9 +105,10 @@ function Dashboard({
               <h2 className="mt-2 text-xl font-semibold">Today&rsquo;s quiz is ready</h2>
               <Link
                 to="/play"
-                className="mt-4 inline-block rounded-lg bg-indigo-600 px-6 py-3 text-lg font-semibold text-white hover:bg-indigo-500"
+                className="mt-4 inline-block rounded-lg bg-indigo-600 px-6 py-3 text-lg font-semibold text-white hover:bg-indigo-500 aria-disabled:opacity-60"
+                aria-disabled={navigatingToPlay}
               >
-                Play today&rsquo;s quiz →
+                {navigatingToPlay ? "Loading quiz…" : "Play today's quiz →"}
               </Link>
             </>
           )}
