@@ -105,7 +105,7 @@ function Dashboard({
               <h2 className="mt-2 text-xl font-semibold">Today&rsquo;s quiz is ready</h2>
               <Link
                 to="/play"
-                className="mt-4 inline-block rounded-lg bg-indigo-600 px-6 py-3 text-lg font-semibold text-white hover:bg-indigo-500 aria-disabled:opacity-60"
+                className={`mt-4 inline-block rounded-lg bg-indigo-600 px-6 py-3 text-lg font-semibold text-white hover:bg-indigo-500 ${navigatingToPlay ? "pointer-events-none opacity-60" : ""}`}
                 aria-disabled={navigatingToPlay}
               >
                 {navigatingToPlay ? "Loading quiz…" : "Play today's quiz →"}
