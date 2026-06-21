@@ -30,7 +30,7 @@ export async function action({ request }: Route.ActionArgs) {
     name,
     createdByTeamId: team.id,
   });
-  throw redirect(`/league/${league.code}`);
+  throw redirect(`/league/${league.code}/admin/setup`);
 }
 
 export default function CreateLeague() {

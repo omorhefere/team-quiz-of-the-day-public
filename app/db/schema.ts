@@ -251,6 +251,22 @@ export const sources = pgTable("source", {
     .defaultNow(),
 });
 
+/** Email/password credentials for a league admin account. One per league. */
+export const leagueAdmins = pgTable("league_admin", {
+  id: uuid("id")
+    .primaryKey()
+    .$defaultFn(() => uuidv7()),
+  leagueId: uuid("league_id")
+    .notNull()
+    .unique()
+    .references(() => leagues.id, { onDelete: "cascade" }),
+  email: text("email").notNull().unique(),
+  passwordHash: text("password_hash").notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+});
+
 export type Team = typeof teams.$inferSelect;
 export type NewTeam = typeof teams.$inferInsert;
 export type Deck = typeof decks.$inferSelect;
@@ -266,6 +282,8 @@ export type CustomQuizSubmission = typeof customQuizSubmissions.$inferSelect;
 export type Source = typeof sources.$inferSelect;
 export type NewSource = typeof sources.$inferInsert;
 
+export type LeagueAdmin = typeof leagueAdmins.$inferSelect;
+
 export const schema = {
   teams,
   decks,
@@ -275,4 +293,5 @@ export const schema = {
   customQuizzes,
   customQuizSubmissions,
   sources,
+  leagueAdmins,
 };
