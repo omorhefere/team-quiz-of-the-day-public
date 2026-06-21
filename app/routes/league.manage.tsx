@@ -20,6 +20,7 @@ export async function loader({ request, params }: Route.LoaderArgs) {
   return {
     league: { code: league.code, name: league.name, plan: league.plan },
     activeQuizId: league.activeCustomQuizId,
+    isDev: process.env.NODE_ENV !== "production",
     quizzes: quizzes.map((q) => ({
       id: q.id,
       title: q.title,
@@ -56,7 +57,7 @@ export async function action({ request, params }: Route.ActionArgs) {
 }
 
 export default function ManageLeague({ loaderData }: Route.ComponentProps) {
-  const { league, activeQuizId, quizzes } = loaderData;
+  const { league, activeQuizId, quizzes, isDev } = loaderData;
   return (
     <main className="min-h-screen bg-gray-950 text-gray-100">
       <LeagueNav code={league.code} isAdmin />
@@ -165,9 +166,8 @@ export default function ManageLeague({ loaderData }: Route.ComponentProps) {
           })}
         </div>
 
-        {/* Dev-only plan toggle — real billing wires in later. AI generation
-            (coming next) is gated behind the pro plan. */}
-        <div className="mt-12 rounded-xl border border-dashed border-gray-800 p-4 text-sm text-gray-500">
+        {/* Dev-only plan toggle — hidden in production until real billing lands. */}
+        {isDev && <div className="mt-12 rounded-xl border border-dashed border-gray-800 p-4 text-sm text-gray-500">
           <p className="mb-2 font-medium text-gray-400">Plan (dev toggle)</p>
           <Form method="post" className="flex items-center gap-2">
             <input type="hidden" name="intent" value="setPlan" />
@@ -180,7 +180,7 @@ export default function ManageLeague({ loaderData }: Route.ComponentProps) {
               {league.plan === "pro" ? "Downgrade to free" : "Upgrade to pro"}
             </button>
           </Form>
-        </div>
+        </div>}
       </div>
     </main>
   );
