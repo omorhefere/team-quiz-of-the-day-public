@@ -1,4 +1,5 @@
 import { Form, Link, redirect } from "react-router";
+import { LeagueNav } from "~/components/Nav";
 import type { Route } from "./+types/league.manage";
 import {
   deleteCustomQuiz,
@@ -58,11 +59,10 @@ export default function ManageLeague({ loaderData }: Route.ComponentProps) {
   const { league, activeQuizId, quizzes } = loaderData;
   return (
     <main className="min-h-screen bg-gray-950 text-gray-100">
+      <LeagueNav code={league.code} isAdmin />
       <div className="mx-auto max-w-2xl px-6 py-12">
-        <div className="mb-2 flex items-center justify-between">
-          <Link to={`/league/${league.code}`} className="text-sm text-indigo-400 hover:underline">
-            ← {league.name}
-          </Link>
+        <div className="mb-4 flex items-center justify-between">
+          <h1 className="text-2xl font-bold">Manage quizzes</h1>
           <span
             className={`rounded-full px-3 py-1 text-xs font-semibold ${
               league.plan === "pro"
@@ -73,8 +73,6 @@ export default function ManageLeague({ loaderData }: Route.ComponentProps) {
             {league.plan.toUpperCase()} plan
           </span>
         </div>
-
-        <h1 className="text-2xl font-bold">Manage quizzes</h1>
         <p className="mt-1 text-sm text-gray-400">
           Build a quiz and set it as your league&rsquo;s quiz of the day. Members
           play it once.
@@ -82,16 +80,16 @@ export default function ManageLeague({ loaderData }: Route.ComponentProps) {
 
         <div className="mt-6 flex flex-wrap gap-3">
           <Link
-            to={`/league/${league.code}/quizzes/new`}
+            to={`/league/${league.code}/sources`}
             className="rounded-lg bg-indigo-600 px-4 py-2 font-semibold text-white hover:bg-indigo-500"
           >
-            + Build a quiz
+            Generate quiz with AI →
           </Link>
           <Link
-            to={`/league/${league.code}/sources`}
+            to={`/league/${league.code}/quizzes/new`}
             className="rounded-lg border border-gray-700 px-4 py-2 font-semibold text-gray-200 hover:bg-gray-900"
           >
-            Sources
+            + Build manually
           </Link>
           <Link
             to={`/league/${league.code}/settings`}
