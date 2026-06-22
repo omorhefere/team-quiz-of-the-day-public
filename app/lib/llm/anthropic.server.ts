@@ -10,9 +10,8 @@
  *   them means the 2nd+ generation only pays ~0.1x for that text. (Note: caching
  *   only kicks in above ~4k tokens on Opus — small corpora just won't cache, which
  *   is fine.)
- * - `claude-opus-4-8` with adaptive thinking: this is a quality-sensitive task
- *   (a confidently-wrong answer is the failure we're guarding against), so we use
- *   the most capable model and let it think.
+ * - `claude-sonnet-4-6` by default: great quality for structured extraction at
+ *   ~10x lower cost than Opus. Override with LLM_MODEL env var if needed.
  *
  * Server-only (`.server`).
  */
@@ -67,8 +66,7 @@ export class AnthropicLLMService implements LLMService {
 
     const response = await this.client.messages.parse({
       model: this.model,
-      max_tokens: 32000,
-      thinking: { type: "adaptive" },
+      max_tokens: 8000,
       system: [
         { type: "text", text: SYSTEM_INSTRUCTIONS },
         // The volatile-but-large source text, cached so re-generation is cheap.

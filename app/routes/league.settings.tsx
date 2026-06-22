@@ -1,4 +1,4 @@
-import { Form, Link, redirect } from "react-router";
+import { Form, Link, redirect, useNavigation } from "react-router";
 import type { Route } from "./+types/league.settings";
 import {
   deleteLeague,
@@ -55,6 +55,8 @@ export async function action({ request, params }: Route.ActionArgs) {
 
 export default function LeagueSettings({ loaderData }: Route.ComponentProps) {
   const { code, name, adminTeamId, members } = loaderData;
+  const navigation = useNavigation();
+  const submitting = navigation.state === "submitting";
   return (
     <main className="min-h-screen bg-gray-950 text-gray-100">
       <div className="mx-auto max-w-2xl px-6 py-12">
@@ -81,8 +83,8 @@ export default function LeagueSettings({ loaderData }: Route.ComponentProps) {
               required
               className="flex-1 rounded-lg border border-gray-700 bg-gray-900 px-4 py-2 text-gray-100 outline-none focus:border-indigo-500"
             />
-            <button className="rounded-lg bg-indigo-600 px-4 py-2 font-semibold text-white hover:bg-indigo-500">
-              Save
+            <button disabled={submitting} className="rounded-lg bg-indigo-600 px-4 py-2 font-semibold text-white hover:bg-indigo-500 disabled:opacity-60">
+              {submitting ? "Saving…" : "Save"}
             </button>
           </Form>
         </section>
@@ -114,7 +116,7 @@ export default function LeagueSettings({ loaderData }: Route.ComponentProps) {
                   >
                     <input type="hidden" name="intent" value="remove-member" />
                     <input type="hidden" name="teamId" value={m.teamId} />
-                    <button className="text-xs font-semibold text-gray-500 hover:text-red-400">
+                    <button disabled={submitting} className="text-xs font-semibold text-gray-500 hover:text-red-400 disabled:opacity-60">
                       Remove
                     </button>
                   </Form>
@@ -142,8 +144,8 @@ export default function LeagueSettings({ loaderData }: Route.ComponentProps) {
             }}
           >
             <input type="hidden" name="intent" value="delete" />
-            <button className="rounded-lg border border-red-500/40 px-4 py-2 text-sm font-semibold text-red-400 hover:bg-red-500/10">
-              Delete league
+            <button disabled={submitting} className="rounded-lg border border-red-500/40 px-4 py-2 text-sm font-semibold text-red-400 hover:bg-red-500/10 disabled:opacity-60">
+              {submitting ? "Deleting…" : "Delete league"}
             </button>
           </Form>
         </section>
