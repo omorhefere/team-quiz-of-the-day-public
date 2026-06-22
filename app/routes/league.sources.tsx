@@ -137,6 +137,9 @@ export default function Sources({ loaderData, actionData }: Route.ComponentProps
   const addingPdf =
     navigation.state === "submitting" &&
     navigation.formData?.get("intent") === "add-pdf";
+  const generating =
+    navigation.state !== "idle" &&
+    navigation.location?.pathname?.endsWith("/generate");
 
   const [urlFields, setUrlFields] = useState([crypto.randomUUID()]);
   function addField() { setUrlFields((p) => [...p, crypto.randomUUID()]); }
@@ -295,8 +298,9 @@ export default function Sources({ loaderData, actionData }: Route.ComponentProps
                 <input type="hidden" name="count" value="10" />
                 <input name="topic" placeholder="Optional topic focus, e.g. refund policy"
                   className="w-full rounded-lg border border-gray-700 bg-gray-900 px-3 py-2 text-sm" />
-                <button className="rounded-lg bg-indigo-600 px-5 py-2 font-semibold text-white hover:bg-indigo-500">
-                  Generate 10 questions →
+                <button disabled={generating}
+                  className="rounded-lg bg-indigo-600 px-5 py-2 font-semibold text-white hover:bg-indigo-500 disabled:opacity-60">
+                  {generating ? "Generating… this takes ~30 seconds" : "Generate 10 questions →"}
                 </button>
               </Form>
             ) : (
