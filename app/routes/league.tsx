@@ -1,4 +1,4 @@
-import { Form, Link, redirect } from "react-router";
+import { Form, Link, redirect, useActionData, useNavigation } from "react-router";
 import { LeagueNav } from "~/components/Nav";
 import type { Route } from "./+types/league";
 import { getDb } from "~/db/client";
@@ -11,10 +11,13 @@ import {
   isLeagueAdmin,
   isLeagueMember,
   removeTeamFromLeague,
+  createTeam,
+  joinLeague,
 } from "~/db/repository";
 import { currentUtcDeckDate, weeklyWindow } from "~/lib/date";
-import { getTeamId } from "~/lib/session.server";
+import { getTeamId, commitTeamId } from "~/lib/session.server";
 import { MAX_SCORE } from "~/lib/quiz";
+import { validateDisplayName, DISPLAY_NAME_ERROR_MESSAGES } from "~/lib/profanity";
 
 export function meta({ data }: Route.MetaArgs) {
   return [{ title: `${data?.league.name ?? "League"} · Office Trivia League` }];
@@ -60,11 +63,27 @@ export async function action({ request, params }: Route.ActionArgs) {
   const league = await getLeagueByCode(db, params.code);
   if (!league) throw new Response("League not found", { status: 404 });
 
+  const form = await request.formData();
+  const intent = String(form.get("intent") ?? "");
+
+  if (intent === "register-and-join") {
+    const displayName = String(form.get("displayName") ?? "").trim();
+    const error = validateDisplayName(displayName);
+    if (error) {
+      return { registerError: DISPLAY_NAME_ERROR_MESSAGES[error] };
+    }
+    const team = await createTeam(db, displayName);
+    await joinLeague(db, league.id, team.id);
+    const cookie = await commitTeamId(request, team.id);
+    throw redirect(`/league/${league.code}`, {
+      headers: { "Set-Cookie": cookie },
+    });
+  }
+
   const teamId = await getTeamId(request);
   if (!teamId) throw redirect("/");
 
-  const form = await request.formData();
-  if (String(form.get("intent")) === "leave") {
+  if (intent === "leave") {
     // Admins can't leave their own league — they must delete it via settings.
     if (!isLeagueAdmin(league, teamId)) {
       await removeTeamFromLeague(db, league.id, teamId);
@@ -74,6 +93,11 @@ export async function action({ request, params }: Route.ActionArgs) {
 }
 
 export default function LeaguePage({ loaderData }: Route.ComponentProps) {
+  const actionData = useActionData<typeof action>();
+  const navigation = useNavigation();
+  const registering =
+    navigation.state === "submitting" &&
+    navigation.formData?.get("intent") === "register-and-join";
   const { league, deckDate, daily, weekly, teamId, member, isAdmin, activeQuiz, playedActive } =
     loaderData;
   return (
@@ -99,6 +123,39 @@ export default function LeaguePage({ loaderData }: Route.ComponentProps) {
             >
               {playedActive ? "See your result →" : "Play now →"}
             </Link>
+          </div>
+        )}
+
+        {/* Visitor with no team: offer to create one and auto-join */}
+        {!teamId && (
+          <div className="mt-6 rounded-xl border border-indigo-500/30 bg-indigo-500/5 p-5">
+            <p className="text-sm font-semibold text-gray-200">
+              Create your team to join <span className="text-indigo-300">{league.name}</span>
+            </p>
+            <p className="mt-1 text-xs text-gray-500">
+              Pick a team name — you&rsquo;ll get a code to share with your crew.
+            </p>
+            {actionData && "registerError" in actionData && (
+              <p className="mt-3 rounded-lg bg-red-500/10 px-3 py-2 text-xs text-red-300">
+                {actionData.registerError}
+              </p>
+            )}
+            <Form method="post" className="mt-3 flex gap-2">
+              <input type="hidden" name="intent" value="register-and-join" />
+              <input
+                name="displayName"
+                required
+                maxLength={30}
+                placeholder="e.g. Platform Engineering"
+                className="flex-1 rounded-lg border border-gray-700 bg-gray-900 px-3 py-2 text-sm text-gray-100 outline-none focus:border-indigo-500"
+              />
+              <button
+                disabled={registering}
+                className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500 disabled:opacity-60"
+              >
+                {registering ? "Joining…" : "Join league →"}
+              </button>
+            </Form>
           </div>
         )}
 
