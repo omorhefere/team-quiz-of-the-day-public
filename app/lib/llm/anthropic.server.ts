@@ -87,7 +87,8 @@ export class AnthropicLLMService implements LLMService {
 
   async generateQuiz(params: GenerateParams): Promise<GeneratedQuiz> {
     const isTopicMode = params.mode === "topic";
-    const topicLine = params.topic ? ` Focus on: ${params.topic}.` : "";
+    const safeTopic = params.topic ? params.topic.replace(/[\r\n]+/g, " ").slice(0, 200) : undefined;
+    const topicLine = safeTopic ? ` Focus on: ${safeTopic}.` : "";
 
     const systemBlocks: Anthropic.Messages.TextBlockParam[] = isTopicMode
       ? [{ type: "text", text: TOPIC_SYSTEM_INSTRUCTIONS }]
@@ -102,7 +103,7 @@ export class AnthropicLLMService implements LLMService {
         ];
 
     const userContent = isTopicMode
-      ? `Generate ${params.count} multiple-choice questions about: ${params.topic ?? "general knowledge"}.${difficultyInstruction(params.difficulty)}`
+      ? `Generate ${params.count} multiple-choice questions about: ${safeTopic ?? "general knowledge"}.${difficultyInstruction(params.difficulty)}`
       : `Generate ${params.count} multiple-choice questions based strictly on the source documents above.${topicLine}${difficultyInstruction(params.difficulty)}`;
 
     const response = await this.client.messages.parse({
@@ -126,6 +127,7 @@ export class AnthropicLLMService implements LLMService {
   }
 
   async summariseSource(text: string, label: string): Promise<string> {
+    const safeLabel = label.replace(/[\r\n]+/g, " ").slice(0, 200);
     const preview = text.slice(0, 8000);
     const response = await this.client.messages.create({
       model: this.model,
@@ -133,7 +135,7 @@ export class AnthropicLLMService implements LLMService {
       messages: [
         {
           role: "user",
-          content: `Summarise the following document in 2–3 plain sentences. State what it is about and what kinds of facts it contains. Do not start with "This document".\n\nDocument title: ${label}\n\n${preview}`,
+          content: `Summarise the following document in 2–3 plain sentences. State what it is about and what kinds of facts it contains. Do not start with "This document".\n\nDocument title: ${safeLabel}\n\n${preview}`,
         },
       ],
     });
