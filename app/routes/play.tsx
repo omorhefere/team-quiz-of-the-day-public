@@ -16,7 +16,7 @@ import { answersSchema, MAX_SCORE, QUESTIONS_PER_DECK } from "~/lib/quiz";
 import type { ValidQuestion } from "~/lib/quiz";
 
 export function meta() {
-  return [{ title: "Today's Quiz · Office Trivia League" }];
+  return [{ title: "Today's Quiz · Team Quiz of the Day" }];
 }
 
 export async function loader({ request }: Route.LoaderArgs) {
@@ -208,7 +208,7 @@ function Results({
 }: {
   data: Extract<Route.ComponentProps["loaderData"], { state: "done" }>;
 }) {
-  const shareText = `Office Trivia League — ${data.deckDate}\n${data.team.displayName}: ${data.score}/${MAX_SCORE} · Rank #${data.rank} of ${data.total}\n${data.appUrl}`;
+  const shareText = `Team Quiz of the Day — ${data.deckDate}\n${data.team.displayName}: ${data.score}/${MAX_SCORE} · Rank #${data.rank} of ${data.total}\n${data.appUrl}`;
   return (
     <div className="text-center">
       <p className="text-sm uppercase tracking-widest text-indigo-400">

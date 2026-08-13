@@ -1,5 +1,5 @@
 /**
- * T2 — Drizzle schema for the Office Trivia League.
+ * T2 — Drizzle schema for the Team Quiz of the Day.
  *
  * Three tables, matching the data model in the approved design doc:
  *   team             — a playing team, identified by a shareable code

@@ -17,7 +17,7 @@ import { getTeamId } from "~/lib/session.server";
 import { MAX_SCORE } from "~/lib/quiz";
 
 export function meta({ data }: Route.MetaArgs) {
-  return [{ title: `${data?.league.name ?? "League"} · Office Trivia League` }];
+  return [{ title: `${data?.league.name ?? "League"} · Team Quiz of the Day` }];
 }
 
 export async function loader({ request, params }: Route.LoaderArgs) {

@@ -5,7 +5,7 @@ import { parseQuizPayload, requireLeagueAdmin } from "~/lib/custom-quiz.server";
 import { QuizBuilder } from "~/components/QuizBuilder";
 
 export function meta() {
-  return [{ title: "Build a quiz · Office Trivia League" }];
+  return [{ title: "Build a quiz · Team Quiz of the Day" }];
 }
 
 export async function loader({ request, params }: Route.LoaderArgs) {

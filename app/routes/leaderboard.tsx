@@ -7,7 +7,7 @@ import { getTeamId } from "~/lib/session.server";
 import { MAX_SCORE } from "~/lib/quiz";
 
 export function meta() {
-  return [{ title: "Global Leaderboard · Office Trivia League" }];
+  return [{ title: "Global Leaderboard · Team Quiz of the Day" }];
 }
 
 export async function loader({ request }: Route.LoaderArgs) {
