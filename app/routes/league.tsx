@@ -67,13 +67,20 @@ export async function action({ request, params }: Route.ActionArgs) {
   const intent = String(form.get("intent") ?? "");
 
   if (intent === "register-and-join") {
+    const existingTeamId = await getTeamId(request);
+    if (existingTeamId) {
+      return { registerError: "You already have a team — refresh the page." };
+    }
     const displayName = String(form.get("displayName") ?? "").trim();
     const error = validateDisplayName(displayName);
     if (error) {
       return { registerError: DISPLAY_NAME_ERROR_MESSAGES[error] };
     }
-    const team = await createTeam(db, displayName);
-    await joinLeague(db, league.id, team.id);
+    const team = await db.transaction(async (tx) => {
+      const t = await createTeam(tx, displayName);
+      await joinLeague(tx, league.id, t.id);
+      return t;
+    });
     const cookie = await commitTeamId(request, team.id);
     throw redirect(`/league/${league.code}`, {
       headers: { "Set-Cookie": cookie },
