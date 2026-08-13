@@ -45,6 +45,8 @@ export interface GenerateParams {
   topic?: string;
   /** Controls how obvious the questions should be. Defaults to "medium". */
   difficulty?: "easy" | "medium" | "hard";
+  /** "document" (default) grounds questions in sources. "topic" uses model knowledge — unverified. */
+  mode?: "document" | "topic";
 }
 
 /**

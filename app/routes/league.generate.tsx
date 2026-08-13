@@ -35,11 +35,6 @@ export async function action({ request, params }: Route.ActionArgs) {
     await redirectWithError("AI generation is a Pro feature. Upgrade your league to use it.");
   }
 
-  const sources = await getReadySources(db, league.id);
-  if (sources.length === 0) {
-    await redirectWithError("Add at least one source before generating a quiz.");
-  }
-
   const form = await request.formData();
   const countSchema = z.coerce
     .number()
@@ -54,6 +49,16 @@ export async function action({ request, params }: Route.ActionArgs) {
   const difficulty = (["easy", "medium", "hard"].includes(difficultyRaw)
     ? difficultyRaw
     : "medium") as "easy" | "medium" | "hard";
+  const modeRaw = String(form.get("mode") ?? "").trim();
+  const mode = modeRaw === "topic" ? "topic" : "document";
+
+  const sources = mode === "document" ? await getReadySources(db, league.id) : [];
+  if (mode === "document" && sources.length === 0) {
+    await redirectWithError("Add at least one source before generating a quiz.");
+  }
+  if (mode === "topic" && !topic) {
+    await redirectWithError("Enter a topic to generate from.");
+  }
 
   let questions: ValidQuestion[] = [];
   try {
@@ -62,6 +67,7 @@ export async function action({ request, params }: Route.ActionArgs) {
       count,
       topic,
       difficulty,
+      mode,
     });
     questions = result.questions.map((q) => ({
       q: q.q,
@@ -80,9 +86,13 @@ export async function action({ request, params }: Route.ActionArgs) {
   }
 
   // Save as a draft quiz and open it in the builder for the admin to review/edit.
+  const title = mode === "topic"
+    ? `AI draft (topic) · ${new Date().toISOString().slice(0, 10)} · ${topic}`
+    : `AI draft · ${new Date().toISOString().slice(0, 10)}${topic ? ` · ${topic}` : ""}`;
+
   const quiz = await createCustomQuiz(db, {
     leagueId: league.id,
-    title: `AI draft · ${new Date().toISOString().slice(0, 10)}${topic ? ` · ${topic}` : ""}`,
+    title,
     questions,
   });
   throw redirect(`/league/${league.code}/quizzes/${quiz.id}/edit`);

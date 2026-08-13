@@ -20,7 +20,10 @@ function firstSentence(text: string): string {
 
 export class FakeLLMService implements LLMService {
   async generateQuiz(params: GenerateParams): Promise<GeneratedQuiz> {
-    const sources = params.sources.length
+    const isTopicMode = params.mode === "topic";
+    const sources = isTopicMode
+      ? [{ label: params.topic ?? "general knowledge", text: `Questions about ${params.topic ?? "general knowledge"}.` }]
+      : params.sources.length
       ? params.sources
       : [{ label: "sample", text: "The company was founded in 2019." }];
 

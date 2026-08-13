@@ -33,6 +33,15 @@ const MAX_SOURCE_CHARS = 200_000;
  * prefix. The hard rule — "answerable ONLY from the sources, and quote the
  * passage" — is what makes the output checkable rather than trusted.
  */
+const TOPIC_SYSTEM_INSTRUCTIONS = `You write multiple-choice quiz questions for a company's internal trivia game.
+
+Rules:
+- Write questions about the topic provided. Use your general knowledge — there are no source documents.
+- Exactly 4 answer choices. One is correct; the other three must be plausible but clearly wrong.
+- Prefer concrete, checkable facts (names, numbers, dates, definitions) over vague or opinion-based questions.
+- Set "source_quote" to the exact fact that proves the answer, written as a plain sentence (since there is no document to quote from, state the fact directly, e.g. "The Eiffel Tower was completed in 1889.").
+- Keep questions and choices concise.`;
+
 const SYSTEM_INSTRUCTIONS = `You write multiple-choice quiz questions for a company's internal trivia game, based ONLY on the source documents provided.
 
 Rules:
@@ -65,29 +74,30 @@ export class AnthropicLLMService implements LLMService {
   }
 
   async generateQuiz(params: GenerateParams): Promise<GeneratedQuiz> {
-    const sourceText = buildSourceText(params.sources);
-    const topicLine = params.topic
-      ? ` Focus on: ${params.topic}.`
-      : "";
+    const isTopicMode = params.mode === "topic";
+    const topicLine = params.topic ? ` Focus on: ${params.topic}.` : "";
+
+    const systemBlocks: Anthropic.Messages.TextBlockParam[] = isTopicMode
+      ? [{ type: "text", text: TOPIC_SYSTEM_INSTRUCTIONS }]
+      : [
+          { type: "text", text: SYSTEM_INSTRUCTIONS },
+          // The volatile-but-large source text, cached so re-generation is cheap.
+          {
+            type: "text",
+            text: `SOURCE DOCUMENTS:\n\n${buildSourceText(params.sources)}`,
+            cache_control: { type: "ephemeral" },
+          },
+        ];
+
+    const userContent = isTopicMode
+      ? `Generate ${params.count} multiple-choice questions about: ${params.topic ?? "general knowledge"}.${difficultyInstruction(params.difficulty)}`
+      : `Generate ${params.count} multiple-choice questions based strictly on the source documents above.${topicLine}${difficultyInstruction(params.difficulty)}`;
 
     const response = await this.client.messages.parse({
       model: this.model,
       max_tokens: 8000,
-      system: [
-        { type: "text", text: SYSTEM_INSTRUCTIONS },
-        // The volatile-but-large source text, cached so re-generation is cheap.
-        {
-          type: "text",
-          text: `SOURCE DOCUMENTS:\n\n${sourceText}`,
-          cache_control: { type: "ephemeral" },
-        },
-      ],
-      messages: [
-        {
-          role: "user",
-          content: `Generate ${params.count} multiple-choice questions based strictly on the source documents above.${topicLine}${difficultyInstruction(params.difficulty)}`,
-        },
-      ],
+      system: systemBlocks,
+      messages: [{ role: "user", content: userContent }],
       output_config: {
         format: zodOutputFormat(generatedQuizSchema),
       },
