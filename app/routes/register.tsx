@@ -79,15 +79,35 @@ export default function Register() {
           {result.code}
         </p>
         <CopyButton text={result.code} />
-        <p className="mt-6 max-w-sm text-gray-400">
-          📌 Pin this code in your team&rsquo;s Slack channel so anyone can start
-          the quiz tomorrow. This device is already saved as your team.
+        <p className="mt-4 max-w-sm text-sm text-gray-500">
+          📌 Save this code — anyone on your team enters it to play together.
         </p>
+
+        {/* League join prompt */}
+        <div className="mt-8 w-full max-w-sm rounded-xl border border-gray-800 p-5 text-left">
+          <p className="text-sm font-semibold text-gray-200">Joining a league?</p>
+          <p className="mt-1 text-xs text-gray-500">
+            If someone gave you a league code, enter it here.
+          </p>
+          <Form method="post" action="/leagues/join" className="mt-3 flex gap-2">
+            <input
+              name="code"
+              required
+              placeholder="e.g. JADE-LYNX-08"
+              autoCapitalize="characters"
+              className="flex-1 rounded-lg border border-gray-700 bg-gray-900 px-3 py-2 text-sm uppercase tracking-wider text-gray-100 outline-none focus:border-indigo-500"
+            />
+            <button className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500">
+              Join
+            </button>
+          </Form>
+        </div>
+
         <Link
           to="/play"
-          className="mt-8 inline-block rounded-lg bg-indigo-600 px-6 py-3 font-semibold text-white hover:bg-indigo-500"
+          className="mt-4 text-sm text-gray-500 hover:text-gray-300 hover:underline"
         >
-          Play today&rsquo;s quiz →
+          Skip — play today&rsquo;s global quiz →
         </Link>
       </Centered>
     );
