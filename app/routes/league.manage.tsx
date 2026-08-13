@@ -1,4 +1,4 @@
-import { Form, Link, redirect } from "react-router";
+import { Form, Link, redirect, useNavigation } from "react-router";
 import { LeagueNav } from "~/components/Nav";
 import type { Route } from "./+types/league.manage";
 import {
@@ -11,7 +11,7 @@ import {
 import { requireLeagueAdmin } from "~/lib/custom-quiz.server";
 
 export function meta() {
-  return [{ title: "Manage quizzes · Office Trivia League" }];
+  return [{ title: "Manage quizzes · Team Quiz of the Day" }];
 }
 
 export async function loader({ request, params }: Route.LoaderArgs) {
@@ -58,6 +58,8 @@ export async function action({ request, params }: Route.ActionArgs) {
 
 export default function ManageLeague({ loaderData }: Route.ComponentProps) {
   const { league, activeQuizId, quizzes, isDev } = loaderData;
+  const navigation = useNavigation();
+  const submitting = navigation.state === "submitting";
   return (
     <main className="min-h-screen bg-gray-950 text-gray-100">
       <LeagueNav code={league.code} isAdmin />
@@ -101,7 +103,7 @@ export default function ManageLeague({ loaderData }: Route.ComponentProps) {
           {activeQuizId && (
             <Form method="post">
               <input type="hidden" name="intent" value="clearActive" />
-              <button className="rounded-lg border border-gray-700 px-4 py-2 text-sm font-semibold text-gray-200 hover:bg-gray-900">
+              <button disabled={submitting} className="rounded-lg border border-gray-700 px-4 py-2 text-sm font-semibold text-gray-200 hover:bg-gray-900 disabled:opacity-60">
                 Clear active quiz
               </button>
             </Form>
@@ -136,7 +138,7 @@ export default function ManageLeague({ loaderData }: Route.ComponentProps) {
                       <Form method="post">
                         <input type="hidden" name="intent" value="setActive" />
                         <input type="hidden" name="quizId" value={quiz.id} />
-                        <button className="rounded-lg bg-indigo-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-indigo-500">
+                        <button disabled={submitting} className="rounded-lg bg-indigo-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-indigo-500 disabled:opacity-60">
                           Set active
                         </button>
                       </Form>
@@ -155,7 +157,7 @@ export default function ManageLeague({ loaderData }: Route.ComponentProps) {
                     >
                       <input type="hidden" name="intent" value="delete" />
                       <input type="hidden" name="quizId" value={quiz.id} />
-                      <button className="rounded-lg px-3 py-1.5 text-xs font-semibold text-gray-500 hover:text-red-400">
+                      <button disabled={submitting} className="rounded-lg px-3 py-1.5 text-xs font-semibold text-gray-500 hover:text-red-400 disabled:opacity-60">
                         Delete
                       </button>
                     </Form>

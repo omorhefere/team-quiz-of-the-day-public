@@ -6,7 +6,7 @@ import { QuizBuilder } from "~/components/QuizBuilder";
 import type { ValidQuestion } from "~/lib/quiz";
 
 export function meta() {
-  return [{ title: "Edit quiz · Office Trivia League" }];
+  return [{ title: "Edit quiz · Team Quiz of the Day" }];
 }
 
 export async function loader({ request, params }: Route.LoaderArgs) {

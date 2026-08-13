@@ -16,7 +16,7 @@ import { MAX_SCORE } from "~/lib/quiz";
 
 export function meta(_: Route.MetaArgs) {
   return [
-    { title: "Office Trivia League" },
+    { title: "Team Quiz of the Day" },
     {
       name: "description",
       content:
@@ -80,6 +80,12 @@ function Dashboard({
   const navigation = useNavigation();
   const navigatingToPlay =
     navigation.state === "loading" && navigation.location?.pathname === "/play";
+  const creatingLeague =
+    navigation.state === "submitting" &&
+    navigation.formAction?.endsWith("/leagues/create");
+  const joiningLeague =
+    navigation.state === "submitting" &&
+    navigation.formAction?.endsWith("/leagues/join");
   return (
     <main className="min-h-screen bg-gray-950 text-gray-100">
       <Nav
@@ -213,8 +219,8 @@ function Dashboard({
                 placeholder="e.g. Acme Engineering"
                 className="w-full rounded-lg border border-gray-700 bg-gray-900 px-3 py-2 text-sm"
               />
-              <button className="w-full rounded-lg bg-indigo-600 px-3 py-2 text-sm font-semibold text-white hover:bg-indigo-500">
-                Create &amp; get invite code
+              <button disabled={creatingLeague} className="w-full rounded-lg bg-indigo-600 px-3 py-2 text-sm font-semibold text-white hover:bg-indigo-500 disabled:opacity-60">
+                {creatingLeague ? "Creating…" : "Create & get invite code"}
               </button>
             </Form>
 
@@ -233,8 +239,8 @@ function Dashboard({
                 autoCapitalize="characters"
                 className="w-full rounded-lg border border-gray-700 bg-gray-900 px-3 py-2 text-sm uppercase tracking-wider"
               />
-              <button className="w-full rounded-lg border border-gray-700 px-3 py-2 text-sm font-semibold text-gray-200 hover:bg-gray-900">
-                Join with code
+              <button disabled={joiningLeague} className="w-full rounded-lg border border-gray-700 px-3 py-2 text-sm font-semibold text-gray-200 hover:bg-gray-900 disabled:opacity-60">
+                {joiningLeague ? "Joining…" : "Join with code"}
               </button>
             </Form>
           </div>
@@ -271,7 +277,7 @@ function Landing() {
     <main className="min-h-screen bg-gray-950 text-gray-100">
       <div className="mx-auto flex max-w-2xl flex-col items-center px-6 py-20 text-center">
         <p className="mb-4 text-sm font-semibold uppercase tracking-widest text-indigo-400">
-          Office Trivia League
+          Team Quiz of the Day
         </p>
         <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
           One quiz a day.

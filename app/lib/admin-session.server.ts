@@ -8,7 +8,7 @@ type AdminSessionData = {
 
 const storage = createCookieSessionStorage<AdminSessionData>({
   cookie: {
-    name: "otl_admin",
+    name: "tqotd_admin",
     httpOnly: true,
     path: "/",
     sameSite: "lax",

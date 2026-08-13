@@ -106,7 +106,7 @@ async function fetchSafe(
   signal: AbortSignal,
 ): Promise<Response> {
   const HEADERS = {
-    "user-agent": "OfficeTriviaLeagueBot/1.0 (+quiz ingestion)",
+    "user-agent": "TeamQuizBot/1.0 (+quiz ingestion)",
     accept: "text/html,application/xhtml+xml",
   };
 

@@ -15,7 +15,7 @@ import { getTeamId } from "~/lib/session.server";
 import { customAnswersSchema, type ValidQuestion } from "~/lib/quiz";
 
 export function meta({ data }: Route.MetaArgs) {
-  return [{ title: `${data?.quizTitle ?? "Quiz"} · Office Trivia League` }];
+  return [{ title: `${data?.quizTitle ?? "Quiz"} · Team Quiz of the Day` }];
 }
 
 export async function loader({ request, params }: Route.LoaderArgs) {

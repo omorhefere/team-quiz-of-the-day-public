@@ -22,7 +22,7 @@ type FlashData = {
 
 const storage = createCookieSessionStorage<SessionData, FlashData>({
   cookie: {
-    name: "otl_team",
+    name: "tqotd_team",
     httpOnly: true,
     path: "/",
     sameSite: "lax",

@@ -29,8 +29,8 @@ type Cache = {
   ready?: Promise<DB>;
 };
 
-const globalCache = globalThis as unknown as { __otl_db?: Cache };
-const cache: Cache = (globalCache.__otl_db ??= {});
+const globalCache = globalThis as unknown as { __tqotd_db?: Cache };
+const cache: Cache = (globalCache.__tqotd_db ??= {});
 
 async function build(): Promise<DB> {
   if (env.databaseUrl) {
