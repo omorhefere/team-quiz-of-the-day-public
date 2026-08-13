@@ -87,6 +87,8 @@ export const verifyResultSchema = z.object({
 export interface LLMService {
   generateQuiz(params: GenerateParams): Promise<GeneratedQuiz>;
   verifyQuiz(params: VerifyParams): Promise<VerifyResult>;
+  /** Returns a 2–3 sentence plain-English summary of the source text. */
+  summariseSource(text: string, label: string): Promise<string>;
 }
 
 export class LLMUnavailableError extends Error {

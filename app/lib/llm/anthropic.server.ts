@@ -125,6 +125,22 @@ export class AnthropicLLMService implements LLMService {
     return response.parsed_output;
   }
 
+  async summariseSource(text: string, label: string): Promise<string> {
+    const preview = text.slice(0, 8000);
+    const response = await this.client.messages.create({
+      model: this.model,
+      max_tokens: 200,
+      messages: [
+        {
+          role: "user",
+          content: `Summarise the following document in 2–3 plain sentences. State what it is about and what kinds of facts it contains. Do not start with "This document".\n\nDocument title: ${label}\n\n${preview}`,
+        },
+      ],
+    });
+    const block = response.content.find((b) => b.type === "text");
+    return block?.type === "text" ? block.text.trim() : "";
+  }
+
   async verifyQuiz(params: VerifyParams): Promise<VerifyResult> {
     const questionList = params.questions
       .map((q, i) => {

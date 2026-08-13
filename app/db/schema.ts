@@ -245,6 +245,8 @@ export const sources = pgTable("source", {
   label: text("label").notNull(),
   // The extracted readable text — the actual payload generation consumes.
   text: text("text").notNull().default(""),
+  /** AI-generated 2–3 sentence plain-English summary. Null until generated. */
+  summary: text("summary"),
   // "ready" once extracted, "error" if ingestion failed. We never want a
   // half-broken source (404, unparseable PDF) silently feeding generation, so
   // generation only reads sources with status = "ready".

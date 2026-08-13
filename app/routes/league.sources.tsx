@@ -10,7 +10,7 @@ import {
 } from "~/db/repository";
 import { requireLeagueAdmin } from "~/lib/custom-quiz.server";
 import { ingestUrl, ingestPdf, IngestError } from "~/lib/ingest.server";
-import { isRealLLMConfigured } from "~/lib/llm/index.server";
+import { getLLMService, isRealLLMConfigured } from "~/lib/llm/index.server";
 import { getFlashError } from "~/lib/session.server";
 
 export function meta() {
@@ -36,6 +36,7 @@ export async function loader({ request, params }: Route.LoaderArgs) {
         chars: s.chars,
         status: s.status,
         preview: s.preview,
+        summary: s.summary,
       })),
     },
     { headers: { "Set-Cookie": cookie } },
@@ -68,7 +69,9 @@ export async function action({ request, params }: Route.ActionArgs) {
     const results = await Promise.allSettled(
       rawUrls.map(async (raw) => {
         const { label, text } = await ingestUrl(raw);
-        await createSource(db, { leagueId: league.id, kind: "url", label, text });
+        let summary: string | undefined;
+        try { summary = await getLLMService().summariseSource(text, label); } catch { /* non-fatal */ }
+        await createSource(db, { leagueId: league.id, kind: "url", label, text, summary });
       }),
     );
     const errors = results
@@ -102,7 +105,9 @@ export async function action({ request, params }: Route.ActionArgs) {
       files.map(async (file) => {
         const buffer = await file.arrayBuffer();
         const { label, text } = await ingestPdf(buffer, file.name);
-        await createSource(db, { leagueId: league.id, kind: "pdf", label, text });
+        let summary: string | undefined;
+        try { summary = await getLLMService().summariseSource(text, label); } catch { /* non-fatal */ }
+        await createSource(db, { leagueId: league.id, kind: "pdf", label, text, summary });
       }),
     );
     const errors = results
@@ -267,9 +272,11 @@ export default function Sources({ loaderData, actionData }: Route.ComponentProps
                   <button className="shrink-0 text-xs font-semibold text-gray-500 hover:text-red-400">Delete</button>
                 </Form>
               </div>
-              {s.preview && (
-                <p className="mt-3 line-clamp-3 text-sm text-gray-400">{s.preview}…</p>
-              )}
+              {s.summary ? (
+                <p className="mt-3 text-sm text-gray-400">{s.summary}</p>
+              ) : s.preview ? (
+                <p className="mt-3 line-clamp-3 text-sm text-gray-500">{s.preview}…</p>
+              ) : null}
             </div>
           ))}
         </div>

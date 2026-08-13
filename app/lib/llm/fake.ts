@@ -48,6 +48,10 @@ export class FakeLLMService implements LLMService {
     return { questions };
   }
 
+  async summariseSource(text: string, label: string): Promise<string> {
+    return `[DEV] Summary of "${label}". Contains ${Math.ceil(text.length / 100)} paragraphs of content. Topics include sample facts for development use.`;
+  }
+
   async verifyQuiz(params: VerifyParams): Promise<VerifyResult> {
     return {
       verdicts: params.questions.map(() => ({ verdict: "confident" as const })),
