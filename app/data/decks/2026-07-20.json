@@ -1,0 +1,106 @@
+{
+  "deck_date": "2026-07-20",
+  "curator_notes": "Languages and linguistics.",
+  "questions": [
+    {
+      "q": "How many official languages does the United Nations recognise?",
+      "choices": [
+        "4",
+        "5",
+        "6",
+        "8"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "What is the most widely spoken language in the world by total speakers?",
+      "choices": [
+        "Spanish",
+        "Hindi",
+        "English",
+        "Mandarin Chinese"
+      ],
+      "correct_idx": 3
+    },
+    {
+      "q": "The study of the meaning of words and sentences is called what?",
+      "choices": [
+        "Syntax",
+        "Phonology",
+        "Morphology",
+        "Semantics"
+      ],
+      "correct_idx": 3
+    },
+    {
+      "q": "Which language family does English belong to?",
+      "choices": [
+        "Romance",
+        "Slavic",
+        "Germanic",
+        "Celtic"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "How many letters are in the modern English alphabet?",
+      "choices": [
+        "24",
+        "25",
+        "26",
+        "27"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "What is the term for a word that sounds like the noise it describes (e.g., 'buzz')?",
+      "choices": [
+        "Alliteration",
+        "Onomatopoeia",
+        "Assonance",
+        "Anaphora"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "Which is the oldest known written language?",
+      "choices": [
+        "Ancient Egyptian",
+        "Sumerian cuneiform",
+        "Sanskrit",
+        "Classical Chinese"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "What do you call a word that reads the same forwards and backwards?",
+      "choices": [
+        "Anagram",
+        "Acronym",
+        "Palindrome",
+        "Homophone"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "The Latin phrase 'carpe diem' translates to what?",
+      "choices": [
+        "Know thyself",
+        "Seize the day",
+        "I think therefore I am",
+        "Love conquers all"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "Approximately how many languages are spoken in the world today?",
+      "choices": [
+        "Under 1,000",
+        "Around 3,000",
+        "Around 7,000",
+        "Over 20,000"
+      ],
+      "correct_idx": 2
+    }
+  ]
+}

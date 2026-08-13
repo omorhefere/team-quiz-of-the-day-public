@@ -1,0 +1,106 @@
+{
+  "deck_date": "2026-07-12",
+  "curator_notes": "Literature and famous books.",
+  "questions": [
+    {
+      "q": "Who wrote 'Pride and Prejudice'?",
+      "choices": [
+        "Charlotte Bronte",
+        "George Eliot",
+        "Jane Austen",
+        "Mary Shelley"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "In George Orwell's '1984', what is the name of the ruling party's leader?",
+      "choices": [
+        "The Party Chairman",
+        "Big Brother",
+        "The Leader",
+        "Winston Smith"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "Which Shakespeare play features the characters Rosencrantz and Guildenstern?",
+      "choices": [
+        "Macbeth",
+        "Othello",
+        "King Lear",
+        "Hamlet"
+      ],
+      "correct_idx": 3
+    },
+    {
+      "q": "What is the subtitle of Mary Shelley's novel 'Frankenstein'?",
+      "choices": [
+        "A Gothic Tale",
+        "The Modern Prometheus",
+        "The Creation",
+        "A Cautionary Tale"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "Which author created the detective Hercule Poirot?",
+      "choices": [
+        "Arthur Conan Doyle",
+        "Dorothy L. Sayers",
+        "Agatha Christie",
+        "Ruth Rendell"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "In which region of Middle-earth is Tolkien's 'The Shire' located?",
+      "choices": [
+        "Gondor",
+        "Rohan",
+        "Eriador in the northwest",
+        "Rhun"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "Who wrote the novel 'One Hundred Years of Solitude'?",
+      "choices": [
+        "Pablo Neruda",
+        "Isabel Allende",
+        "Jorge Luis Borges",
+        "Gabriel Garcia Marquez"
+      ],
+      "correct_idx": 3
+    },
+    {
+      "q": "What is the first book of the Bible's Old Testament?",
+      "choices": [
+        "Exodus",
+        "Psalms",
+        "Genesis",
+        "Numbers"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "Which novel begins with the line 'Call me Ishmael'?",
+      "choices": [
+        "The Old Man and the Sea",
+        "Moby Dick",
+        "Billy Budd",
+        "Lord Jim"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "Who wrote 'The Metamorphosis', in which a man wakes up as a giant insect?",
+      "choices": [
+        "Thomas Mann",
+        "Bertolt Brecht",
+        "Franz Kafka",
+        "Stefan Zweig"
+      ],
+      "correct_idx": 2
+    }
+  ]
+}

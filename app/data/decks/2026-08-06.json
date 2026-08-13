@@ -1,0 +1,106 @@
+{
+  "deck_date": "2026-08-06",
+  "curator_notes": "British history.",
+  "questions": [
+    {
+      "q": "In what year was the Magna Carta signed?",
+      "choices": [
+        "1066",
+        "1215",
+        "1348",
+        "1509"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "Which monarch ruled Britain the longest in history?",
+      "choices": [
+        "Queen Victoria",
+        "King George III",
+        "Queen Elizabeth II",
+        "King Henry VIII"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "The Battle of Hastings in 1066 was fought between Harold II and whom?",
+      "choices": [
+        "The Vikings",
+        "William the Conqueror",
+        "King Cnut",
+        "The Scots"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "What was the period 1665-1666 known for in London?",
+      "choices": [
+        "The English Civil War",
+        "The Industrial Revolution",
+        "The Great Plague and Great Fire",
+        "The Black Death"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "Which British scientist proposed the theory of evolution by natural selection?",
+      "choices": [
+        "Isaac Newton",
+        "Michael Faraday",
+        "Charles Darwin",
+        "Francis Crick"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "The Act of Union in 1707 united England and Wales with which country?",
+      "choices": [
+        "Ireland",
+        "Scotland",
+        "Wales alone",
+        "Northern Ireland"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "Which war was fought between Britain and Argentina in 1982?",
+      "choices": [
+        "The Gulf War",
+        "The Falklands War",
+        "The South Atlantic Conflict",
+        "The Malvinas War"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "Who was the first female Prime Minister of the United Kingdom?",
+      "choices": [
+        "Theresa May",
+        "Margaret Thatcher",
+        "Liz Truss",
+        "Barbara Castle"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "Hadrian's Wall was built by which empire?",
+      "choices": [
+        "The Norman Empire",
+        "The Byzantine Empire",
+        "The Roman Empire",
+        "The Viking Empire"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "In which century did the British Industrial Revolution primarily occur?",
+      "choices": [
+        "17th century",
+        "18th-19th century",
+        "20th century",
+        "16th century"
+      ],
+      "correct_idx": 1
+    }
+  ]
+}

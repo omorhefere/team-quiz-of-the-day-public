@@ -1,0 +1,106 @@
+{
+  "deck_date": "2026-07-05",
+  "curator_notes": "Oceans and marine life.",
+  "questions": [
+    {
+      "q": "What is the largest ocean on Earth?",
+      "choices": [
+        "Atlantic",
+        "Indian",
+        "Arctic",
+        "Pacific"
+      ],
+      "correct_idx": 3
+    },
+    {
+      "q": "Which marine animal has three hearts?",
+      "choices": [
+        "Shark",
+        "Octopus",
+        "Dolphin",
+        "Sea turtle"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "What percentage of Earth's surface is covered by oceans?",
+      "choices": [
+        "51%",
+        "61%",
+        "71%",
+        "81%"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "The Great Barrier Reef is located off the coast of which country?",
+      "choices": [
+        "New Zealand",
+        "South Africa",
+        "Australia",
+        "Indonesia"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "What is the deepest point in the world's oceans called?",
+      "choices": [
+        "The Mariana Trench",
+        "The Pacific Abyss",
+        "The Java Deep",
+        "The Puerto Rico Trench"
+      ],
+      "correct_idx": 0
+    },
+    {
+      "q": "Which fish is known as the fastest in the ocean?",
+      "choices": [
+        "Tuna",
+        "Mako shark",
+        "Swordfish",
+        "Sailfish"
+      ],
+      "correct_idx": 3
+    },
+    {
+      "q": "Sea horses are unique among fish because the males do what?",
+      "choices": [
+        "Build nests",
+        "Carry and give birth to young",
+        "Guard eggs only",
+        "Change colour to attract mates"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "What drives surface ocean currents primarily?",
+      "choices": [
+        "Earth's rotation alone",
+        "Temperature differences alone",
+        "Wind",
+        "Gravity"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "Which ocean is the saltiest on average?",
+      "choices": [
+        "Pacific",
+        "Indian",
+        "Arctic",
+        "Atlantic"
+      ],
+      "correct_idx": 3
+    },
+    {
+      "q": "Bioluminescence in the ocean is produced by organisms creating what?",
+      "choices": [
+        "Sound waves",
+        "Heat energy",
+        "Light through chemical reactions",
+        "Electrical pulses"
+      ],
+      "correct_idx": 2
+    }
+  ]
+}

@@ -1,0 +1,106 @@
+{
+  "deck_date": "2026-07-27",
+  "curator_notes": "Health and medicine.",
+  "questions": [
+    {
+      "q": "What vitamin is produced by the human body when exposed to sunlight?",
+      "choices": [
+        "Vitamin A",
+        "Vitamin B12",
+        "Vitamin C",
+        "Vitamin D"
+      ],
+      "correct_idx": 3
+    },
+    {
+      "q": "What is the normal resting heart rate range for adults (beats per minute)?",
+      "choices": [
+        "40-60 bpm",
+        "60-100 bpm",
+        "80-120 bpm",
+        "50-90 bpm"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "Which organ filters toxins from the blood?",
+      "choices": [
+        "Pancreas",
+        "Spleen",
+        "Liver",
+        "Gallbladder"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "What is the name of the protein that carries oxygen in red blood cells?",
+      "choices": [
+        "Insulin",
+        "Haemoglobin",
+        "Albumin",
+        "Fibrin"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "Which disease is caused by a deficiency of vitamin C?",
+      "choices": [
+        "Rickets",
+        "Pellagra",
+        "Scurvy",
+        "Beriberi"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "What does an ECG (electrocardiogram) measure?",
+      "choices": [
+        "Brain activity",
+        "Blood oxygen levels",
+        "Electrical activity of the heart",
+        "Lung capacity"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "The BCG vaccine protects against which disease?",
+      "choices": [
+        "Polio",
+        "Measles",
+        "Tuberculosis",
+        "Typhoid"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "What is the medical term for high blood pressure?",
+      "choices": [
+        "Tachycardia",
+        "Hypotension",
+        "Atherosclerosis",
+        "Hypertension"
+      ],
+      "correct_idx": 3
+    },
+    {
+      "q": "Which specialist doctor focuses on the heart and cardiovascular system?",
+      "choices": [
+        "Neurologist",
+        "Pulmonologist",
+        "Cardiologist",
+        "Gastroenterologist"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "What is the Hippocratic Oath in medicine?",
+      "choices": [
+        "A treatment guideline",
+        "A legal contract for doctors",
+        "A traditional ethical pledge taken by doctors",
+        "A ranking system for medical schools"
+      ],
+      "correct_idx": 2
+    }
+  ]
+}

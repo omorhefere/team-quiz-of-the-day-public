@@ -1,0 +1,106 @@
+{
+  "deck_date": "2026-07-19",
+  "curator_notes": "Inventions and innovations throughout history.",
+  "questions": [
+    {
+      "q": "Who is credited with inventing the telephone?",
+      "choices": [
+        "Thomas Edison",
+        "Nikola Tesla",
+        "Alexander Graham Bell",
+        "Guglielmo Marconi"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "In what century was the printing press with movable type developed by Gutenberg?",
+      "choices": [
+        "13th century",
+        "14th century",
+        "15th century",
+        "16th century"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "What did Alexander Fleming discover in 1928?",
+      "choices": [
+        "Insulin",
+        "Penicillin",
+        "X-rays",
+        "The polio vaccine"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "Who invented the World Wide Web in 1989?",
+      "choices": [
+        "Bill Gates",
+        "Steve Jobs",
+        "Tim Berners-Lee",
+        "Vint Cerf"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "The steam engine was significantly improved during the Industrial Revolution by whom?",
+      "choices": [
+        "Richard Arkwright",
+        "George Stephenson",
+        "James Watt",
+        "Thomas Newcomen"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "In what year did the Wright Brothers make their first powered flight?",
+      "choices": [
+        "1899",
+        "1901",
+        "1903",
+        "1905"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "Which inventor held more than 1,000 patents, including for the phonograph and the light bulb?",
+      "choices": [
+        "Nikola Tesla",
+        "Thomas Edison",
+        "George Westinghouse",
+        "Michael Faraday"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "The GPS navigation system was originally developed by which organisation?",
+      "choices": [
+        "NASA",
+        "DARPA",
+        "The US Department of Defense",
+        "MIT"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "What ancient invention is considered one of humanity's greatest, enabling transportation and machinery?",
+      "choices": [
+        "The pulley",
+        "The wheel",
+        "The lever",
+        "The axe"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "Which company launched the first commercially available smartphone with a full touchscreen in 2007?",
+      "choices": [
+        "Nokia",
+        "BlackBerry",
+        "Samsung",
+        "Apple"
+      ],
+      "correct_idx": 3
+    }
+  ]
+}

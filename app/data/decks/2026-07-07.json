@@ -1,0 +1,106 @@
+{
+  "deck_date": "2026-07-07",
+  "curator_notes": "Human body and anatomy.",
+  "questions": [
+    {
+      "q": "How many bones are in the adult human body?",
+      "choices": [
+        "196",
+        "206",
+        "216",
+        "226"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "Which organ produces insulin?",
+      "choices": [
+        "Liver",
+        "Kidney",
+        "Pancreas",
+        "Spleen"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "What is the largest organ of the human body?",
+      "choices": [
+        "Liver",
+        "Skin",
+        "Large intestine",
+        "Lungs"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "How many chambers does the human heart have?",
+      "choices": [
+        "2",
+        "3",
+        "4",
+        "5"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "Which part of the brain is responsible for balance and coordination?",
+      "choices": [
+        "Cerebrum",
+        "Medulla oblongata",
+        "Thalamus",
+        "Cerebellum"
+      ],
+      "correct_idx": 3
+    },
+    {
+      "q": "What is the smallest bone in the human body?",
+      "choices": [
+        "Patella",
+        "Stirrup (stapes)",
+        "Radius",
+        "Fibula"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "Approximately how many taste buds does the average adult human tongue have?",
+      "choices": [
+        "1,000",
+        "5,000",
+        "10,000",
+        "25,000"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "Which blood type is known as the universal donor?",
+      "choices": [
+        "A negative",
+        "B negative",
+        "AB positive",
+        "O negative"
+      ],
+      "correct_idx": 3
+    },
+    {
+      "q": "How long is the small intestine in an average adult?",
+      "choices": [
+        "1-2 metres",
+        "3-4 metres",
+        "6-7 metres",
+        "10-11 metres"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "What substance makes up the outer layer of teeth?",
+      "choices": [
+        "Dentine",
+        "Enamel",
+        "Calcium",
+        "Cementum"
+      ],
+      "correct_idx": 1
+    }
+  ]
+}

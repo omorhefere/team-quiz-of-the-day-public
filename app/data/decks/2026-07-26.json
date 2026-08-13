@@ -1,0 +1,106 @@
+{
+  "deck_date": "2026-07-26",
+  "curator_notes": "Art history and famous paintings.",
+  "questions": [
+    {
+      "q": "Who painted the Sistine Chapel ceiling?",
+      "choices": [
+        "Leonardo da Vinci",
+        "Raphael",
+        "Michelangelo",
+        "Botticelli"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "In which museum can you view the 'Mona Lisa'?",
+      "choices": [
+        "The Uffizi Gallery",
+        "The Prado",
+        "The Metropolitan Museum",
+        "The Louvre"
+      ],
+      "correct_idx": 3
+    },
+    {
+      "q": "Which artist is famous for his series of water lily paintings?",
+      "choices": [
+        "Paul Cezanne",
+        "Claude Monet",
+        "Pierre-Auguste Renoir",
+        "Edouard Manet"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "Vincent van Gogh is associated with which art movement?",
+      "choices": [
+        "Impressionism",
+        "Surrealism",
+        "Post-Impressionism",
+        "Cubism"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "Which Spanish artist co-founded Cubism?",
+      "choices": [
+        "Salvador Dali",
+        "Joan Miro",
+        "Francisco Goya",
+        "Pablo Picasso"
+      ],
+      "correct_idx": 3
+    },
+    {
+      "q": "What technique involves applying thick paint to a canvas to create texture?",
+      "choices": [
+        "Fresco",
+        "Impasto",
+        "Chiaroscuro",
+        "Sfumato"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "Edvard Munch's famous painting 'The Scream' was created in which country?",
+      "choices": [
+        "Sweden",
+        "Denmark",
+        "Germany",
+        "Norway"
+      ],
+      "correct_idx": 3
+    },
+    {
+      "q": "The art period known as the 'Renaissance' began in which country?",
+      "choices": [
+        "France",
+        "Spain",
+        "Italy",
+        "Greece"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "What is a 'triptych' in art?",
+      "choices": [
+        "A sculpture with three dimensions",
+        "A painting or carving on three panels",
+        "A print made with three colours",
+        "A three-dimensional mosaic"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "Jackson Pollock is famous for which style of painting?",
+      "choices": [
+        "Photorealism",
+        "Abstract Expressionism",
+        "Pop Art",
+        "Minimalism"
+      ],
+      "correct_idx": 1
+    }
+  ]
+}

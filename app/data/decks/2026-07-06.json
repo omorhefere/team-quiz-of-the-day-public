@@ -1,0 +1,106 @@
+{
+  "deck_date": "2026-07-06",
+  "curator_notes": "World cinema classics.",
+  "questions": [
+    {
+      "q": "Which film won the first Academy Award for Best Picture in 1929?",
+      "choices": [
+        "All Quiet on the Western Front",
+        "Wings",
+        "Sunrise",
+        "The Broadway Melody"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "Who directed the 1968 film '2001: A Space Odyssey'?",
+      "choices": [
+        "Ridley Scott",
+        "George Lucas",
+        "Steven Spielberg",
+        "Stanley Kubrick"
+      ],
+      "correct_idx": 3
+    },
+    {
+      "q": "In 'The Godfather', which family does Michael Corleone lead?",
+      "choices": [
+        "Barzini",
+        "Tattaglia",
+        "Corleone",
+        "Stracci"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "Which actress played Scarlett O'Hara in 'Gone with the Wind'?",
+      "choices": [
+        "Bette Davis",
+        "Joan Crawford",
+        "Vivien Leigh",
+        "Katharine Hepburn"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "The film 'Casablanca' is set during which war?",
+      "choices": [
+        "World War I",
+        "The Korean War",
+        "World War II",
+        "The Cold War"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "Which director made 'Schindler's List'?",
+      "choices": [
+        "Martin Scorsese",
+        "Steven Spielberg",
+        "Francis Ford Coppola",
+        "Oliver Stone"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "What country produced the film 'Parasite', which won Best Picture in 2020?",
+      "choices": [
+        "Japan",
+        "China",
+        "Taiwan",
+        "South Korea"
+      ],
+      "correct_idx": 3
+    },
+    {
+      "q": "In 'Citizen Kane', what is the meaning of 'Rosebud'?",
+      "choices": [
+        "Kane's lost love",
+        "His childhood sled",
+        "His mother's nickname",
+        "A secret bank account"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "Which Pixar film features a rat who dreams of becoming a chef?",
+      "choices": [
+        "Finding Nemo",
+        "The Incredibles",
+        "Ratatouille",
+        "Up"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "Which film franchise features the fictional spy James Bond, agent 007?",
+      "choices": [
+        "Mission: Impossible",
+        "The Bourne Series",
+        "The EON Productions Bond series",
+        "The Man from U.N.C.L.E."
+      ],
+      "correct_idx": 2
+    }
+  ]
+}

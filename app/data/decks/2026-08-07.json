@@ -1,0 +1,106 @@
+{
+  "deck_date": "2026-08-07",
+  "curator_notes": "The natural world: ecology and ecosystems.",
+  "questions": [
+    {
+      "q": "What term describes the variety of life within a given ecosystem?",
+      "choices": [
+        "Ecology",
+        "Biodiversity",
+        "Biomass",
+        "Species richness"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "What is the role of decomposers in an ecosystem?",
+      "choices": [
+        "Produce energy from sunlight",
+        "Hunt and eat other animals",
+        "Break down dead organic matter into nutrients",
+        "Compete with producers for space"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "What is a 'food chain'?",
+      "choices": [
+        "A network of organisms sharing a habitat",
+        "A sequence showing how energy flows from one organism to another",
+        "A diagram showing nutrient cycling",
+        "A list of animals competing for the same food"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "Which ecosystem stores the most carbon per unit area?",
+      "choices": [
+        "Tropical rainforest",
+        "Grassland",
+        "Peatland / wetland",
+        "Temperate forest"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "What is 'symbiosis'?",
+      "choices": [
+        "Competition between two species",
+        "A predator-prey relationship",
+        "A close long-term interaction between different species",
+        "Migration to better feeding grounds"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "Which gas is most responsible for the greenhouse effect?",
+      "choices": [
+        "Oxygen",
+        "Carbon dioxide",
+        "Nitrogen",
+        "Ozone"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "What is an 'invasive species'?",
+      "choices": [
+        "A species that only lives in one small area",
+        "A species introduced to an area where it is not native, often causing harm",
+        "A species that is critically endangered",
+        "A species at the top of its food chain"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "The Amazon rainforest is often called 'the lungs of the Earth' because it does what?",
+      "choices": [
+        "Produces half the world's freshwater",
+        "Absorbs massive amounts of CO2 and produces oxygen",
+        "Regulates ocean temperatures",
+        "Stores the world's largest aquifer"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "What is a 'keystone species'?",
+      "choices": [
+        "The most numerous species in an ecosystem",
+        "A species with a disproportionately large effect on its ecosystem",
+        "The largest predator in a food chain",
+        "The first species to colonise a new habitat"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "What does 'endemic' mean when referring to a species?",
+      "choices": [
+        "Present on every continent",
+        "Critically endangered",
+        "Native to and found only in a specific place",
+        "Rapidly increasing in population"
+      ],
+      "correct_idx": 2
+    }
+  ]
+}

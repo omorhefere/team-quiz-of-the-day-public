@@ -1,0 +1,106 @@
+{
+  "deck_date": "2026-08-02",
+  "curator_notes": "World history: explorers and discoveries.",
+  "questions": [
+    {
+      "q": "Who is credited as the first European to sail to the Americas in 1492?",
+      "choices": [
+        "Amerigo Vespucci",
+        "Vasco da Gama",
+        "Christopher Columbus",
+        "Ferdinand Magellan"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "Ferdinand Magellan's expedition was the first to do what?",
+      "choices": [
+        "Reach India by sea",
+        "Cross the Pacific Ocean",
+        "Circumnavigate the globe",
+        "Discover Australia"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "Who was the first European to reach the southern tip of Africa, in 1488?",
+      "choices": [
+        "Vasco da Gama",
+        "Bartolomeu Dias",
+        "Pedro Alvares Cabral",
+        "Ferdinand Magellan"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "The Lewis and Clark Expedition explored which territory for the United States?",
+      "choices": [
+        "Alaska",
+        "Florida",
+        "The Louisiana Purchase territory",
+        "Texas"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "David Livingstone was an explorer of which continent?",
+      "choices": [
+        "Asia",
+        "South America",
+        "Australia",
+        "Africa"
+      ],
+      "correct_idx": 3
+    },
+    {
+      "q": "Who was the first person to reach the South Pole, in 1911?",
+      "choices": [
+        "Ernest Shackleton",
+        "Robert Falcon Scott",
+        "Roald Amundsen",
+        "Richard Byrd"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "Marco Polo's famous travels took him to which empire?",
+      "choices": [
+        "The Ottoman Empire",
+        "The Mughal Empire",
+        "The Mongol Empire and China",
+        "The Byzantine Empire"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "Which ocean did Vasco da Gama cross to reach India in 1498?",
+      "choices": [
+        "The Atlantic Ocean",
+        "The Pacific Ocean",
+        "The Indian Ocean",
+        "The Southern Ocean"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "The Viking explorer Leif Eriksson is believed to have reached North America around what year?",
+      "choices": [
+        "900 AD",
+        "985 AD",
+        "1000 AD",
+        "1100 AD"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "Which European nation sponsored most of the early voyages of exploration in the 15th century?",
+      "choices": [
+        "Spain and France",
+        "England and the Netherlands",
+        "Portugal and Spain",
+        "Italy and Portugal"
+      ],
+      "correct_idx": 2
+    }
+  ]
+}

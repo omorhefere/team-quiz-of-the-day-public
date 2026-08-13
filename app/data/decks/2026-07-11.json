@@ -1,0 +1,106 @@
+{
+  "deck_date": "2026-07-11",
+  "curator_notes": "Food and cuisine from around the world.",
+  "questions": [
+    {
+      "q": "Sushi originated in which country?",
+      "choices": [
+        "China",
+        "South Korea",
+        "Japan",
+        "Vietnam"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "Which spice is derived from the dried stigmas of a crocus flower?",
+      "choices": [
+        "Turmeric",
+        "Paprika",
+        "Saffron",
+        "Cardamom"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "What is the main ingredient in hummus?",
+      "choices": [
+        "Lentils",
+        "Chickpeas",
+        "Kidney beans",
+        "Fava beans"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "Croissants are most closely associated with the cuisine of which country?",
+      "choices": [
+        "Italy",
+        "Switzerland",
+        "Belgium",
+        "France"
+      ],
+      "correct_idx": 3
+    },
+    {
+      "q": "Which country is the world's largest producer of coffee?",
+      "choices": [
+        "Colombia",
+        "Vietnam",
+        "Ethiopia",
+        "Brazil"
+      ],
+      "correct_idx": 3
+    },
+    {
+      "q": "What type of pasta is shaped like small rice grains?",
+      "choices": [
+        "Orzo",
+        "Farfalle",
+        "Orecchiette",
+        "Conchiglie"
+      ],
+      "correct_idx": 0
+    },
+    {
+      "q": "The Scoville scale measures the heat of what?",
+      "choices": [
+        "Spicy dishes",
+        "Chili peppers",
+        "Mustard",
+        "Ginger"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "Kimchi is a fermented dish originating from which country?",
+      "choices": [
+        "China",
+        "Japan",
+        "South Korea",
+        "Thailand"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "What is the French culinary term for a classic brown sauce made from butter and flour?",
+      "choices": [
+        "Bechamel",
+        "Veloute",
+        "Espagnole",
+        "Hollandaise"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "Guacamole is primarily made from which fruit?",
+      "choices": [
+        "Mango",
+        "Tomato",
+        "Avocado",
+        "Lime"
+      ],
+      "correct_idx": 2
+    }
+  ]
+}

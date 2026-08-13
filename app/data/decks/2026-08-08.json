@@ -1,0 +1,106 @@
+{
+  "deck_date": "2026-08-08",
+  "curator_notes": "Tennis and racket sports.",
+  "questions": [
+    {
+      "q": "How many sets are played in a men's singles Grand Slam match (best of)?",
+      "choices": [
+        "3",
+        "4",
+        "5",
+        "7"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "Which player has won the most Grand Slam singles titles in tennis history (men)?",
+      "choices": [
+        "Roger Federer",
+        "Rafael Nadal",
+        "Novak Djokovic",
+        "Pete Sampras"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "What is the term for winning a game in tennis without the opponent scoring a point?",
+      "choices": [
+        "Ace",
+        "Double bagel",
+        "Love game",
+        "Golden set"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "The French Open is played on which surface?",
+      "choices": [
+        "Hard court",
+        "Grass",
+        "Clay",
+        "Carpet"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "In squash, the ball must bounce off which wall before reaching the opposing player?",
+      "choices": [
+        "The side wall",
+        "The back wall",
+        "The front wall",
+        "Any wall"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "What is a 'deuce' in tennis?",
+      "choices": [
+        "A score of 40-40 requiring a two-point lead to win the game",
+        "Winning a game without dropping a point",
+        "A serve that clips the net but lands in",
+        "Losing two games in a row"
+      ],
+      "correct_idx": 0
+    },
+    {
+      "q": "Which country is credited with developing the sport of badminton?",
+      "choices": [
+        "India (developed in British India)",
+        "China",
+        "Japan",
+        "Denmark"
+      ],
+      "correct_idx": 0
+    },
+    {
+      "q": "Wimbledon is held in which city?",
+      "choices": [
+        "Oxford",
+        "Manchester",
+        "London",
+        "Brighton"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "In table tennis, how many points must you reach to win a standard game?",
+      "choices": [
+        "9",
+        "11",
+        "15",
+        "21"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "What is the term for a tennis serve that the receiver cannot touch?",
+      "choices": [
+        "Winner",
+        "Fault",
+        "Ace",
+        "Slice"
+      ],
+      "correct_idx": 2
+    }
+  ]
+}

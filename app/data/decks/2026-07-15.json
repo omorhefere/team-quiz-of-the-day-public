@@ -1,0 +1,106 @@
+{
+  "deck_date": "2026-07-15",
+  "curator_notes": "Animals and wildlife.",
+  "questions": [
+    {
+      "q": "Which land animal can run the fastest?",
+      "choices": [
+        "Lion",
+        "Pronghorn antelope",
+        "Cheetah",
+        "Springbok"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "How many legs does a spider have?",
+      "choices": [
+        "6",
+        "8",
+        "10",
+        "12"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "What is a group of lions called?",
+      "choices": [
+        "Pack",
+        "Herd",
+        "Pride",
+        "Troop"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "Which animal has the longest gestation period?",
+      "choices": [
+        "Elephant",
+        "Blue whale",
+        "Rhinoceros",
+        "Giraffe"
+      ],
+      "correct_idx": 0
+    },
+    {
+      "q": "What type of animal is a Komodo dragon?",
+      "choices": [
+        "Crocodilian",
+        "Snake",
+        "Lizard",
+        "Tortoise"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "Which bird is known for its impressive ability to mimic human speech?",
+      "choices": [
+        "Crow",
+        "Myna",
+        "African Grey Parrot",
+        "Cockatiel"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "What do you call the process by which caterpillars transform into butterflies?",
+      "choices": [
+        "Adaptation",
+        "Hybridisation",
+        "Metamorphosis",
+        "Symbiosis"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "Which mammal is capable of true sustained flight?",
+      "choices": [
+        "Flying squirrel",
+        "Bat",
+        "Colugo",
+        "Sugar glider"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "What is the largest land animal on Earth?",
+      "choices": [
+        "Hippopotamus",
+        "White rhinoceros",
+        "African bush elephant",
+        "Giraffe"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "Penguins are native to which hemisphere?",
+      "choices": [
+        "Northern",
+        "Southern",
+        "Both equally",
+        "Neither; they live at the equator"
+      ],
+      "correct_idx": 1
+    }
+  ]
+}

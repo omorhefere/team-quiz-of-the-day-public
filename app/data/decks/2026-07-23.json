@@ -1,0 +1,106 @@
+{
+  "deck_date": "2026-07-23",
+  "curator_notes": "World War II history.",
+  "questions": [
+    {
+      "q": "In what year did World War II begin in Europe?",
+      "choices": [
+        "1937",
+        "1938",
+        "1939",
+        "1940"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "Which event brought the United States into World War II?",
+      "choices": [
+        "The fall of France",
+        "Germany's declaration of war on the US",
+        "The attack on Pearl Harbor",
+        "The Blitz of London"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "What was the code name for the Allied invasion of Normandy in June 1944?",
+      "choices": [
+        "Operation Overlord",
+        "Operation Barbarossa",
+        "Operation Market Garden",
+        "Operation Torch"
+      ],
+      "correct_idx": 0
+    },
+    {
+      "q": "Which country surrendered first: Germany or Japan?",
+      "choices": [
+        "Japan",
+        "They surrendered on the same day",
+        "Germany",
+        "Neither - they were defeated simultaneously"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "What was the name of the German secret police during the Nazi era?",
+      "choices": [
+        "Wehrmacht",
+        "SS",
+        "Gestapo",
+        "Abwehr"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "In which cities were atomic bombs dropped in August 1945?",
+      "choices": [
+        "Tokyo and Osaka",
+        "Hiroshima and Nagasaki",
+        "Kyoto and Hiroshima",
+        "Nagasaki and Tokyo"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "Who was the British Prime Minister for much of World War II?",
+      "choices": [
+        "Neville Chamberlain",
+        "Clement Attlee",
+        "Anthony Eden",
+        "Winston Churchill"
+      ],
+      "correct_idx": 3
+    },
+    {
+      "q": "The Battle of Stalingrad is considered a turning point on which front?",
+      "choices": [
+        "The Pacific Front",
+        "The North African Front",
+        "The Eastern Front",
+        "The Italian Front"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "What did the acronym 'V-E Day' stand for?",
+      "choices": [
+        "Victory in Europe Day",
+        "Victory and End Day",
+        "Victory over Enemies Day",
+        "Veterans' Emblem Day"
+      ],
+      "correct_idx": 0
+    },
+    {
+      "q": "The Nuremberg Trials after World War II prosecuted leaders for which crimes?",
+      "choices": [
+        "Financial fraud and war profiteering",
+        "War crimes and crimes against humanity",
+        "Espionage and treason",
+        "Desertion and mutiny"
+      ],
+      "correct_idx": 1
+    }
+  ]
+}

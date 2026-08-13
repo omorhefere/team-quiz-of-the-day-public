@@ -1,0 +1,106 @@
+{
+  "deck_date": "2026-08-15",
+  "curator_notes": "Video games and gaming culture.",
+  "questions": [
+    {
+      "q": "Which video game franchise features the plumber Mario?",
+      "choices": [
+        "Sega",
+        "Atari",
+        "Nintendo",
+        "Sony"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "What year was the original Tetris game created?",
+      "choices": [
+        "1980",
+        "1982",
+        "1984",
+        "1986"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "In 'Minecraft', what are the hostile mobs that explode called?",
+      "choices": [
+        "Zombies",
+        "Skeletons",
+        "Endermen",
+        "Creepers"
+      ],
+      "correct_idx": 3
+    },
+    {
+      "q": "Which game series features 'Master Chief' as its protagonist?",
+      "choices": [
+        "Call of Duty",
+        "Gears of War",
+        "Halo",
+        "Battlefield"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "What does 'RPG' stand for in video game terminology?",
+      "choices": [
+        "Real Play Game",
+        "Role-Playing Game",
+        "Rapid Progression Game",
+        "Random Play Generator"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "Which iconic game character says 'It's dangerous to go alone! Take this.'?",
+      "choices": [
+        "Link (from The Legend of Zelda)",
+        "Mario",
+        "Sonic the Hedgehog",
+        "Mega Man"
+      ],
+      "correct_idx": 0
+    },
+    {
+      "q": "What is the best-selling video game of all time?",
+      "choices": [
+        "Tetris",
+        "Grand Theft Auto V",
+        "Minecraft",
+        "Wii Sports"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "What is a 'roguelike' game?",
+      "choices": [
+        "A game with regenerating enemies",
+        "A game with procedurally generated levels and permadeath",
+        "A game that plays like a puzzle",
+        "A stealth-based game"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "Which game studio developed 'The Last of Us' series?",
+      "choices": [
+        "Insomniac Games",
+        "Naughty Dog",
+        "Sony Santa Monica",
+        "Rockstar Games"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "Which country hosts the biggest annual gaming event, 'Gamescom'?",
+      "choices": [
+        "Japan",
+        "United States",
+        "South Korea",
+        "Germany"
+      ],
+      "correct_idx": 3
+    }
+  ]
+}

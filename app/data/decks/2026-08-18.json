@@ -1,0 +1,106 @@
+{
+  "deck_date": "2026-08-18",
+  "curator_notes": "Economics and finance basics.",
+  "questions": [
+    {
+      "q": "What does 'GDP' stand for?",
+      "choices": [
+        "Gross Domestic Production",
+        "General Domestic Product",
+        "Gross Domestic Product",
+        "Global Development Price"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "Inflation refers to what economic phenomenon?",
+      "choices": [
+        "A rise in interest rates",
+        "An increase in unemployment",
+        "A general rise in the price level of goods and services",
+        "Growth in a country's exports"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "What is a 'bull market'?",
+      "choices": [
+        "A market where prices are falling",
+        "A market with heavy regulation",
+        "A market where prices are rising",
+        "A market dominated by one company"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "What does a central bank primarily do?",
+      "choices": [
+        "Provide personal bank accounts",
+        "Manage government debt",
+        "Regulate monetary policy and the money supply",
+        "Set tax rates"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "What is 'supply and demand' in economics?",
+      "choices": [
+        "The ratio of exports to imports",
+        "The model describing how prices are determined by producer supply and consumer demand",
+        "A business strategy for pricing products",
+        "A measure of economic inequality"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "Which economist wrote 'The Wealth of Nations', considered the founding text of modern economics?",
+      "choices": [
+        "John Maynard Keynes",
+        "Karl Marx",
+        "Adam Smith",
+        "David Ricardo"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "What is the term for the interest rate at which commercial banks can borrow from a central bank?",
+      "choices": [
+        "The mortgage rate",
+        "The exchange rate",
+        "The base rate / policy rate",
+        "The prime rate"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "What does 'fiscal policy' involve?",
+      "choices": [
+        "A central bank's control of money supply",
+        "Government spending and taxation decisions",
+        "Regulation of international trade",
+        "The management of currency exchange rates"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "What is a 'monopoly' in economic terms?",
+      "choices": [
+        "A market with many competing firms",
+        "A market with only two firms",
+        "A market dominated by a single seller",
+        "A government-controlled market"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "What is the NASDAQ?",
+      "choices": [
+        "A US government bond market",
+        "A commodity exchange for oil and gas",
+        "A US stock exchange known for tech companies",
+        "An international trade organisation"
+      ],
+      "correct_idx": 2
+    }
+  ]
+}

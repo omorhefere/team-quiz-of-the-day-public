@@ -1,0 +1,106 @@
+{
+  "deck_date": "2026-08-04",
+  "curator_notes": "The Solar System in depth.",
+  "questions": [
+    {
+      "q": "Which planet is closest to the Sun?",
+      "choices": [
+        "Venus",
+        "Earth",
+        "Mercury",
+        "Mars"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "What is the name of the largest volcano in the solar system, found on Mars?",
+      "choices": [
+        "Olympus Mons",
+        "Elysium Mons",
+        "Mons Huygens",
+        "Arsia Mons"
+      ],
+      "correct_idx": 0
+    },
+    {
+      "q": "Saturn's rings are composed primarily of what?",
+      "choices": [
+        "Dust and rocks",
+        "Ice and rocky debris",
+        "Gas clouds",
+        "Metal particles"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "How many planets are officially in our solar system?",
+      "choices": [
+        "7",
+        "8",
+        "9",
+        "10"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "Which planet rotates on its side, with its axis tilted nearly 98 degrees?",
+      "choices": [
+        "Neptune",
+        "Saturn",
+        "Pluto",
+        "Uranus"
+      ],
+      "correct_idx": 3
+    },
+    {
+      "q": "What is the name of Jupiter's largest moon?",
+      "choices": [
+        "Io",
+        "Europa",
+        "Callisto",
+        "Ganymede"
+      ],
+      "correct_idx": 3
+    },
+    {
+      "q": "The asteroid belt lies between which two planets?",
+      "choices": [
+        "Earth and Mars",
+        "Mars and Jupiter",
+        "Jupiter and Saturn",
+        "Saturn and Uranus"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "Which is the hottest planet in our solar system?",
+      "choices": [
+        "Mercury",
+        "Mars",
+        "Venus",
+        "Jupiter"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "What is a comet made of?",
+      "choices": [
+        "Dense iron and nickel",
+        "Ice, dust and rocky material",
+        "Pure frozen gas",
+        "Compacted asteroid fragments"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "How long does it take Earth to orbit the Sun once?",
+      "choices": [
+        "364.25 days",
+        "365.25 days",
+        "366 days",
+        "360 days"
+      ],
+      "correct_idx": 1
+    }
+  ]
+}

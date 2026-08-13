@@ -1,0 +1,106 @@
+{
+  "deck_date": "2026-08-01",
+  "curator_notes": "Mathematics and numbers.",
+  "questions": [
+    {
+      "q": "What is the value of pi to two decimal places?",
+      "choices": [
+        "3.12",
+        "3.14",
+        "3.16",
+        "3.18"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "What is the name for a triangle with all three sides of equal length?",
+      "choices": [
+        "Isosceles",
+        "Scalene",
+        "Equilateral",
+        "Right-angled"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "What is the square root of 144?",
+      "choices": [
+        "11",
+        "12",
+        "13",
+        "14"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "In Roman numerals, what does 'L' represent?",
+      "choices": [
+        "10",
+        "40",
+        "50",
+        "100"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "What is the Fibonacci sequence?",
+      "choices": [
+        "Each number is double the previous",
+        "Each number is the product of the previous two",
+        "Each number is the sum of the previous two",
+        "Each number is the square of its position"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "What is 7 factorial (7!)?",
+      "choices": [
+        "49",
+        "720",
+        "5040",
+        "40320"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "In a standard set of data, what is the 'mean'?",
+      "choices": [
+        "The most frequently occurring value",
+        "The middle value when sorted",
+        "The arithmetic average",
+        "The difference between the highest and lowest value"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "What is a prime number?",
+      "choices": [
+        "A number divisible by 2",
+        "A number with no factors other than 1 and itself",
+        "An odd number greater than 1",
+        "A number that is a perfect square"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "How many degrees are in the angles of a triangle in total?",
+      "choices": [
+        "90",
+        "180",
+        "270",
+        "360"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "What is the name for the longest side of a right-angled triangle?",
+      "choices": [
+        "Adjacent",
+        "Opposite",
+        "Hypotenuse",
+        "Transverse"
+      ],
+      "correct_idx": 2
+    }
+  ]
+}

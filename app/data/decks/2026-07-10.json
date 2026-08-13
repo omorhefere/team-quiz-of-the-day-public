@@ -1,0 +1,106 @@
+{
+  "deck_date": "2026-07-10",
+  "curator_notes": "Space exploration and astronomy.",
+  "questions": [
+    {
+      "q": "Which planet in our solar system has the most moons?",
+      "choices": [
+        "Jupiter",
+        "Saturn",
+        "Uranus",
+        "Neptune"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "What year did humans first land on the Moon?",
+      "choices": [
+        "1965",
+        "1967",
+        "1969",
+        "1971"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "What is the name of the galaxy that contains our solar system?",
+      "choices": [
+        "Andromeda",
+        "The Milky Way",
+        "Triangulum",
+        "Centaurus A"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "Which planet is known as the Red Planet?",
+      "choices": [
+        "Venus",
+        "Mercury",
+        "Jupiter",
+        "Mars"
+      ],
+      "correct_idx": 3
+    },
+    {
+      "q": "What is a light-year a measure of?",
+      "choices": [
+        "Time",
+        "Speed",
+        "Distance",
+        "Energy"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "The International Space Station orbits Earth at roughly what altitude?",
+      "choices": [
+        "200 km",
+        "400 km",
+        "800 km",
+        "1,200 km"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "What is the name of NASA's Mars rover that landed in 2021?",
+      "choices": [
+        "Curiosity",
+        "Opportunity",
+        "Spirit",
+        "Perseverance"
+      ],
+      "correct_idx": 3
+    },
+    {
+      "q": "Which space telescope was launched in 2021 to succeed Hubble?",
+      "choices": [
+        "Chandra",
+        "Kepler",
+        "James Webb",
+        "Spitzer"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "The Sun is classified as which type of star?",
+      "choices": [
+        "Red giant",
+        "White dwarf",
+        "Yellow dwarf",
+        "Blue supergiant"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "How long does light from the Sun take to reach Earth?",
+      "choices": [
+        "About 8 minutes",
+        "About 8 hours",
+        "About 8 seconds",
+        "About 8 days"
+      ],
+      "correct_idx": 0
+    }
+  ]
+}

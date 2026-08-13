@@ -1,0 +1,106 @@
+{
+  "deck_date": "2026-07-29",
+  "curator_notes": "Architecture and famous structures.",
+  "questions": [
+    {
+      "q": "In which country is the Taj Mahal located?",
+      "choices": [
+        "Pakistan",
+        "Bangladesh",
+        "India",
+        "Nepal"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "The Sagrada Familia cathedral is in which city?",
+      "choices": [
+        "Madrid",
+        "Seville",
+        "Valencia",
+        "Barcelona"
+      ],
+      "correct_idx": 3
+    },
+    {
+      "q": "Which style of architecture is characterised by pointed arches and flying buttresses?",
+      "choices": [
+        "Romanesque",
+        "Baroque",
+        "Gothic",
+        "Neoclassical"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "Who designed the Sydney Opera House?",
+      "choices": [
+        "Frank Lloyd Wright",
+        "Renzo Piano",
+        "Jorn Utzon",
+        "Zaha Hadid"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "In which US city is the Empire State Building located?",
+      "choices": [
+        "Chicago",
+        "Los Angeles",
+        "Boston",
+        "New York City"
+      ],
+      "correct_idx": 3
+    },
+    {
+      "q": "The ancient temple complex of Angkor Wat is located in which country?",
+      "choices": [
+        "Thailand",
+        "Laos",
+        "Cambodia",
+        "Vietnam"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "What does 'Bauhaus' refer to in architecture and design?",
+      "choices": [
+        "A German art and design school emphasising function",
+        "A French Baroque palace style",
+        "An Italian Renaissance approach to proportions",
+        "A Japanese minimalist school"
+      ],
+      "correct_idx": 0
+    },
+    {
+      "q": "Stonehenge is located in which English county?",
+      "choices": [
+        "Dorset",
+        "Devon",
+        "Somerset",
+        "Wiltshire"
+      ],
+      "correct_idx": 3
+    },
+    {
+      "q": "The Burj Khalifa, currently the world's tallest building, is in which city?",
+      "choices": [
+        "Riyadh",
+        "Abu Dhabi",
+        "Dubai",
+        "Doha"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "Which famous bridge connects the boroughs of Manhattan and Brooklyn in New York?",
+      "choices": [
+        "The Verrazano-Narrows Bridge",
+        "The Manhattan Bridge",
+        "The George Washington Bridge",
+        "The Brooklyn Bridge"
+      ],
+      "correct_idx": 3
+    }
+  ]
+}

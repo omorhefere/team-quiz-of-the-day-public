@@ -1,0 +1,106 @@
+{
+  "deck_date": "2026-08-12",
+  "curator_notes": "General knowledge potpourri.",
+  "questions": [
+    {
+      "q": "In which year did the Berlin Wall fall?",
+      "choices": [
+        "1987",
+        "1988",
+        "1989",
+        "1991"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "What is the currency of Japan?",
+      "choices": [
+        "Won",
+        "Yuan",
+        "Yen",
+        "Baht"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "How many sides does a hexagon have?",
+      "choices": [
+        "5",
+        "6",
+        "7",
+        "8"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "Which planet is nicknamed the 'Morning Star'?",
+      "choices": [
+        "Mercury",
+        "Mars",
+        "Venus",
+        "Jupiter"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "What is the world's largest desert by area?",
+      "choices": [
+        "The Sahara",
+        "The Arabian Desert",
+        "The Antarctic Desert",
+        "The Gobi Desert"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "Which author wrote 'Harry Potter and the Philosopher's Stone'?",
+      "choices": [
+        "Roald Dahl",
+        "Philip Pullman",
+        "J.K. Rowling",
+        "C.S. Lewis"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "A 'fortnight' is a period of how many days?",
+      "choices": [
+        "7",
+        "10",
+        "14",
+        "21"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "What is the chemical symbol for iron?",
+      "choices": [
+        "Ir",
+        "In",
+        "Fe",
+        "Io"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "In which city is the Colosseum located?",
+      "choices": [
+        "Athens",
+        "Madrid",
+        "Rome",
+        "Naples"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "What type of animal is a Nile crocodile?",
+      "choices": [
+        "A lizard",
+        "A crocodilian reptile",
+        "An amphibian",
+        "A large monitor lizard"
+      ],
+      "correct_idx": 1
+    }
+  ]
+}

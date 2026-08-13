@@ -1,0 +1,106 @@
+{
+  "deck_date": "2026-07-13",
+  "curator_notes": "Technology and computing.",
+  "questions": [
+    {
+      "q": "What does CPU stand for?",
+      "choices": [
+        "Central Processing Unit",
+        "Core Power Utility",
+        "Computer Processing Unit",
+        "Central Program Utility"
+      ],
+      "correct_idx": 0
+    },
+    {
+      "q": "Python programming language was created by whom?",
+      "choices": [
+        "Dennis Ritchie",
+        "James Gosling",
+        "Guido van Rossum",
+        "Bjarne Stroustrup"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "What does HTTP stand for?",
+      "choices": [
+        "HyperText Transfer Protocol",
+        "High Transfer Text Protocol",
+        "Hyper Transfer Text Procedure",
+        "HyperText Transmission Process"
+      ],
+      "correct_idx": 0
+    },
+    {
+      "q": "How many bits are in a byte?",
+      "choices": [
+        "4",
+        "8",
+        "16",
+        "32"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "What is the name of Apple's voice assistant?",
+      "choices": [
+        "Cortana",
+        "Alexa",
+        "Google Assistant",
+        "Siri"
+      ],
+      "correct_idx": 3
+    },
+    {
+      "q": "In what decade was the World Wide Web invented?",
+      "choices": [
+        "1970s",
+        "1980s",
+        "1990s",
+        "2000s"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "What does 'open source' software mean?",
+      "choices": [
+        "Software that is free to use",
+        "Software whose source code is publicly available",
+        "Software without a license",
+        "Software made by volunteers only"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "Which technology allows devices to communicate wirelessly using radio waves at 2.4 or 5 GHz?",
+      "choices": [
+        "Bluetooth",
+        "Wi-Fi",
+        "NFC",
+        "Infrared"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "What is the name of the first electronic general-purpose computer, built in the 1940s?",
+      "choices": [
+        "UNIVAC",
+        "ENIAC",
+        "Colossus",
+        "Mark I"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "In cybersecurity, what does 'phishing' refer to?",
+      "choices": [
+        "Scanning networks for vulnerabilities",
+        "Cracking encryption keys",
+        "Tricking users into revealing sensitive information",
+        "Overloading a server with traffic"
+      ],
+      "correct_idx": 2
+    }
+  ]
+}

@@ -1,0 +1,106 @@
+{
+  "deck_date": "2026-08-17",
+  "curator_notes": "Dance and performing arts.",
+  "questions": [
+    {
+      "q": "Ballet as a formalised art form originated in which country?",
+      "choices": [
+        "Russia",
+        "France",
+        "Italy",
+        "Spain"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "What is the name for the stiff tutu skirt worn by classical ballerinas?",
+      "choices": [
+        "A tutu",
+        "A petticoat",
+        "A crinoline",
+        "A farthingale"
+      ],
+      "correct_idx": 0
+    },
+    {
+      "q": "The Bolshoi Ballet is based in which city?",
+      "choices": [
+        "St. Petersburg",
+        "Kiev",
+        "Moscow",
+        "Vienna"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "Which dance originated in Argentina and Uruguay and is characterised by close embrace and dramatic movements?",
+      "choices": [
+        "Samba",
+        "Flamenco",
+        "Tango",
+        "Salsa"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "What term describes a complete theatrical production combining music, story, dance, and spectacle?",
+      "choices": [
+        "An opera",
+        "A musical",
+        "A revue",
+        "A cabaret"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "Which style of dance uses improvised movement and is associated with artists like Martha Graham?",
+      "choices": [
+        "Classical ballet",
+        "Modern/contemporary dance",
+        "Ballroom dance",
+        "Tap dance"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "In which country did the dance form 'Flamenco' originate?",
+      "choices": [
+        "Portugal",
+        "Mexico",
+        "Spain",
+        "Cuba"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "What is a 'pas de deux' in ballet?",
+      "choices": [
+        "A solo performance by the lead ballerina",
+        "A dance for two performers",
+        "A group sequence for the corps de ballet",
+        "A dramatic leap"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "Which Indian classical dance form is associated with temple traditions in Tamil Nadu?",
+      "choices": [
+        "Kathak",
+        "Odissi",
+        "Kuchipudi",
+        "Bharatanatyam"
+      ],
+      "correct_idx": 3
+    },
+    {
+      "q": "Michael Jackson is famous for which signature dance move?",
+      "choices": [
+        "The Running Man",
+        "The Moonwalk",
+        "The Breakdance spin",
+        "The Electric Slide"
+      ],
+      "correct_idx": 1
+    }
+  ]
+}

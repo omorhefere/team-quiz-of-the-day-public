@@ -1,0 +1,106 @@
+{
+  "deck_date": "2026-07-18",
+  "curator_notes": "Sport: athletics and the Olympics.",
+  "questions": [
+    {
+      "q": "In what city were the first modern Olympic Games held in 1896?",
+      "choices": [
+        "Paris",
+        "Rome",
+        "Athens",
+        "London"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "How many rings make up the Olympic symbol?",
+      "choices": [
+        "4",
+        "5",
+        "6",
+        "7"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "What is the standard marathon distance?",
+      "choices": [
+        "26.2 miles (42.195 km)",
+        "25 miles (40.23 km)",
+        "30 km",
+        "26 miles (41.84 km)"
+      ],
+      "correct_idx": 0
+    },
+    {
+      "q": "In athletics, the decathlon consists of how many events?",
+      "choices": [
+        "7",
+        "8",
+        "10",
+        "12"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "Which country has won the most Summer Olympic gold medals in history?",
+      "choices": [
+        "China",
+        "Russia / Soviet Union",
+        "Great Britain",
+        "United States"
+      ],
+      "correct_idx": 3
+    },
+    {
+      "q": "Who holds the men's 100m world record?",
+      "choices": [
+        "Asafa Powell",
+        "Justin Gatlin",
+        "Usain Bolt",
+        "Yohan Blake"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "In which sport would you perform a 'Fosbury Flop'?",
+      "choices": [
+        "Pole vault",
+        "Long jump",
+        "High jump",
+        "Triple jump"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "How many laps of a standard track make up a 1500m race?",
+      "choices": [
+        "3",
+        "3.75",
+        "4",
+        "4.5"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "The Olympic motto 'Citius, Altius, Fortius' translates to what?",
+      "choices": [
+        "Strength, Speed, Spirit",
+        "Faster, Higher, Stronger",
+        "Power, Grace, Endurance",
+        "Unity, Respect, Excellence"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "What sport features the Heptathlon at the Olympics?",
+      "choices": [
+        "Swimming",
+        "Cycling",
+        "Athletics (track and field)",
+        "Gymnastics"
+      ],
+      "correct_idx": 2
+    }
+  ]
+}

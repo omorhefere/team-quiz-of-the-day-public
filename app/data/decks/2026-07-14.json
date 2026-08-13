@@ -1,0 +1,106 @@
+{
+  "deck_date": "2026-07-14",
+  "curator_notes": "Bastille Day special: French history and culture.",
+  "questions": [
+    {
+      "q": "What event is commemorated on France's national holiday, 14 July?",
+      "choices": [
+        "The execution of Louis XVI",
+        "The storming of the Bastille",
+        "The signing of the Declaration of the Rights of Man",
+        "Napoleon's coronation"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "In what year did the French Revolution begin?",
+      "choices": [
+        "1785",
+        "1789",
+        "1793",
+        "1799"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "Who painted the 'Mona Lisa'?",
+      "choices": [
+        "Raphael",
+        "Michelangelo",
+        "Leonardo da Vinci",
+        "Caravaggio"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "The Eiffel Tower was built as the entrance arch for which world's fair?",
+      "choices": [
+        "1876 Philadelphia Centennial",
+        "1889 Paris World's Fair",
+        "1900 Paris Exposition",
+        "1904 St. Louis World's Fair"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "What is the motto of France?",
+      "choices": [
+        "Peace, Order and Good Government",
+        "Life, Liberty and the Pursuit of Happiness",
+        "Liberty, Equality, Fraternity",
+        "Unity, Faith, Discipline"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "Which French emperor was exiled to the island of Saint Helena?",
+      "choices": [
+        "Louis XVI",
+        "Charles X",
+        "Napoleon Bonaparte",
+        "Louis-Philippe"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "What is the name of France's highest military and civilian honour?",
+      "choices": [
+        "The Medaille Militaire",
+        "The Legion d'honneur",
+        "The Croix de Guerre",
+        "The Ordre National du Merite"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "Which French city is world-famous for its annual international film festival?",
+      "choices": [
+        "Nice",
+        "Lyon",
+        "Marseille",
+        "Cannes"
+      ],
+      "correct_idx": 3
+    },
+    {
+      "q": "What is the name of the Gothic cathedral in Paris that was severely damaged by fire in 2019?",
+      "choices": [
+        "Sacre-Coeur",
+        "Saint-Denis Basilica",
+        "Notre-Dame de Paris",
+        "Sainte-Chapelle"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "Which French scientist is credited with developing the germ theory of disease?",
+      "choices": [
+        "Marie Curie",
+        "Louis Pasteur",
+        "Claude Bernard",
+        "Rene Laennec"
+      ],
+      "correct_idx": 1
+    }
+  ]
+}

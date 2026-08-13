@@ -1,0 +1,106 @@
+{
+  "deck_date": "2026-08-03",
+  "curator_notes": "Television and streaming culture.",
+  "questions": [
+    {
+      "q": "Which TV show features the fictional land of Westeros and is based on novels by George R.R. Martin?",
+      "choices": [
+        "The Witcher",
+        "Wheel of Time",
+        "Game of Thrones",
+        "Rings of Power"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "Which streaming service produced 'Stranger Things'?",
+      "choices": [
+        "Amazon Prime Video",
+        "HBO Max",
+        "Disney+",
+        "Netflix"
+      ],
+      "correct_idx": 3
+    },
+    {
+      "q": "The TV series 'Breaking Bad' is set primarily in which US city?",
+      "choices": [
+        "Phoenix",
+        "Las Vegas",
+        "Albuquerque",
+        "Denver"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "Which long-running American animated show is set in Springfield?",
+      "choices": [
+        "Family Guy",
+        "Futurama",
+        "The Simpsons",
+        "Bob's Burgers"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "In 'Friends', what was the name of the coffee shop where the characters frequently met?",
+      "choices": [
+        "The Perk",
+        "Central Perk",
+        "Java Jive",
+        "The Grind"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "Which British TV panel show features comedians competing over obscure facts?",
+      "choices": [
+        "Would I Lie to You?",
+        "8 Out of 10 Cats",
+        "QI",
+        "Mock the Week"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "The HBO series 'The Wire' is set in which American city?",
+      "choices": [
+        "Philadelphia",
+        "Baltimore",
+        "Chicago",
+        "Detroit"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "Which TV show popularised the phrase 'Winter is coming'?",
+      "choices": [
+        "Vikings",
+        "Outlander",
+        "Game of Thrones",
+        "The Last Kingdom"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "What does 'OTT' stand for in the context of video streaming?",
+      "choices": [
+        "Online Television Transmission",
+        "Over-The-Top",
+        "On-Demand Television Technology",
+        "Open Transfer Technology"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "Which TV documentary series is famous for narration by David Attenborough?",
+      "choices": [
+        "Wild America",
+        "Nature",
+        "Planet Earth",
+        "Wild at Heart"
+      ],
+      "correct_idx": 2
+    }
+  ]
+}

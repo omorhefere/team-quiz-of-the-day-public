@@ -1,0 +1,106 @@
+{
+  "deck_date": "2026-07-24",
+  "curator_notes": "Plants and the natural world.",
+  "questions": [
+    {
+      "q": "What process do plants use to convert sunlight into food?",
+      "choices": [
+        "Respiration",
+        "Transpiration",
+        "Photosynthesis",
+        "Germination"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "What is the world's tallest species of tree?",
+      "choices": [
+        "Giant Sequoia",
+        "Douglas Fir",
+        "Coast Redwood",
+        "Sitka Spruce"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "Which part of a flower contains the pollen?",
+      "choices": [
+        "Pistil",
+        "Sepal",
+        "Petal",
+        "Stamen"
+      ],
+      "correct_idx": 3
+    },
+    {
+      "q": "What is the name of the process by which water evaporates from plant leaves?",
+      "choices": [
+        "Osmosis",
+        "Transpiration",
+        "Diffusion",
+        "Absorption"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "What type of plant has no roots, stems, or leaves and reproduces with spores?",
+      "choices": [
+        "Fern",
+        "Moss",
+        "Fungi (not actually a plant)",
+        "Lichen"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "The Venus flytrap is native to which country?",
+      "choices": [
+        "Australia",
+        "Brazil",
+        "South Africa",
+        "United States"
+      ],
+      "correct_idx": 3
+    },
+    {
+      "q": "What is the name for the waxy protective layer on the surface of leaves?",
+      "choices": [
+        "The epidermis",
+        "The cuticle",
+        "The stomata",
+        "The mesophyll"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "Bamboo is technically classified as which type of plant?",
+      "choices": [
+        "A tree",
+        "A fern",
+        "A grass",
+        "A shrub"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "What is the term for plants that complete their life cycle in one year?",
+      "choices": [
+        "Perennial",
+        "Biennial",
+        "Annual",
+        "Ephemeral"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "Which gas do plants absorb during photosynthesis?",
+      "choices": [
+        "Nitrogen",
+        "Oxygen",
+        "Hydrogen",
+        "Carbon dioxide"
+      ],
+      "correct_idx": 3
+    }
+  ]
+}

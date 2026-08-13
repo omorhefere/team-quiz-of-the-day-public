@@ -1,0 +1,106 @@
+{
+  "deck_date": "2026-08-13",
+  "curator_notes": "Cricket: the gentleman's game.",
+  "questions": [
+    {
+      "q": "How many players are on a cricket team?",
+      "choices": [
+        "9",
+        "10",
+        "11",
+        "12"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "What is a 'century' in cricket?",
+      "choices": [
+        "Bowling 100 overs",
+        "A match lasting 100 hours",
+        "A batsman scoring 100 or more runs in a single innings",
+        "Taking 100 wickets in a career"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "How many balls are bowled per over in cricket?",
+      "choices": [
+        "4",
+        "5",
+        "6",
+        "8"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "Which country won the very first Cricket World Cup in 1975?",
+      "choices": [
+        "Australia",
+        "India",
+        "West Indies",
+        "England"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "What is the term when a batsman is dismissed without scoring?",
+      "choices": [
+        "A blank",
+        "A duck",
+        "A zero",
+        "A null"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "The Ashes is a famous Test series played between which two countries?",
+      "choices": [
+        "India and Pakistan",
+        "South Africa and England",
+        "England and Australia",
+        "New Zealand and Australia"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "What does 'LBW' stand for in cricket?",
+      "choices": [
+        "Left Before Wicket",
+        "Leg Before Wicket",
+        "Long Ball Wide",
+        "Left Behind Wicket"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "A 'hat-trick' in cricket means a bowler dismisses how many batsmen on consecutive deliveries?",
+      "choices": [
+        "2",
+        "3",
+        "4",
+        "5"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "In Test cricket, how many innings does each team get?",
+      "choices": [
+        "1",
+        "2",
+        "3",
+        "4"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "Who holds the record for the highest individual Test innings score (400 not out)?",
+      "choices": [
+        "Sachin Tendulkar",
+        "Don Bradman",
+        "Brian Lara",
+        "Virender Sehwag"
+      ],
+      "correct_idx": 2
+    }
+  ]
+}

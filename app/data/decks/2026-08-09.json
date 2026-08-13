@@ -1,0 +1,106 @@
+{
+  "deck_date": "2026-08-09",
+  "curator_notes": "Biology and evolution.",
+  "questions": [
+    {
+      "q": "What is the basic unit of life?",
+      "choices": [
+        "An atom",
+        "A molecule",
+        "A cell",
+        "A tissue"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "What is the name of the process by which DNA is copied to RNA?",
+      "choices": [
+        "Translation",
+        "Replication",
+        "Transcription",
+        "Transduction"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "Charles Darwin and Alfred Russel Wallace are jointly credited with proposing which theory?",
+      "choices": [
+        "The theory of genetics",
+        "The germ theory of disease",
+        "The theory of evolution by natural selection",
+        "The cell theory"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "What are chromosomes made of?",
+      "choices": [
+        "Proteins alone",
+        "RNA and lipids",
+        "DNA and proteins",
+        "Carbohydrates and nucleic acids"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "What does 'DNA' stand for?",
+      "choices": [
+        "Deoxyribonucleic Acid",
+        "Deoxyribose Nitrogen Acid",
+        "Double Nucleotide Arrangement",
+        "Deoxyribose Nucleus Acid"
+      ],
+      "correct_idx": 0
+    },
+    {
+      "q": "Mitosis is a type of cell division that produces how many daughter cells?",
+      "choices": [
+        "1",
+        "2",
+        "3",
+        "4"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "Which organelle is responsible for producing energy (ATP) in eukaryotic cells?",
+      "choices": [
+        "Nucleus",
+        "Ribosome",
+        "Endoplasmic reticulum",
+        "Mitochondria"
+      ],
+      "correct_idx": 3
+    },
+    {
+      "q": "What is natural selection?",
+      "choices": [
+        "Random mutation in DNA",
+        "Artificial breeding by humans",
+        "The process whereby organisms better adapted to their environment tend to survive and reproduce",
+        "The tendency of traits to blend together in offspring"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "Gregor Mendel is known as the father of which branch of science?",
+      "choices": [
+        "Cell biology",
+        "Genetics",
+        "Evolutionary biology",
+        "Microbiology"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "How many base pairs does human DNA contain (approximately)?",
+      "choices": [
+        "3 million",
+        "300 million",
+        "3 billion",
+        "3 trillion"
+      ],
+      "correct_idx": 2
+    }
+  ]
+}

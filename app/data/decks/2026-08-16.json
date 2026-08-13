@@ -1,0 +1,106 @@
+{
+  "deck_date": "2026-08-16",
+  "curator_notes": "The environment and sustainability.",
+  "questions": [
+    {
+      "q": "What does 'carbon neutral' mean?",
+      "choices": [
+        "Producing zero carbon emissions",
+        "Offsetting carbon emissions so the net total is zero",
+        "Using only renewable energy",
+        "Removing all existing CO2 from the atmosphere"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "Which international agreement aims to limit global warming to 1.5 degrees C above pre-industrial levels?",
+      "choices": [
+        "The Kyoto Protocol",
+        "The Montreal Protocol",
+        "The Paris Agreement",
+        "The Copenhagen Accord"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "Recycling aluminium saves approximately what percentage of energy compared to producing new aluminium?",
+      "choices": [
+        "25%",
+        "50%",
+        "75%",
+        "95%"
+      ],
+      "correct_idx": 3
+    },
+    {
+      "q": "What is the primary cause of coral reef bleaching?",
+      "choices": [
+        "Ocean acidification alone",
+        "Overfishing",
+        "Rising sea temperatures",
+        "Plastic pollution"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "Which renewable energy source generates the most electricity globally?",
+      "choices": [
+        "Solar power",
+        "Wind power",
+        "Geothermal energy",
+        "Hydropower"
+      ],
+      "correct_idx": 3
+    },
+    {
+      "q": "What percentage of plastic produced globally is estimated to be recycled?",
+      "choices": [
+        "Less than 10%",
+        "About 25%",
+        "About 40%",
+        "About 55%"
+      ],
+      "correct_idx": 0
+    },
+    {
+      "q": "The 'three Rs' in sustainability stand for what?",
+      "choices": [
+        "Repair, Restore, Renew",
+        "Reduce, Reuse, Recycle",
+        "Rethink, Replace, Reform",
+        "Refuse, Return, Repurpose"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "Deforestation of tropical rainforests primarily contributes to which global problem?",
+      "choices": [
+        "Ozone depletion",
+        "Climate change and loss of biodiversity",
+        "Ocean acidification",
+        "Soil erosion only"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "What is the term for energy produced from organic materials such as plant waste?",
+      "choices": [
+        "Geothermal",
+        "Biomass energy",
+        "Tidal energy",
+        "Fusion energy"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "Which gas, used in old refrigerators, contributed to ozone layer depletion?",
+      "choices": [
+        "Carbon monoxide",
+        "Methane",
+        "Sulphur dioxide",
+        "Chlorofluorocarbons (CFCs)"
+      ],
+      "correct_idx": 3
+    }
+  ]
+}

@@ -1,0 +1,106 @@
+{
+  "deck_date": "2026-07-09",
+  "curator_notes": "Music history and theory.",
+  "questions": [
+    {
+      "q": "How many strings does a standard classical guitar have?",
+      "choices": [
+        "4",
+        "5",
+        "6",
+        "8"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "Which composer wrote the 'Moonlight Sonata'?",
+      "choices": [
+        "Mozart",
+        "Bach",
+        "Beethoven",
+        "Schubert"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "What does 'forte' mean in musical notation?",
+      "choices": [
+        "Slow",
+        "Loud",
+        "Soft",
+        "Fast"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "How many notes are in an octave?",
+      "choices": [
+        "7",
+        "8",
+        "10",
+        "12"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "Which band recorded the album 'Abbey Road'?",
+      "choices": [
+        "The Rolling Stones",
+        "Led Zeppelin",
+        "The Beatles",
+        "The Who"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "What instrument is Yo-Yo Ma famous for playing?",
+      "choices": [
+        "Violin",
+        "Viola",
+        "Cello",
+        "Double bass"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "In music, what does BPM stand for?",
+      "choices": [
+        "Beats Per Measure",
+        "Bass Per Minute",
+        "Beats Per Minute",
+        "Bars Per Movement"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "Which country does the musical genre 'Bossa Nova' originate from?",
+      "choices": [
+        "Argentina",
+        "Cuba",
+        "Portugal",
+        "Brazil"
+      ],
+      "correct_idx": 3
+    },
+    {
+      "q": "A 'symphony' is typically performed by which type of ensemble?",
+      "choices": [
+        "String quartet",
+        "Jazz band",
+        "Orchestra",
+        "Chamber ensemble"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "What is the lowest male singing voice type?",
+      "choices": [
+        "Baritone",
+        "Tenor",
+        "Bass",
+        "Alto"
+      ],
+      "correct_idx": 2
+    }
+  ]
+}

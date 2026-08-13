@@ -1,0 +1,106 @@
+{
+  "deck_date": "2026-08-11",
+  "curator_notes": "Famous scientists and their discoveries.",
+  "questions": [
+    {
+      "q": "Marie Curie was the first person to win Nobel Prizes in two different sciences. Which were they?",
+      "choices": [
+        "Chemistry and Medicine",
+        "Physics and Chemistry",
+        "Physics and Medicine",
+        "Chemistry and Peace"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "Albert Einstein was born in which country?",
+      "choices": [
+        "Austria",
+        "Switzerland",
+        "Germany",
+        "Hungary"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "Stephen Hawking made major contributions to the study of what?",
+      "choices": [
+        "Genetics and biology",
+        "Black holes and cosmology",
+        "Quantum computing",
+        "Climate science"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "Nikola Tesla is famous for his work with which type of electrical current?",
+      "choices": [
+        "Direct Current (DC)",
+        "Alternating Current (AC)",
+        "Pulsed Current",
+        "Static Electricity"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "Which scientist is considered the father of the periodic table?",
+      "choices": [
+        "Antoine Lavoisier",
+        "John Dalton",
+        "Dmitri Mendeleev",
+        "Humphry Davy"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "Rosalind Franklin's X-ray images were crucial in discovering the structure of what?",
+      "choices": [
+        "The atom",
+        "DNA",
+        "Proteins",
+        "Viruses"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "Isaac Newton famously developed his theories after observing what falling?",
+      "choices": [
+        "A raindrop",
+        "An apple",
+        "A leaf",
+        "A feather"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "Which scientist developed the first vaccine (for smallpox) in 1796?",
+      "choices": [
+        "Louis Pasteur",
+        "Robert Koch",
+        "Edward Jenner",
+        "Joseph Lister"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "Carl Sagan was famous for popularising which field of science?",
+      "choices": [
+        "Marine biology",
+        "Genetics",
+        "Astronomy and cosmology",
+        "Geology"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "What did Alan Turing contribute to during World War II?",
+      "choices": [
+        "Nuclear weapons research",
+        "Radar technology",
+        "Codebreaking and early computing",
+        "Military medicine"
+      ],
+      "correct_idx": 2
+    }
+  ]
+}

@@ -1,0 +1,106 @@
+{
+  "deck_date": "2026-07-08",
+  "curator_notes": "World geography: countries and capitals.",
+  "questions": [
+    {
+      "q": "What is the capital of Australia?",
+      "choices": [
+        "Sydney",
+        "Melbourne",
+        "Brisbane",
+        "Canberra"
+      ],
+      "correct_idx": 3
+    },
+    {
+      "q": "Which country has the most natural lakes in the world?",
+      "choices": [
+        "Russia",
+        "USA",
+        "Finland",
+        "Canada"
+      ],
+      "correct_idx": 3
+    },
+    {
+      "q": "The Amazon River flows primarily through which country?",
+      "choices": [
+        "Colombia",
+        "Peru",
+        "Brazil",
+        "Bolivia"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "What is the smallest country in the world by area?",
+      "choices": [
+        "Monaco",
+        "San Marino",
+        "Vatican City",
+        "Liechtenstein"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "Which African country has the largest population?",
+      "choices": [
+        "Ethiopia",
+        "Egypt",
+        "South Africa",
+        "Nigeria"
+      ],
+      "correct_idx": 3
+    },
+    {
+      "q": "The Andes mountain range runs along the western coast of which continent?",
+      "choices": [
+        "North America",
+        "Africa",
+        "Asia",
+        "South America"
+      ],
+      "correct_idx": 3
+    },
+    {
+      "q": "What is the capital of Canada?",
+      "choices": [
+        "Toronto",
+        "Vancouver",
+        "Montreal",
+        "Ottawa"
+      ],
+      "correct_idx": 3
+    },
+    {
+      "q": "Which country has the longest coastline in the world?",
+      "choices": [
+        "Russia",
+        "Australia",
+        "Norway",
+        "Canada"
+      ],
+      "correct_idx": 3
+    },
+    {
+      "q": "Lake Titicaca is located on the border of which two countries?",
+      "choices": [
+        "Chile and Argentina",
+        "Peru and Bolivia",
+        "Ecuador and Peru",
+        "Colombia and Venezuela"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "Which country contains the most of the Sahara Desert?",
+      "choices": [
+        "Egypt",
+        "Libya",
+        "Algeria",
+        "Sudan"
+      ],
+      "correct_idx": 2
+    }
+  ]
+}

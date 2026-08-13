@@ -1,0 +1,106 @@
+{
+  "deck_date": "2026-07-31",
+  "curator_notes": "Pop culture and entertainment of the 2000s.",
+  "questions": [
+    {
+      "q": "Which social network launched in 2004 and became the world's largest?",
+      "choices": [
+        "MySpace",
+        "Twitter",
+        "LinkedIn",
+        "Facebook"
+      ],
+      "correct_idx": 3
+    },
+    {
+      "q": "The film 'Avatar' (2009) was directed by whom?",
+      "choices": [
+        "Steven Spielberg",
+        "Peter Jackson",
+        "James Cameron",
+        "Michael Bay"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "What was the best-selling video game console of the 2000s decade?",
+      "choices": [
+        "Xbox",
+        "GameCube",
+        "PlayStation 2",
+        "Nintendo DS"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "Which pop star released the album 'Back to Black' in 2006?",
+      "choices": [
+        "Adele",
+        "Amy Winehouse",
+        "Lily Allen",
+        "Duffy"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "The TV show 'Lost' debuted in which year?",
+      "choices": [
+        "2002",
+        "2003",
+        "2004",
+        "2005"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "Which film trilogy concluded with 'The Return of the King' in 2003?",
+      "choices": [
+        "The Matrix",
+        "Star Wars prequels",
+        "Pirates of the Caribbean",
+        "The Lord of the Rings"
+      ],
+      "correct_idx": 3
+    },
+    {
+      "q": "What was the name of Amazon's e-reader launched in 2007?",
+      "choices": [
+        "iBook",
+        "Nook",
+        "Kobo",
+        "Kindle"
+      ],
+      "correct_idx": 3
+    },
+    {
+      "q": "Which reality TV show, premiering in 2000, stranded people in an isolated location and voted each other out?",
+      "choices": [
+        "Big Brother",
+        "The Amazing Race",
+        "Survivor",
+        "The Bachelor"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "Eminem's album 'The Marshall Mathers LP' was released in which year?",
+      "choices": [
+        "1999",
+        "2000",
+        "2001",
+        "2002"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "Which superhero film, launched in 2008, created the Marvel Cinematic Universe?",
+      "choices": [
+        "Spider-Man",
+        "X-Men",
+        "Iron Man",
+        "Thor"
+      ],
+      "correct_idx": 2
+    }
+  ]
+}

@@ -1,0 +1,106 @@
+{
+  "deck_date": "2026-07-25",
+  "curator_notes": "Football (soccer): the world's game.",
+  "questions": [
+    {
+      "q": "How many players are on a standard football (soccer) team on the pitch?",
+      "choices": [
+        "9",
+        "10",
+        "11",
+        "12"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "Which country has won the most FIFA World Cup titles?",
+      "choices": [
+        "Germany",
+        "Argentina",
+        "Italy",
+        "Brazil"
+      ],
+      "correct_idx": 3
+    },
+    {
+      "q": "The FIFA World Cup is held every how many years?",
+      "choices": [
+        "2",
+        "3",
+        "4",
+        "5"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "What is the name of the award given to the best player at each FIFA World Cup?",
+      "choices": [
+        "The Golden Boot",
+        "The Ballon d'Or",
+        "The Golden Ball",
+        "The World Cup Trophy"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "Which club has won the most UEFA Champions League titles?",
+      "choices": [
+        "Barcelona",
+        "Bayern Munich",
+        "AC Milan",
+        "Real Madrid"
+      ],
+      "correct_idx": 3
+    },
+    {
+      "q": "What is the standard size of a football pitch for international matches (length)?",
+      "choices": [
+        "90-120 metres",
+        "100-130 metres",
+        "80-110 metres",
+        "95-115 metres"
+      ],
+      "correct_idx": 0
+    },
+    {
+      "q": "In football, what does a 'hat-trick' mean?",
+      "choices": [
+        "Three assists in a game",
+        "Three yellow cards",
+        "Three goals by one player in one game",
+        "Three penalties in a match"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "Who holds the record for the most goals scored in FIFA World Cup history?",
+      "choices": [
+        "Ronaldo (Brazil)",
+        "Pele",
+        "Miroslav Klose",
+        "Gerd Muller"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "What colour card results in a player being sent off in football?",
+      "choices": [
+        "Yellow",
+        "Orange",
+        "Red",
+        "Black"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "The 'offside rule' means an attacker cannot receive the ball when they are what?",
+      "choices": [
+        "Outside the centre circle",
+        "Closer to the opponent's goal line than both the ball and the second-last defender",
+        "On the halfway line",
+        "Behind the goalkeeper"
+      ],
+      "correct_idx": 1
+    }
+  ]
+}

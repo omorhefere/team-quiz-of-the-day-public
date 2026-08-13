@@ -1,0 +1,106 @@
+{
+  "deck_date": "2026-07-21",
+  "curator_notes": "World religions and beliefs.",
+  "questions": [
+    {
+      "q": "Which religion has the most followers worldwide?",
+      "choices": [
+        "Islam",
+        "Hinduism",
+        "Buddhism",
+        "Christianity"
+      ],
+      "correct_idx": 3
+    },
+    {
+      "q": "Where is the holiest site in Islam, the Masjid al-Haram, located?",
+      "choices": [
+        "Medina",
+        "Mecca",
+        "Jerusalem",
+        "Baghdad"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "What is the sacred text of Hinduism called?",
+      "choices": [
+        "The Quran",
+        "The Talmud",
+        "The Vedas",
+        "The Tripitaka"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "Who founded Buddhism?",
+      "choices": [
+        "Mahavira",
+        "Confucius",
+        "Siddhartha Gautama (the Buddha)",
+        "Laozi"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "In Judaism, what is the name of the weekly day of rest?",
+      "choices": [
+        "Passover",
+        "Shabbat",
+        "Hanukkah",
+        "Yom Kippur"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "The Dalai Lama is the spiritual leader of which branch of Buddhism?",
+      "choices": [
+        "Theravada",
+        "Zen",
+        "Pure Land",
+        "Tibetan (Vajrayana)"
+      ],
+      "correct_idx": 3
+    },
+    {
+      "q": "What is the name for the Islamic declaration of faith?",
+      "choices": [
+        "Salah",
+        "Zakat",
+        "Shahada",
+        "Sawm"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "Which religion holds the concept of 'karma' and 'dharma' as central?",
+      "choices": [
+        "Sikhism only",
+        "Hinduism and Buddhism",
+        "Jainism only",
+        "Taoism"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "The Vatican City is the headquarters of which religious organisation?",
+      "choices": [
+        "The Eastern Orthodox Church",
+        "The Anglican Communion",
+        "The Roman Catholic Church",
+        "The Lutheran Church"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "In which modern country was Sikhism founded?",
+      "choices": [
+        "Nepal",
+        "Pakistan",
+        "India",
+        "Bangladesh"
+      ],
+      "correct_idx": 2
+    }
+  ]
+}

@@ -1,0 +1,106 @@
+{
+  "deck_date": "2026-07-28",
+  "curator_notes": "Physics and the laws of nature.",
+  "questions": [
+    {
+      "q": "What is the speed of light in a vacuum (approximately)?",
+      "choices": [
+        "300,000 km/s",
+        "150,000 km/s",
+        "3,000,000 km/s",
+        "30,000 km/s"
+      ],
+      "correct_idx": 0
+    },
+    {
+      "q": "What force keeps planets in orbit around the Sun?",
+      "choices": [
+        "Electromagnetism",
+        "The strong nuclear force",
+        "Gravity",
+        "The weak nuclear force"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "Who formulated the three laws of motion?",
+      "choices": [
+        "Galileo Galilei",
+        "Albert Einstein",
+        "Isaac Newton",
+        "James Clerk Maxwell"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "What does Einstein's famous equation E=mc2 relate?",
+      "choices": [
+        "Energy and velocity",
+        "Mass and acceleration",
+        "Energy and mass",
+        "Force and distance"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "What is the SI unit of electric current?",
+      "choices": [
+        "Volt",
+        "Watt",
+        "Ohm",
+        "Ampere"
+      ],
+      "correct_idx": 3
+    },
+    {
+      "q": "What type of energy does a stretched spring possess?",
+      "choices": [
+        "Kinetic energy",
+        "Thermal energy",
+        "Gravitational potential energy",
+        "Elastic potential energy"
+      ],
+      "correct_idx": 3
+    },
+    {
+      "q": "What does a thermometer measure?",
+      "choices": [
+        "Pressure",
+        "Temperature",
+        "Humidity",
+        "Heat capacity"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "According to Newton's first law, an object at rest stays at rest unless acted upon by what?",
+      "choices": [
+        "A magnetic field",
+        "Gravity",
+        "An external force",
+        "Friction"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "What is the unit of measurement for frequency?",
+      "choices": [
+        "Joule",
+        "Pascal",
+        "Hertz",
+        "Newton"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "Which phenomenon describes light bending as it passes from one medium to another?",
+      "choices": [
+        "Reflection",
+        "Diffraction",
+        "Refraction",
+        "Scattering"
+      ],
+      "correct_idx": 2
+    }
+  ]
+}

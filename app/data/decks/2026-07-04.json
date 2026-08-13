@@ -1,0 +1,106 @@
+{
+  "deck_date": "2026-07-04",
+  "curator_notes": "Independence Day special: American history and culture.",
+  "questions": [
+    {
+      "q": "In what year did the United States declare independence?",
+      "choices": [
+        "1776",
+        "1783",
+        "1765",
+        "1812"
+      ],
+      "correct_idx": 0
+    },
+    {
+      "q": "Which document begins with 'We hold these truths to be self-evident'?",
+      "choices": [
+        "The Constitution",
+        "The Bill of Rights",
+        "The Federalist Papers",
+        "The Declaration of Independence"
+      ],
+      "correct_idx": 3
+    },
+    {
+      "q": "How many original colonies signed the Declaration of Independence?",
+      "choices": [
+        "13",
+        "12",
+        "15",
+        "50"
+      ],
+      "correct_idx": 0
+    },
+    {
+      "q": "Who was the primary author of the Declaration of Independence?",
+      "choices": [
+        "George Washington",
+        "Benjamin Franklin",
+        "Thomas Jefferson",
+        "John Adams"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "Which city hosted the Second Continental Congress that adopted the Declaration?",
+      "choices": [
+        "Boston",
+        "New York",
+        "Philadelphia",
+        "Washington D.C."
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "The Liberty Bell is famously cracked. In which city is it displayed?",
+      "choices": [
+        "Boston",
+        "Philadelphia",
+        "Washington D.C.",
+        "New York"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "Which president was born on July 4th AND died on July 4th, 1826?",
+      "choices": [
+        "George Washington",
+        "James Madison",
+        "John Adams",
+        "Andrew Jackson"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "What is the nickname of the American flag?",
+      "choices": [
+        "The Stars and Stripes",
+        "The Red, White and Blue Banner",
+        "Old Glory",
+        "The Freedom Flag"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "How many stripes are on the US flag?",
+      "choices": [
+        "50",
+        "13",
+        "10",
+        "15"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "The Statue of Liberty was a gift to the US from which country?",
+      "choices": [
+        "England",
+        "Germany",
+        "Spain",
+        "France"
+      ],
+      "correct_idx": 3
+    }
+  ]
+}

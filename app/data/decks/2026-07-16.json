@@ -1,0 +1,106 @@
+{
+  "deck_date": "2026-07-16",
+  "curator_notes": "Ancient civilisations.",
+  "questions": [
+    {
+      "q": "The ancient city of Carthage was located in modern-day which country?",
+      "choices": [
+        "Libya",
+        "Algeria",
+        "Morocco",
+        "Tunisia"
+      ],
+      "correct_idx": 3
+    },
+    {
+      "q": "Which ancient wonder of the world still stands today?",
+      "choices": [
+        "The Colossus of Rhodes",
+        "The Hanging Gardens of Babylon",
+        "The Great Pyramid of Giza",
+        "The Lighthouse of Alexandria"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "What writing system did the ancient Egyptians use?",
+      "choices": [
+        "Cuneiform",
+        "Hieroglyphics",
+        "Linear B",
+        "Runes"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "The Colosseum in Rome was primarily used for what?",
+      "choices": [
+        "Religious ceremonies",
+        "Senate meetings",
+        "Gladiatorial combat and public spectacles",
+        "Trading markets"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "Which ancient Greek philosopher was the teacher of Alexander the Great?",
+      "choices": [
+        "Plato",
+        "Socrates",
+        "Aristotle",
+        "Pythagoras"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "The Inca Empire was centred in which modern country?",
+      "choices": [
+        "Mexico",
+        "Bolivia",
+        "Peru",
+        "Ecuador"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "What was the primary building material used in construction of the Great Wall of China?",
+      "choices": [
+        "Granite",
+        "Limestone",
+        "Brick and stone",
+        "Marble"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "Julius Caesar was assassinated in what year (BC)?",
+      "choices": [
+        "55 BC",
+        "44 BC",
+        "27 BC",
+        "63 BC"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "The ancient city of Mesopotamia developed in the region between which two rivers?",
+      "choices": [
+        "Nile and Euphrates",
+        "Indus and Ganges",
+        "Tigris and Euphrates",
+        "Yangtze and Yellow"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "What material did the ancient Romans use in construction that made their structures so durable?",
+      "choices": [
+        "Mortar and lime",
+        "Volcanic ash concrete (pozzolana)",
+        "Cut granite blocks",
+        "Fired clay bricks"
+      ],
+      "correct_idx": 1
+    }
+  ]
+}

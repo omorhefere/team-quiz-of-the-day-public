@@ -1,0 +1,106 @@
+{
+  "deck_date": "2026-07-17",
+  "curator_notes": "The human mind: psychology and neuroscience.",
+  "questions": [
+    {
+      "q": "What is the term for the tendency to seek information that confirms your existing beliefs?",
+      "choices": [
+        "Attribution bias",
+        "Confirmation bias",
+        "Anchoring bias",
+        "Availability heuristic"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "Who developed the theory of classical conditioning using dogs and bells?",
+      "choices": [
+        "B.F. Skinner",
+        "Sigmund Freud",
+        "Ivan Pavlov",
+        "William James"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "Which part of the brain is considered the centre of emotions and memory formation?",
+      "choices": [
+        "Hippocampus",
+        "Frontal lobe",
+        "Amygdala",
+        "Parietal lobe"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "What does REM stand for in the context of sleep?",
+      "choices": [
+        "Rapid Eye Movement",
+        "Rest and Energy Mode",
+        "Regular Evening Monitoring",
+        "Rhythmic Eye Mapping"
+      ],
+      "correct_idx": 0
+    },
+    {
+      "q": "Maslow's hierarchy of needs places which need at the very top?",
+      "choices": [
+        "Safety",
+        "Esteem",
+        "Love and belonging",
+        "Self-actualisation"
+      ],
+      "correct_idx": 3
+    },
+    {
+      "q": "What is the phenomenon where people perform better on tasks when others are watching?",
+      "choices": [
+        "The observer effect",
+        "Social facilitation",
+        "Groupthink",
+        "The Hawthorne effect"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "Approximately how many neurons does the human brain contain?",
+      "choices": [
+        "86 thousand",
+        "86 million",
+        "86 billion",
+        "86 trillion"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "What is 'cognitive dissonance'?",
+      "choices": [
+        "Forgetting important information under stress",
+        "The discomfort of holding contradictory beliefs",
+        "Difficulty concentrating on multiple tasks",
+        "An impaired sense of reality"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "Which psychologist introduced the concept of the 'unconscious mind'?",
+      "choices": [
+        "Carl Jung",
+        "Alfred Adler",
+        "Sigmund Freud",
+        "Erik Erikson"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "What is the 'placebo effect'?",
+      "choices": [
+        "A drug that has no active ingredients",
+        "Improvement in condition due to belief in a treatment",
+        "Side effects of a real medication",
+        "A false memory of taking medicine"
+      ],
+      "correct_idx": 1
+    }
+  ]
+}

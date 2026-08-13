@@ -1,0 +1,106 @@
+{
+  "deck_date": "2026-08-19",
+  "curator_notes": "Mythology from around the world.",
+  "questions": [
+    {
+      "q": "Who is the king of the Greek gods?",
+      "choices": [
+        "Poseidon",
+        "Apollo",
+        "Zeus",
+        "Ares"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "In Norse mythology, what is the name of the world tree connecting the nine worlds?",
+      "choices": [
+        "Bifrost",
+        "Yggdrasil",
+        "Valhalla",
+        "Asgard"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "In Egyptian mythology, who is the god of the dead and the afterlife?",
+      "choices": [
+        "Ra",
+        "Horus",
+        "Osiris",
+        "Anubis"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "The Roman god Mars is associated with what?",
+      "choices": [
+        "The sea",
+        "Love and beauty",
+        "War",
+        "Wisdom"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "In Greek mythology, who was punished to forever push a boulder up a hill only for it to roll back down?",
+      "choices": [
+        "Tantalus",
+        "Ixion",
+        "Prometheus",
+        "Sisyphus"
+      ],
+      "correct_idx": 3
+    },
+    {
+      "q": "In Hindu mythology, Ganesha is depicted with the head of which animal?",
+      "choices": [
+        "Lion",
+        "Bull",
+        "Elephant",
+        "Monkey"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "In Greek mythology, which hero slew the Minotaur?",
+      "choices": [
+        "Perseus",
+        "Odysseus",
+        "Achilles",
+        "Theseus"
+      ],
+      "correct_idx": 3
+    },
+    {
+      "q": "What is the name of the hammer wielded by Thor in Norse mythology?",
+      "choices": [
+        "Gungnir",
+        "Mjolnir",
+        "Durandal",
+        "Excalibur"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "In Aztec mythology, Quetzalcoatl is depicted as what?",
+      "choices": [
+        "A jaguar god",
+        "A feathered serpent",
+        "A sun god with human form",
+        "A war eagle"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "In Greek mythology, what gift did Prometheus give to humanity?",
+      "choices": [
+        "The gift of music",
+        "The gift of fire",
+        "The gift of agriculture",
+        "The gift of language"
+      ],
+      "correct_idx": 1
+    }
+  ]
+}

@@ -1,0 +1,106 @@
+{
+  "deck_date": "2026-07-22",
+  "curator_notes": "Chemistry and the elements.",
+  "questions": [
+    {
+      "q": "What is the chemical symbol for gold?",
+      "choices": [
+        "Gd",
+        "Go",
+        "Ag",
+        "Au"
+      ],
+      "correct_idx": 3
+    },
+    {
+      "q": "How many elements are in the periodic table (as of 2024)?",
+      "choices": [
+        "108",
+        "112",
+        "118",
+        "120"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "What is the most abundant element in the Earth's crust?",
+      "choices": [
+        "Silicon",
+        "Iron",
+        "Oxygen",
+        "Aluminium"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "What is the chemical formula for water?",
+      "choices": [
+        "HO",
+        "H2O",
+        "H2O2",
+        "OH"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "Which gas makes up approximately 78% of Earth's atmosphere?",
+      "choices": [
+        "Oxygen",
+        "Carbon dioxide",
+        "Argon",
+        "Nitrogen"
+      ],
+      "correct_idx": 3
+    },
+    {
+      "q": "What is the atomic number of carbon?",
+      "choices": [
+        "4",
+        "6",
+        "8",
+        "12"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "What type of chemical bond involves the sharing of electrons between atoms?",
+      "choices": [
+        "Ionic bond",
+        "Covalent bond",
+        "Metallic bond",
+        "Hydrogen bond"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "What is the common name for sodium chloride?",
+      "choices": [
+        "Baking soda",
+        "Table salt",
+        "Chalk",
+        "Vinegar"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "Which element is a liquid at room temperature and is the only non-radioactive liquid metal?",
+      "choices": [
+        "Bromine",
+        "Caesium",
+        "Mercury",
+        "Gallium"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "What does pH measure?",
+      "choices": [
+        "Electrical conductivity",
+        "Acidity or alkalinity",
+        "Temperature sensitivity",
+        "Molecular weight"
+      ],
+      "correct_idx": 1
+    }
+  ]
+}

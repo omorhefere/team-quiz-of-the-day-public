@@ -1,0 +1,106 @@
+{
+  "deck_date": "2026-07-30",
+  "curator_notes": "Climate and weather phenomena.",
+  "questions": [
+    {
+      "q": "What is the term for the transfer of heat through direct contact?",
+      "choices": [
+        "Convection",
+        "Radiation",
+        "Conduction",
+        "Evaporation"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "The Coriolis effect influences the rotation of hurricanes. In the Northern Hemisphere they spin which direction?",
+      "choices": [
+        "Clockwise",
+        "Anticlockwise (counterclockwise)",
+        "Randomly",
+        "Both directions equally"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "What instrument measures atmospheric pressure?",
+      "choices": [
+        "Hygrometer",
+        "Thermometer",
+        "Anemometer",
+        "Barometer"
+      ],
+      "correct_idx": 3
+    },
+    {
+      "q": "Which scale is used to classify the intensity of a hurricane?",
+      "choices": [
+        "The Fujita scale",
+        "The Beaufort scale",
+        "The Saffir-Simpson scale",
+        "The Richter scale"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "What causes the Northern Lights (Aurora Borealis)?",
+      "choices": [
+        "Reflection of sunlight off polar ice",
+        "Volcanic gas emissions",
+        "Charged particles from the Sun interacting with Earth's atmosphere",
+        "Lightning in the upper atmosphere"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "What is the name for a prolonged period of abnormally low rainfall?",
+      "choices": [
+        "Monsoon",
+        "Drought",
+        "El Nino",
+        "Arid spell"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "Which layer of the atmosphere contains the ozone layer?",
+      "choices": [
+        "Troposphere",
+        "Mesosphere",
+        "Stratosphere",
+        "Thermosphere"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "What causes a rainbow?",
+      "choices": [
+        "Reflection of light off cloud droplets",
+        "Refraction and reflection of light in water droplets",
+        "Diffraction of light around clouds",
+        "Scattering of light by dust particles"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "What is 'acid rain' caused by?",
+      "choices": [
+        "Volcanic eruptions only",
+        "Sulphur dioxide and nitrogen oxides dissolving in rainwater",
+        "High concentrations of CO2 in the atmosphere",
+        "Ozone depletion"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "What is a 'monsoon'?",
+      "choices": [
+        "A very heavy thunderstorm",
+        "A seasonal shift in wind patterns bringing heavy rainfall",
+        "A tropical cyclone",
+        "A period of extreme heat"
+      ],
+      "correct_idx": 1
+    }
+  ]
+}

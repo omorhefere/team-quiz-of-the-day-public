@@ -1,0 +1,106 @@
+{
+  "deck_date": "2026-08-20",
+  "curator_notes": "Around the world in 10 questions: global trivia.",
+  "questions": [
+    {
+      "q": "Which river is the longest in the world?",
+      "choices": [
+        "The Amazon",
+        "The Yangtze",
+        "The Nile",
+        "The Mississippi"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "Mount Everest lies on the border between which two countries?",
+      "choices": [
+        "India and Tibet",
+        "Nepal and Tibet (China)",
+        "India and Nepal",
+        "Bhutan and China"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "Which city is home to the most billionaires in the world?",
+      "choices": [
+        "New York",
+        "London",
+        "Hong Kong",
+        "Beijing"
+      ],
+      "correct_idx": 0
+    },
+    {
+      "q": "In which country would you find the ancient ruins of Machu Picchu?",
+      "choices": [
+        "Bolivia",
+        "Colombia",
+        "Ecuador",
+        "Peru"
+      ],
+      "correct_idx": 3
+    },
+    {
+      "q": "Which country consumes the most tea per capita?",
+      "choices": [
+        "China",
+        "India",
+        "Turkey",
+        "United Kingdom"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "The Trans-Siberian Railway runs across which country?",
+      "choices": [
+        "Mongolia",
+        "China",
+        "Kazakhstan",
+        "Russia"
+      ],
+      "correct_idx": 3
+    },
+    {
+      "q": "Victoria Falls lies on the border of which two African countries?",
+      "choices": [
+        "Zambia and Zimbabwe",
+        "Mozambique and Zimbabwe",
+        "South Africa and Botswana",
+        "Tanzania and Uganda"
+      ],
+      "correct_idx": 0
+    },
+    {
+      "q": "Which is the world's most visited country by international tourists?",
+      "choices": [
+        "Spain",
+        "United States",
+        "China",
+        "France"
+      ],
+      "correct_idx": 3
+    },
+    {
+      "q": "What is the official language of Brazil?",
+      "choices": [
+        "Spanish",
+        "English",
+        "Portuguese",
+        "French"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "Which country has the most UNESCO World Heritage Sites?",
+      "choices": [
+        "China",
+        "France",
+        "Spain",
+        "Italy"
+      ],
+      "correct_idx": 3
+    }
+  ]
+}

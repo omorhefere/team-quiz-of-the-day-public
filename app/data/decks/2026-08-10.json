@@ -1,0 +1,106 @@
+{
+  "deck_date": "2026-08-10",
+  "curator_notes": "World capitals and political geography.",
+  "questions": [
+    {
+      "q": "What is the capital of Brazil?",
+      "choices": [
+        "Sao Paulo",
+        "Rio de Janeiro",
+        "Brasilia",
+        "Salvador"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "Which city is the administrative capital of South Africa?",
+      "choices": [
+        "Cape Town",
+        "Johannesburg",
+        "Durban",
+        "Pretoria"
+      ],
+      "correct_idx": 3
+    },
+    {
+      "q": "What is the capital of Japan?",
+      "choices": [
+        "Osaka",
+        "Kyoto",
+        "Tokyo",
+        "Hiroshima"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "Which city is both the capital and the largest city of Argentina?",
+      "choices": [
+        "Cordoba",
+        "Rosario",
+        "Mendoza",
+        "Buenos Aires"
+      ],
+      "correct_idx": 3
+    },
+    {
+      "q": "What is the capital of Egypt?",
+      "choices": [
+        "Alexandria",
+        "Luxor",
+        "Giza",
+        "Cairo"
+      ],
+      "correct_idx": 3
+    },
+    {
+      "q": "Nairobi is the capital of which African country?",
+      "choices": [
+        "Tanzania",
+        "Uganda",
+        "Ethiopia",
+        "Kenya"
+      ],
+      "correct_idx": 3
+    },
+    {
+      "q": "What is the capital of Indonesia?",
+      "choices": [
+        "Bali",
+        "Surabaya",
+        "Jakarta",
+        "Bandung"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "Which city is the capital of Germany?",
+      "choices": [
+        "Munich",
+        "Hamburg",
+        "Frankfurt",
+        "Berlin"
+      ],
+      "correct_idx": 3
+    },
+    {
+      "q": "What is the capital of New Zealand?",
+      "choices": [
+        "Auckland",
+        "Christchurch",
+        "Wellington",
+        "Dunedin"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "The capital of Saudi Arabia is?",
+      "choices": [
+        "Jeddah",
+        "Mecca",
+        "Medina",
+        "Riyadh"
+      ],
+      "correct_idx": 3
+    }
+  ]
+}

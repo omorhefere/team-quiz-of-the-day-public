@@ -1,0 +1,106 @@
+{
+  "deck_date": "2026-08-14",
+  "curator_notes": "The Renaissance and early modern Europe.",
+  "questions": [
+    {
+      "q": "The Renaissance movement began in which Italian city?",
+      "choices": [
+        "Rome",
+        "Venice",
+        "Florence",
+        "Milan"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "Leonardo da Vinci's 'The Last Supper' depicts which event?",
+      "choices": [
+        "The crucifixion of Jesus",
+        "Jesus's final meal with his apostles",
+        "The resurrection of Jesus",
+        "The baptism of Jesus"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "Who wrote the political treatise 'The Prince' in 1513?",
+      "choices": [
+        "Thomas More",
+        "Erasmus",
+        "Niccolo Machiavelli",
+        "Francesco Guicciardini"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "Copernicus proposed which revolutionary idea?",
+      "choices": [
+        "The Earth is flat",
+        "The Sun orbits the Earth",
+        "The Earth orbits the Sun (heliocentric model)",
+        "Stars are other suns"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "Who painted the Birth of Venus?",
+      "choices": [
+        "Raphael",
+        "Leonardo da Vinci",
+        "Michelangelo",
+        "Sandro Botticelli"
+      ],
+      "correct_idx": 3
+    },
+    {
+      "q": "Martin Luther's 95 Theses in 1517 sparked which religious movement?",
+      "choices": [
+        "The Counter-Reformation",
+        "The Protestant Reformation",
+        "The Crusades",
+        "The Great Schism"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "What is the name of Raphael's famous fresco depicting ancient Greek philosophers?",
+      "choices": [
+        "The School of Athens",
+        "The Academy of Athens",
+        "The Philosophers of Athens",
+        "The Debate of Athens"
+      ],
+      "correct_idx": 0
+    },
+    {
+      "q": "In which century did the Renaissance primarily flourish?",
+      "choices": [
+        "12th-13th centuries",
+        "14th-17th centuries",
+        "18th century",
+        "11th-12th centuries"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "Galileo Galilei improved the telescope and supported which model of the solar system?",
+      "choices": [
+        "The geocentric model",
+        "The heliocentric model",
+        "The binary star model",
+        "The flat Earth model"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "Who was among the key architects of St. Peter's Basilica in Rome?",
+      "choices": [
+        "Raphael alone",
+        "Leonardo da Vinci",
+        "Michelangelo and Bernini among others",
+        "Filippo Brunelleschi"
+      ],
+      "correct_idx": 2
+    }
+  ]
+}

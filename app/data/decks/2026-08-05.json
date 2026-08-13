@@ -1,0 +1,106 @@
+{
+  "deck_date": "2026-08-05",
+  "curator_notes": "Food science and nutrition.",
+  "questions": [
+    {
+      "q": "Which macronutrient provides 9 calories per gram?",
+      "choices": [
+        "Carbohydrates",
+        "Protein",
+        "Fat",
+        "Fibre"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "What vitamin is abundant in citrus fruits and essential for immune function?",
+      "choices": [
+        "Vitamin A",
+        "Vitamin B6",
+        "Vitamin C",
+        "Vitamin E"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "Fermentation is used in producing which of these foods?",
+      "choices": [
+        "White rice",
+        "Plain pasta",
+        "Bread",
+        "Boiled potatoes"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "What mineral is essential for strong bones and teeth?",
+      "choices": [
+        "Iron",
+        "Zinc",
+        "Potassium",
+        "Calcium"
+      ],
+      "correct_idx": 3
+    },
+    {
+      "q": "Which process preserves food by removing its water content?",
+      "choices": [
+        "Pasteurisation",
+        "Dehydration",
+        "Sterilisation",
+        "Blanching"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "Omega-3 fatty acids are most abundant in which food?",
+      "choices": [
+        "Chicken",
+        "Red meat",
+        "Oily fish",
+        "Dairy products"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "What gives chillies their spicy heat?",
+      "choices": [
+        "Lycopene",
+        "Allicin",
+        "Capsaicin",
+        "Curcumin"
+      ],
+      "correct_idx": 2
+    },
+    {
+      "q": "Which sugar is found naturally in milk?",
+      "choices": [
+        "Fructose",
+        "Sucrose",
+        "Glucose",
+        "Lactose"
+      ],
+      "correct_idx": 3
+    },
+    {
+      "q": "How many kilocalories (kcal) are in a gram of carbohydrate?",
+      "choices": [
+        "2",
+        "4",
+        "7",
+        "9"
+      ],
+      "correct_idx": 1
+    },
+    {
+      "q": "What is the primary purpose of dietary fibre in the human body?",
+      "choices": [
+        "Provide energy quickly",
+        "Build muscle",
+        "Aid digestive health and regularity",
+        "Absorb vitamins"
+      ],
+      "correct_idx": 2
+    }
+  ]
+}
