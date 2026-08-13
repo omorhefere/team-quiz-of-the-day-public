@@ -43,6 +43,8 @@ export interface GenerateParams {
   count: number;
   /** Optional focus, e.g. "our refund policy". */
   topic?: string;
+  /** Controls how obvious the questions should be. Defaults to "medium". */
+  difficulty?: "easy" | "medium" | "hard";
 }
 
 /**

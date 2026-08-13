@@ -298,6 +298,21 @@ export default function Sources({ loaderData, actionData }: Route.ComponentProps
                 <input type="hidden" name="count" value="10" />
                 <input name="topic" placeholder="Optional topic focus, e.g. refund policy"
                   className="w-full rounded-lg border border-gray-700 bg-gray-900 px-3 py-2 text-sm" />
+                {/* Difficulty */}
+                <div className="flex gap-3">
+                  {(["easy", "medium", "hard"] as const).map((d) => (
+                    <label key={d} className="flex cursor-pointer items-center gap-1.5 text-sm text-gray-400">
+                      <input
+                        type="radio"
+                        name="difficulty"
+                        value={d}
+                        defaultChecked={d === "medium"}
+                        className="accent-indigo-500"
+                      />
+                      {d.charAt(0).toUpperCase() + d.slice(1)}
+                    </label>
+                  ))}
+                </div>
                 <button disabled={generating}
                   className="rounded-lg bg-indigo-600 px-5 py-2 font-semibold text-white hover:bg-indigo-500 disabled:opacity-60">
                   {generating ? "Generating… this takes ~30 seconds" : "Generate 10 questions →"}

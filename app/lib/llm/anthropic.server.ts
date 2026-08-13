@@ -42,6 +42,12 @@ Rules:
 - Prefer concrete, checkable facts (names, numbers, policies, definitions) over vague or opinion-based questions.
 - Keep questions and choices concise. Do not reference "the document" or "the text" in the question wording.`;
 
+function difficultyInstruction(d: GenerateParams["difficulty"]): string {
+  if (d === "easy") return "\nDifficulty: EASY — favour questions where the answer is stated plainly and obviously in the source. Avoid trick questions or fine distinctions.";
+  if (d === "hard") return "\nDifficulty: HARD — favour questions that require careful reading, specific recall, or distinguishing between closely related facts. Avoid questions with an obvious answer.";
+  return "\nDifficulty: MEDIUM — mix straightforward and moderately challenging questions.";
+}
+
 function buildSourceText(sources: GenerateParams["sources"]): string {
   const joined = sources
     .map((s) => `## Source: ${s.label}\n${s.text}`)
@@ -79,7 +85,7 @@ export class AnthropicLLMService implements LLMService {
       messages: [
         {
           role: "user",
-          content: `Generate ${params.count} multiple-choice questions based strictly on the source documents above.${topicLine}`,
+          content: `Generate ${params.count} multiple-choice questions based strictly on the source documents above.${topicLine}${difficultyInstruction(params.difficulty)}`,
         },
       ],
       output_config: {

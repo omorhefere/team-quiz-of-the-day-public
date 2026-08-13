@@ -50,6 +50,10 @@ export async function action({ request, params }: Route.ActionArgs) {
   const count = countSchema.catch(5).parse(form.get("count") ?? undefined);
   // Cap topic to prevent prompt injection via an unusually long free-text field.
   const topic = (String(form.get("topic") ?? "").trim().slice(0, 200)) || undefined;
+  const difficultyRaw = String(form.get("difficulty") ?? "").trim();
+  const difficulty = (["easy", "medium", "hard"].includes(difficultyRaw)
+    ? difficultyRaw
+    : "medium") as "easy" | "medium" | "hard";
 
   let questions: ValidQuestion[] = [];
   try {
@@ -57,6 +61,7 @@ export async function action({ request, params }: Route.ActionArgs) {
       sources: sources.map((s) => ({ label: s.label, text: s.text })),
       count,
       topic,
+      difficulty,
     });
     questions = result.questions.map((q) => ({
       q: q.q,
