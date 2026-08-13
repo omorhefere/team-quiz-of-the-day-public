@@ -95,7 +95,8 @@ export class AnthropicLLMService implements LLMService {
 
     const response = await this.client.messages.parse({
       model: this.model,
-      max_tokens: 8000,
+      max_tokens: isTopicMode ? 8000 : 32000,
+      ...(isTopicMode ? {} : { thinking: { type: "adaptive" } }),
       system: systemBlocks,
       messages: [{ role: "user", content: userContent }],
       output_config: {
