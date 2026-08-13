@@ -49,12 +49,44 @@ export interface GenerateParams {
   mode?: "document" | "topic";
 }
 
+export interface VerificationResult {
+  verdict: "confident" | "review" | "flagged";
+  /** Short explanation, shown to the admin. */
+  reason?: string;
+}
+
+export interface VerifyParams {
+  questions: Array<{
+    q: string;
+    choices: string[];
+    correct_idx: number;
+    source_quote: string;
+  }>;
+  /** "topic" mode questions have no source document — verifier uses general knowledge. */
+  mode: "document" | "topic";
+}
+
+export interface VerifyResult {
+  /** One entry per question, same order as VerifyParams.questions. */
+  verdicts: VerificationResult[];
+}
+
+export const verificationResultSchema = z.object({
+  verdict: z.enum(["confident", "review", "flagged"]),
+  reason: z.string().optional(),
+});
+
+export const verifyResultSchema = z.object({
+  verdicts: z.array(verificationResultSchema),
+});
+
 /**
  * The provider-agnostic generation service. Implemented by `AnthropicLLMService`
  * (real) and `FakeLLMService` (deterministic, for dev/tests without a key).
  */
 export interface LLMService {
   generateQuiz(params: GenerateParams): Promise<GeneratedQuiz>;
+  verifyQuiz(params: VerifyParams): Promise<VerifyResult>;
 }
 
 export class LLMUnavailableError extends Error {

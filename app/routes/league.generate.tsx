@@ -8,6 +8,7 @@ import {
 } from "~/db/repository";
 import { requireLeagueAdmin } from "~/lib/custom-quiz.server";
 import { getLLMService } from "~/lib/llm/index.server";
+import type { VerifyResult } from "~/lib/llm/schema";
 import {
   MAX_CUSTOM_QUESTIONS,
   type ValidQuestion,
@@ -85,6 +86,27 @@ export async function action({ request, params }: Route.ActionArgs) {
     await redirectWithError("Generation returned no questions. Try adding more source content.");
   }
 
+  // Run adversarial verifier — non-fatal; a failure just omits verdicts.
+  let verifyResult: VerifyResult | null = null;
+  try {
+    verifyResult = await getLLMService().verifyQuiz({
+      questions: questions.map((q) => ({
+        q: q.q,
+        choices: q.choices,
+        correct_idx: q.correct_idx,
+        source_quote: q.source_quote ?? "",
+      })),
+      mode,
+    });
+  } catch (err) {
+    console.error("[generate] verifier error (non-fatal):", err);
+  }
+
+  const verifiedQuestions = questions.map((q, i) => ({
+    ...q,
+    verification: verifyResult?.verdicts[i] ?? undefined,
+  }));
+
   // Save as a draft quiz and open it in the builder for the admin to review/edit.
   const title = mode === "topic"
     ? `AI draft (topic) · ${new Date().toISOString().slice(0, 10)} · ${topic}`
@@ -93,7 +115,7 @@ export async function action({ request, params }: Route.ActionArgs) {
   const quiz = await createCustomQuiz(db, {
     leagueId: league.id,
     title,
-    questions,
+    questions: verifiedQuestions,
   });
   throw redirect(`/league/${league.code}/quizzes/${quiz.id}/edit`);
 }

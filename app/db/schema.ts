@@ -37,6 +37,11 @@ export interface Question {
   correct_idx: number;
   /** Verbatim passage from the source documents that proves `correct_idx`. */
   source_quote?: string;
+  /** Set after post-generation verification. Absent on manually built questions. */
+  verification?: {
+    verdict: "confident" | "review" | "flagged";
+    reason?: string;
+  };
 }
 
 export const teams = pgTable("team", {

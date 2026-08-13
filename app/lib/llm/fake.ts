@@ -10,6 +10,8 @@ import {
   type GenerateParams,
   type GeneratedQuiz,
   type LLMService,
+  type VerifyParams,
+  type VerifyResult,
 } from "./schema";
 
 function firstSentence(text: string): string {
@@ -44,5 +46,11 @@ export class FakeLLMService implements LLMService {
     });
 
     return { questions };
+  }
+
+  async verifyQuiz(params: VerifyParams): Promise<VerifyResult> {
+    return {
+      verdicts: params.questions.map(() => ({ verdict: "confident" as const })),
+    };
   }
 }

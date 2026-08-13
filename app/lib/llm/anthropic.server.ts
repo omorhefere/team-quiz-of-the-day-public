@@ -20,9 +20,12 @@ import Anthropic from "@anthropic-ai/sdk";
 import { zodOutputFormat } from "@anthropic-ai/sdk/helpers/zod";
 import {
   generatedQuizSchema,
+  verifyResultSchema,
   type GenerateParams,
   type GeneratedQuiz,
   type LLMService,
+  type VerifyParams,
+  type VerifyResult,
 } from "./schema";
 
 /** Defensive cap on total source text fed to the model (chars). */
@@ -50,6 +53,15 @@ Rules:
 - Exactly 4 answer choices. One is correct; the other three must be plausible but clearly wrong per the sources.
 - Prefer concrete, checkable facts (names, numbers, policies, definitions) over vague or opinion-based questions.
 - Keep questions and choices concise. Do not reference "the document" or "the text" in the question wording.`;
+
+const VERIFY_SYSTEM_INSTRUCTIONS = `You are an adversarial quiz verifier. For each question, try to find a reason it is wrong or unfair.
+
+For each question assign one of three verdicts:
+- "confident": the correct answer is unambiguously right; the three wrong answers are clearly wrong; the question is fair and unambiguous.
+- "review": the answer is probably right but the question is ambiguous, or a wrong answer could be argued as correct, or the wording is confusing.
+- "flagged": the stated correct answer is wrong, or multiple answers are correct, or the question is unanswerable.
+
+Set "reason" for any "review" or "flagged" verdict — one short sentence explaining the problem.`;
 
 function difficultyInstruction(d: GenerateParams["difficulty"]): string {
   if (d === "easy") return "\nDifficulty: EASY — favour questions where the answer is stated plainly and obviously in the source. Avoid trick questions or fine distinctions.";
@@ -111,5 +123,48 @@ export class AnthropicLLMService implements LLMService {
       );
     }
     return response.parsed_output;
+  }
+
+  async verifyQuiz(params: VerifyParams): Promise<VerifyResult> {
+    const questionList = params.questions
+      .map((q, i) => {
+        const choices = q.choices
+          .map((c, ci) => `  ${ci === q.correct_idx ? "✓" : " "} ${ci}. ${c}`)
+          .join("\n");
+        const quote =
+          params.mode === "topic"
+            ? `Stated fact: ${q.source_quote}`
+            : `Source quote: "${q.source_quote}"`;
+        return `Q${i + 1}: ${q.q}\n${choices}\n${quote}`;
+      })
+      .join("\n\n");
+
+    const response = await this.client.messages.parse({
+      model: this.model,
+      max_tokens: 2000,
+      system: [{ type: "text", text: VERIFY_SYSTEM_INSTRUCTIONS }],
+      messages: [
+        {
+          role: "user",
+          content: `Verify these ${params.questions.length} questions. Return one verdict per question in the same order.\n\n${questionList}`,
+        },
+      ],
+      output_config: { format: zodOutputFormat(verifyResultSchema) },
+    });
+
+    if (!response.parsed_output) {
+      return {
+        verdicts: params.questions.map(() => ({
+          verdict: "review" as const,
+          reason: "Verification call failed — please review manually.",
+        })),
+      };
+    }
+
+    const verdicts = response.parsed_output.verdicts.slice(0, params.questions.length);
+    while (verdicts.length < params.questions.length) {
+      verdicts.push({ verdict: "review" as const, reason: "No verdict returned." });
+    }
+    return { verdicts };
   }
 }
