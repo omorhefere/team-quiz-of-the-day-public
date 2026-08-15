@@ -1,4 +1,4 @@
-import { Form, Link, useNavigation } from "react-router";
+import { Form, Link, redirect, useNavigation } from "react-router";
 import { Nav } from "~/components/Nav";
 import type { Route } from "./+types/home";
 import { getDb } from "~/db/client";
@@ -13,6 +13,13 @@ import {
 import { currentUtcDeckDate } from "~/lib/date";
 import { getTeamId } from "~/lib/session.server";
 import { MAX_SCORE } from "~/lib/quiz";
+
+export async function action({ request }: Route.ActionArgs) {
+  const form = await request.formData();
+  const code = String(form.get("leagueCode") ?? "").toUpperCase().trim();
+  if (!code) return null;
+  throw redirect(`/league/${code}/admin/login`);
+}
 
 export function meta(_: Route.MetaArgs) {
   return [
@@ -345,9 +352,32 @@ function Landing() {
           </Form>
         </div>
 
+        <div className="mt-8 flex items-center gap-3 text-xs text-gray-600">
+          <span className="h-px flex-1 bg-gray-800" />
+          League admin?
+          <span className="h-px flex-1 bg-gray-800" />
+        </div>
+
+        <Form method="post" className="mt-4 w-full max-w-sm space-y-3">
+          <input
+            name="leagueCode"
+            type="text"
+            required
+            placeholder="KEEN-PERCH-68"
+            autoCapitalize="characters"
+            className="w-full rounded-lg border border-gray-700 bg-gray-900 px-4 py-3 text-base uppercase tracking-wider outline-none focus:border-indigo-500"
+          />
+          <button
+            type="submit"
+            className="w-full rounded-lg border border-gray-700 px-4 py-3 font-semibold text-gray-300 transition hover:bg-gray-900"
+          >
+            Sign in to manage league →
+          </button>
+        </Form>
+
         <Link
           to="/leaderboard"
-          className="mt-12 text-sm text-gray-500 underline-offset-4 hover:text-gray-300 hover:underline"
+          className="mt-10 text-sm text-gray-500 underline-offset-4 hover:text-gray-300 hover:underline"
         >
           View the global leaderboard →
         </Link>

@@ -1,4 +1,4 @@
-import { Form, data, redirect, useActionData, useNavigation } from "react-router";
+import { Form, Link, data, redirect, useActionData, useNavigation } from "react-router";
 import type { Route } from "./+types/league.admin.setup";
 import { getDb } from "~/db/client";
 import { getLeagueByCode, isLeagueAdmin } from "~/db/repository";
@@ -38,16 +38,29 @@ export async function action({ request, params }: Route.ActionArgs) {
   const confirm = String(form.get("confirm") ?? "");
 
   if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    return data({ error: "Please enter a valid email address." }, { status: 400 });
+    return data({ error: "Please enter a valid email address.", loginUrl: null }, { status: 400 });
   }
   if (password.length < 8) {
-    return data({ error: "Password must be at least 8 characters." }, { status: 400 });
+    return data({ error: "Password must be at least 8 characters.", loginUrl: null }, { status: 400 });
   }
   if (password !== confirm) {
-    return data({ error: "Passwords don't match." }, { status: 400 });
+    return data({ error: "Passwords don't match.", loginUrl: null }, { status: 400 });
   }
 
-  const adminId = await createLeagueAdmin(db, league.id, email, password);
+  let adminId: string;
+  try {
+    adminId = await createLeagueAdmin(db, league.id, email, password);
+  } catch (err: unknown) {
+    // Postgres unique-constraint violation on email
+    const code = (err as { cause?: { code?: string } })?.cause?.code;
+    if (code === "23505") {
+      return data(
+        { error: "An admin account with this email already exists. Sign in instead.", loginUrl: `/league/${league.code}/admin/login` },
+        { status: 409 },
+      );
+    }
+    throw err;
+  }
   const cookie = await commitAdminSession(request, adminId, league.id);
 
   throw redirect(`/league/${league.code}`, {
@@ -73,9 +86,14 @@ export default function AdminSetup({ loaderData }: Route.ComponentProps) {
 
         <Form method="post" className="mt-8 space-y-4">
           {result?.error && (
-            <p className="rounded-lg bg-red-900/40 px-4 py-3 text-sm text-red-300">
+            <div className="rounded-lg bg-red-900/40 px-4 py-3 text-sm text-red-300">
               {result.error}
-            </p>
+              {result.loginUrl && (
+                <Link to={result.loginUrl} className="ml-1 underline underline-offset-2 hover:text-red-200">
+                  Sign in →
+                </Link>
+              )}
+            </div>
           )}
           <div className="space-y-2">
             <label className="block text-sm text-gray-400" htmlFor="email">Email</label>
