@@ -48,7 +48,7 @@ export async function action({ request }: Route.ActionArgs) {
   }
 
   const cookie = await commitAdminSession(request, admin.id, admin.leagueId);
-  throw redirect(`/league/${league.code}`, {
+  throw redirect(`/league/${league.code}/sources`, {
     headers: { "Set-Cookie": cookie },
   });
 }
@@ -237,7 +237,7 @@ function Dashboard({
                     </span>
                     {l.isCreator && (
                       <Link
-                        to={`/league/${l.code}/admin/login`}
+                        to={`/league/${l.code}/sources`}
                         className="rounded-md border border-gray-700 px-2.5 py-1 text-xs font-semibold text-gray-300 hover:border-indigo-500 hover:text-indigo-300"
                       >
                         Manage →
