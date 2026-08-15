@@ -88,6 +88,15 @@ export default function AdminLogin({ loaderData }: Route.ComponentProps) {
           >
             {submitting ? "Signing in…" : "Sign in →"}
           </button>
+          <p className="text-center text-sm text-gray-500">
+            Forgot your password? Email{" "}
+            <a
+              href="mailto:omorhefere.i@gmail.com"
+              className="text-indigo-400 hover:text-indigo-300 hover:underline"
+            >
+              omorhefere.i@gmail.com
+            </a>
+          </p>
         </Form>
       </div>
     </main>
