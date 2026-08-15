@@ -1,8 +1,9 @@
-import { Form, Link, redirect, useNavigation } from "react-router";
+import { Form, Link, data, redirect, useActionData, useNavigation } from "react-router";
 import { Nav } from "~/components/Nav";
 import type { Route } from "./+types/home";
 import { getDb } from "~/db/client";
 import {
+  getLeagueById,
   getLeaguesForTeam,
   getPublishedDeck,
   getSubmission,
@@ -11,14 +12,35 @@ import {
   getTeamStats,
 } from "~/db/repository";
 import { currentUtcDeckDate } from "~/lib/date";
+import { verifyAdminPasswordByEmail } from "~/lib/admin-auth.server";
+import { commitAdminSession } from "~/lib/admin-session.server";
 import { getTeamId } from "~/lib/session.server";
 import { MAX_SCORE } from "~/lib/quiz";
 
 export async function action({ request }: Route.ActionArgs) {
   const form = await request.formData();
-  const code = String(form.get("leagueCode") ?? "").toUpperCase().trim();
-  if (!code) return null;
-  throw redirect(`/league/${code}/admin/login`);
+  const email = String(form.get("email") ?? "").toLowerCase().trim();
+  const password = String(form.get("password") ?? "");
+
+  if (!email || !password) {
+    return data({ error: "Email and password are required." }, { status: 400 });
+  }
+
+  const db = await getDb();
+  const admin = await verifyAdminPasswordByEmail(db, email, password);
+  if (!admin) {
+    return data({ error: "Incorrect email or password." }, { status: 401 });
+  }
+
+  const league = await getLeagueById(db, admin.leagueId);
+  if (!league) {
+    return data({ error: "League not found." }, { status: 404 });
+  }
+
+  const cookie = await commitAdminSession(request, admin.id, admin.leagueId);
+  throw redirect(`/league/${league.code}`, {
+    headers: { "Set-Cookie": cookie },
+  });
 }
 
 export function meta(_: Route.MetaArgs) {
@@ -68,11 +90,11 @@ export async function loader({ request }: Route.LoaderArgs) {
   };
 }
 
-export default function Home({ loaderData }: Route.ComponentProps) {
+export default function Home({ loaderData, actionData }: Route.ComponentProps) {
   if (loaderData.state === "dashboard") {
     return <Dashboard data={loaderData} />;
   }
-  return <Landing />;
+  return <Landing adminError={actionData?.error} />;
 }
 
 // ---------------------------------------------------------------------------
@@ -279,7 +301,9 @@ function Stat({ label, value }: { label: string; value: string | number }) {
 // Anonymous landing
 // ---------------------------------------------------------------------------
 
-function Landing() {
+function Landing({ adminError }: { adminError?: string }) {
+  const navigation = useNavigation();
+  const signingIn = navigation.state === "submitting" && !navigation.formAction?.includes("/register") && !navigation.formAction?.includes("/join");
   return (
     <main className="min-h-screen bg-gray-950 text-gray-100">
       <div className="mx-auto max-w-4xl px-6 py-16">
@@ -398,19 +422,33 @@ function Landing() {
                 <label className="block text-sm font-medium text-gray-300">
                   Sign in to manage your league
                 </label>
+                {adminError && (
+                  <p className="rounded-lg bg-red-900/40 px-4 py-3 text-sm text-red-300">
+                    {adminError}
+                  </p>
+                )}
                 <input
-                  name="leagueCode"
-                  type="text"
+                  name="email"
+                  type="email"
                   required
-                  placeholder="KEEN-PERCH-68"
-                  autoCapitalize="characters"
-                  className="w-full rounded-lg border border-gray-700 bg-gray-900 px-4 py-3 text-base uppercase tracking-wider outline-none focus:border-indigo-500"
+                  placeholder="you@example.com"
+                  autoComplete="email"
+                  className="w-full rounded-lg border border-gray-700 bg-gray-900 px-4 py-3 text-base outline-none focus:border-indigo-500"
+                />
+                <input
+                  name="password"
+                  type="password"
+                  required
+                  autoComplete="current-password"
+                  placeholder="Password"
+                  className="w-full rounded-lg border border-gray-700 bg-gray-900 px-4 py-3 text-base outline-none focus:border-indigo-500"
                 />
                 <button
                   type="submit"
-                  className="w-full rounded-lg border border-gray-700 px-4 py-3 font-semibold text-gray-200 transition hover:bg-gray-900"
+                  disabled={signingIn}
+                  className="w-full rounded-lg border border-gray-700 px-4 py-3 font-semibold text-gray-200 transition hover:bg-gray-900 disabled:opacity-60"
                 >
-                  Sign in to manage league →
+                  {signingIn ? "Signing in…" : "Sign in →"}
                 </button>
               </Form>
             </div>

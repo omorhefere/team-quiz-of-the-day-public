@@ -20,6 +20,24 @@ export async function createLeagueAdmin(
   return admin.id;
 }
 
+/** Sign in by email alone (email is globally unique). Returns id + leagueId. */
+export async function verifyAdminPasswordByEmail(
+  db: DB,
+  email: string,
+  password: string,
+): Promise<{ id: string; leagueId: string } | null> {
+  const [admin] = await db
+    .select()
+    .from(leagueAdmins)
+    .where(eq(leagueAdmins.email, email.toLowerCase()))
+    .limit(1);
+
+  if (!admin) return null;
+  const valid = await argon2.verify(admin.passwordHash, password);
+  if (!valid) return null;
+  return { id: admin.id, leagueId: admin.leagueId };
+}
+
 export async function verifyLeagueAdminPassword(
   db: DB,
   leagueId: string,
