@@ -10,6 +10,7 @@ import { requireLeagueAdmin } from "~/lib/custom-quiz.server";
 import { getLLMService } from "~/lib/llm/index.server";
 import type { VerifyResult } from "~/lib/llm/schema";
 import {
+  CUSTOM_QUIZ_TITLE_MAX,
   MAX_CUSTOM_QUESTIONS,
   type ValidQuestion,
 } from "~/lib/quiz";
@@ -45,7 +46,7 @@ export async function action({ request, params }: Route.ActionArgs) {
     .default(5);
   const count = countSchema.catch(5).parse(form.get("count") ?? undefined);
   // Cap topic to prevent prompt injection via an unusually long free-text field.
-  const topic = (String(form.get("topic") ?? "").trim().slice(0, 200)) || undefined;
+  const topic = (String(form.get("topic") ?? "").replace(/[\r\n]+/g, " ").trim().slice(0, 200)) || undefined;
   const difficultyRaw = String(form.get("difficulty") ?? "").trim();
   const difficulty = (["easy", "medium", "hard"].includes(difficultyRaw)
     ? difficultyRaw
@@ -108,9 +109,10 @@ export async function action({ request, params }: Route.ActionArgs) {
   }));
 
   // Save as a draft quiz and open it in the builder for the admin to review/edit.
-  const title = mode === "topic"
-    ? `AI draft (topic) · ${new Date().toISOString().slice(0, 10)} · ${topic}`
-    : `AI draft · ${new Date().toISOString().slice(0, 10)}${topic ? ` · ${topic}` : ""}`;
+  const dateStr = new Date().toISOString().slice(0, 10);
+  const prefix = mode === "topic" ? `AI draft (topic) · ${dateStr}` : `AI draft · ${dateStr}`;
+  const topicSuffix = topic ? ` · ${topic}` : "";
+  const title = (prefix + topicSuffix).slice(0, CUSTOM_QUIZ_TITLE_MAX);
 
   const quiz = await createCustomQuiz(db, {
     leagueId: league.id,
