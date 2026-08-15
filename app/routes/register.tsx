@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { Form, Link, data, useActionData, useNavigation } from "react-router";
+import { Form, Link, data, redirect, useActionData, useLoaderData, useNavigation } from "react-router";
 import type { Route } from "./+types/register";
 import { getDb } from "~/db/client";
-import { createTeam } from "~/db/repository";
+import { createLeague, createTeam } from "~/db/repository";
 import { commitTeamId } from "~/lib/session.server";
 import {
   DISPLAY_NAME_ERROR_MESSAGES,
@@ -12,11 +12,16 @@ import {
 // No loader redirect: the loader re-runs during the post-action render, so
 // redirecting here would discard the action result. Direct GETs fall through to
 // the form rendered by the component.
-export async function loader() {
-  return null;
+export async function loader({ request }: Route.LoaderArgs) {
+  const url = new URL(request.url);
+  const league = url.searchParams.get("league")?.trim().slice(0, 30) || null;
+  return { league };
 }
 
 export async function action({ request }: Route.ActionArgs) {
+  const url = new URL(request.url);
+  const pendingLeague = url.searchParams.get("league")?.trim().slice(0, 30) || null;
+
   const form = await request.formData();
   const displayName = String(form.get("displayName") ?? "");
 
@@ -28,6 +33,14 @@ export async function action({ request }: Route.ActionArgs) {
   const db = await getDb();
   const team = await createTeam(db, displayName);
   const cookie = await commitTeamId(request, team.id);
+
+  // If a league name was passed in the URL, create it now and go straight to setup.
+  if (pendingLeague) {
+    const league = await createLeague(db, { name: pendingLeague, createdByTeamId: team.id });
+    throw redirect(`/league/${league.code}/admin/setup`, {
+      headers: { "Set-Cookie": cookie },
+    });
+  }
 
   return data(
     { code: team.code, displayName: team.displayName },
@@ -113,18 +126,31 @@ export default function Register() {
     );
   }
 
+  const { league } = useLoaderData<typeof loader>();
   const navigation = useNavigation();
   const submitting = navigation.state === "submitting";
 
-  // No action data (shouldn't normally render): offer the form.
   return (
     <Centered>
-      <Form method="post" className="space-y-3">
+      {league ? (
+        <>
+          <p className="text-sm font-semibold uppercase tracking-widest text-indigo-400">
+            Creating league: {league}
+          </p>
+          <h1 className="mt-3 text-2xl font-bold">First, set up your team</h1>
+          <p className="mt-2 max-w-sm text-sm text-gray-400">
+            Give your team a name — your team code lets everyone play together.
+          </p>
+        </>
+      ) : (
+        <h1 className="text-2xl font-bold">Create your team</h1>
+      )}
+      <Form method="post" className="mt-6 w-full max-w-sm space-y-3">
         <input
           name="displayName"
           required
           maxLength={30}
-          placeholder="Team name"
+          placeholder="e.g. Platform Engineering"
           disabled={submitting}
           className="w-full rounded-lg border border-gray-700 bg-gray-900 px-4 py-3 disabled:opacity-50"
         />
@@ -132,7 +158,9 @@ export default function Register() {
           disabled={submitting}
           className="w-full rounded-lg bg-indigo-600 px-4 py-3 font-semibold disabled:opacity-60"
         >
-          {submitting ? "Creating your team…" : "Get our team code"}
+          {submitting
+            ? league ? "Setting up…" : "Creating your team…"
+            : league ? "Create team & set up league →" : "Get our team code"}
         </button>
       </Form>
     </Centered>

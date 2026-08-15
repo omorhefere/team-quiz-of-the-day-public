@@ -19,6 +19,16 @@ import { MAX_SCORE } from "~/lib/quiz";
 
 export async function action({ request }: Route.ActionArgs) {
   const form = await request.formData();
+  const intent = String(form.get("intent") ?? "");
+
+  // "Create league" from landing — redirect to register with league name in URL.
+  if (intent === "create-league") {
+    const name = String(form.get("name") ?? "").trim().slice(0, 30);
+    if (!name) return data({ error: "Enter a league name." }, { status: 400 });
+    throw redirect(`/register?league=${encodeURIComponent(name)}`);
+  }
+
+  // Admin sign-in.
   const email = String(form.get("email") ?? "").toLowerCase().trim();
   const password = String(form.get("password") ?? "");
 
@@ -86,6 +96,7 @@ export async function loader({ request }: Route.LoaderArgs) {
       code: l.league.code,
       name: l.league.name,
       memberCount: l.memberCount,
+      isCreator: l.league.createdByTeamId === team.id,
     })),
   };
 }
@@ -213,16 +224,27 @@ function Dashboard({
           {data.leagues.length > 0 ? (
             <div className="mb-4 divide-y divide-gray-800 overflow-hidden rounded-xl border border-gray-800">
               {data.leagues.map((l) => (
-                <Link
+                <div
                   key={l.code}
-                  to={`/league/${l.code}`}
-                  className="flex items-center justify-between px-4 py-3 hover:bg-gray-900"
+                  className="flex items-center justify-between px-4 py-3"
                 >
-                  <span className="font-medium">{l.name}</span>
-                  <span className="text-sm text-gray-500">
-                    {l.memberCount} {l.memberCount === 1 ? "team" : "teams"} →
-                  </span>
-                </Link>
+                  <Link to={`/league/${l.code}`} className="font-medium hover:text-indigo-300">
+                    {l.name}
+                  </Link>
+                  <div className="flex items-center gap-3">
+                    <span className="text-sm text-gray-500">
+                      {l.memberCount} {l.memberCount === 1 ? "team" : "teams"}
+                    </span>
+                    {l.isCreator && (
+                      <Link
+                        to={`/league/${l.code}/admin/login`}
+                        className="rounded-md border border-gray-700 px-2.5 py-1 text-xs font-semibold text-gray-300 hover:border-indigo-500 hover:text-indigo-300"
+                      >
+                        Manage →
+                      </Link>
+                    )}
+                  </div>
+                </div>
               ))}
             </div>
           ) : (
@@ -393,7 +415,8 @@ function Landing({ adminError }: { adminError?: string }) {
               League admins
             </p>
             <div className="space-y-6">
-              <Form method="post" action="/leagues/create" className="space-y-3">
+              <Form method="post" className="space-y-3">
+                <input type="hidden" name="intent" value="create-league" />
                 <label className="block text-sm font-medium text-gray-300">
                   Create a league
                 </label>
