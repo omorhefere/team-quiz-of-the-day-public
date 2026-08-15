@@ -10,6 +10,8 @@ import {
   type GenerateParams,
   type GeneratedQuiz,
   type LLMService,
+  type VerifyParams,
+  type VerifyResult,
 } from "./schema";
 
 function firstSentence(text: string): string {
@@ -20,7 +22,10 @@ function firstSentence(text: string): string {
 
 export class FakeLLMService implements LLMService {
   async generateQuiz(params: GenerateParams): Promise<GeneratedQuiz> {
-    const sources = params.sources.length
+    const isTopicMode = params.mode === "topic";
+    const sources = isTopicMode
+      ? [{ label: params.topic ?? "general knowledge", text: `Questions about ${params.topic ?? "general knowledge"}.` }]
+      : params.sources.length
       ? params.sources
       : [{ label: "sample", text: "The company was founded in 2019." }];
 
@@ -41,5 +46,15 @@ export class FakeLLMService implements LLMService {
     });
 
     return { questions };
+  }
+
+  async summariseSource(text: string, label: string): Promise<string> {
+    return `[DEV] Summary of "${label}". Contains ${Math.ceil(text.length / 100)} paragraphs of content. Topics include sample facts for development use.`;
+  }
+
+  async verifyQuiz(params: VerifyParams): Promise<VerifyResult> {
+    return {
+      verdicts: params.questions.map(() => ({ verdict: "confident" as const })),
+    };
   }
 }

@@ -7,6 +7,10 @@ interface BuilderQuestion {
   choices: string[]; // length 4
   correct_idx: number;
   source_quote?: string;
+  verification?: {
+    verdict: "confident" | "review" | "flagged";
+    reason?: string;
+  };
 }
 
 export interface QuizBuilderProps {
@@ -106,6 +110,20 @@ export function QuizBuilder({
             placeholder="Question text"
             className="mb-3 w-full rounded-lg border border-gray-700 bg-gray-900 px-3 py-2 text-gray-100 outline-none focus:border-indigo-500"
           />
+          {question.verification && question.verification.verdict !== "confident" && (
+            <div
+              className={`mt-1 mb-3 flex items-center gap-1.5 rounded px-2 py-1 text-xs font-medium ${
+                question.verification.verdict === "flagged"
+                  ? "bg-red-500/10 text-red-300"
+                  : "bg-yellow-500/10 text-yellow-300"
+              }`}
+            >
+              {question.verification.verdict === "flagged" ? "⚠ Flagged" : "○ Review"}
+              {question.verification.reason && (
+                <span className="font-normal text-gray-400">— {question.verification.reason}</span>
+              )}
+            </div>
+          )}
           <p className="mb-2 text-xs text-gray-500">
             Enter 4 choices and select the correct one.
           </p>

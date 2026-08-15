@@ -839,6 +839,7 @@ export async function createSource(
     kind: "url" | "pdf";
     label: string;
     text: string;
+    summary?: string;
     status?: "ready" | "error";
     error?: string | null;
   },
@@ -850,6 +851,7 @@ export async function createSource(
       kind: params.kind,
       label: params.label,
       text: params.text,
+      summary: params.summary ?? null,
       status: params.status ?? "ready",
       error: params.error ?? null,
     })
@@ -865,6 +867,7 @@ export async function listSources(db: DB, leagueId: string) {
       label: sources.label,
       status: sources.status,
       error: sources.error,
+      summary: sources.summary,
       createdAt: sources.createdAt,
       chars: sql<number>`length(${sources.text})`,
       preview: sql<string>`substr(${sources.text}, 1, 240)`,

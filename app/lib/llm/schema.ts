@@ -43,7 +43,42 @@ export interface GenerateParams {
   count: number;
   /** Optional focus, e.g. "our refund policy". */
   topic?: string;
+  /** Controls how obvious the questions should be. Defaults to "medium". */
+  difficulty?: "easy" | "medium" | "hard";
+  /** "document" (default) grounds questions in sources. "topic" uses model knowledge — unverified. */
+  mode?: "document" | "topic";
 }
+
+export interface VerificationResult {
+  verdict: "confident" | "review" | "flagged";
+  /** Short explanation, shown to the admin. */
+  reason?: string;
+}
+
+export interface VerifyParams {
+  questions: Array<{
+    q: string;
+    choices: string[];
+    correct_idx: number;
+    source_quote: string;
+  }>;
+  /** "topic" mode questions have no source document — verifier uses general knowledge. */
+  mode: "document" | "topic";
+}
+
+export interface VerifyResult {
+  /** One entry per question, same order as VerifyParams.questions. */
+  verdicts: VerificationResult[];
+}
+
+export const verificationResultSchema = z.object({
+  verdict: z.enum(["confident", "review", "flagged"]),
+  reason: z.string().optional(),
+});
+
+export const verifyResultSchema = z.object({
+  verdicts: z.array(verificationResultSchema),
+});
 
 /**
  * The provider-agnostic generation service. Implemented by `AnthropicLLMService`
@@ -51,6 +86,9 @@ export interface GenerateParams {
  */
 export interface LLMService {
   generateQuiz(params: GenerateParams): Promise<GeneratedQuiz>;
+  verifyQuiz(params: VerifyParams): Promise<VerifyResult>;
+  /** Returns a 2–3 sentence plain-English summary of the source text. */
+  summariseSource(text: string, label: string): Promise<string>;
 }
 
 export class LLMUnavailableError extends Error {
