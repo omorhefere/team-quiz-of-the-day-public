@@ -79,8 +79,10 @@ export default function ManageLeague({ loaderData }: Route.ComponentProps) {
     <main className="min-h-screen bg-gray-950 text-gray-100">
       <LeagueNav code={league.code} isAdmin />
       <div className="mx-auto max-w-2xl px-6 py-12">
-        <div className="mb-4 flex items-center justify-between">
-          <h1 className="text-2xl font-bold">Manage quizzes</h1>
+        <div className="mb-1 flex items-center justify-between">
+          <p className="text-sm font-semibold uppercase tracking-widest text-indigo-400">
+            {league.name}
+          </p>
           <span
             className={`rounded-full px-3 py-1 text-xs font-semibold ${
               league.plan === "pro"
@@ -91,6 +93,7 @@ export default function ManageLeague({ loaderData }: Route.ComponentProps) {
             {league.plan.toUpperCase()} plan
           </span>
         </div>
+        <h1 className="text-2xl font-bold">Manage quizzes</h1>
         <p className="mt-1 text-sm text-gray-400">
           Build a quiz and set it as your league&rsquo;s quiz of the day. Members
           play it once.
@@ -119,9 +122,24 @@ export default function ManageLeague({ loaderData }: Route.ComponentProps) {
 
         <div className="mt-8 space-y-3">
           {quizzes.length === 0 && (
-            <p className="rounded-xl border border-gray-800 px-4 py-8 text-center text-gray-500">
-              No quizzes yet. Build your first one.
-            </p>
+            <div className="rounded-xl border border-gray-800 px-4 py-10 text-center">
+              <p className="text-gray-400 font-medium">No quizzes yet</p>
+              <p className="mt-1 text-sm text-gray-600">Generate one with AI or build it manually.</p>
+              <div className="mt-5 flex justify-center gap-3">
+                <Link
+                  to={`/league/${league.code}/sources`}
+                  className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500"
+                >
+                  Generate with AI →
+                </Link>
+                <Link
+                  to={`/league/${league.code}/quizzes/new`}
+                  className="rounded-lg border border-gray-700 px-4 py-2 text-sm font-semibold text-gray-200 hover:bg-gray-900"
+                >
+                  + Build manually
+                </Link>
+              </div>
+            </div>
           )}
           {quizzes.map((quiz) => {
             const isActive = quiz.id === activeQuizId;
