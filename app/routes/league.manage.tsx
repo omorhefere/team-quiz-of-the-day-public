@@ -110,21 +110,7 @@ export default function ManageLeague({ loaderData }: Route.ComponentProps) {
           {quizzes.length === 0 && (
             <div className="rounded-xl border border-gray-800 px-4 py-10 text-center">
               <p className="text-gray-400 font-medium">No quizzes yet</p>
-              <p className="mt-1 text-sm text-gray-600">Generate one with AI or build it manually.</p>
-              <div className="mt-5 flex justify-center gap-3">
-                <Link
-                  to={`/league/${league.code}/sources`}
-                  className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500"
-                >
-                  Generate with AI →
-                </Link>
-                <Link
-                  to={`/league/${league.code}/quizzes/new`}
-                  className="rounded-lg border border-gray-700 px-4 py-2 text-sm font-semibold text-gray-200 hover:bg-gray-900"
-                >
-                  + Build manually
-                </Link>
-              </div>
+              <p className="mt-1 text-sm text-gray-600">Use the buttons above to generate or build one.</p>
             </div>
           )}
           {quizzes.map((quiz) => {
