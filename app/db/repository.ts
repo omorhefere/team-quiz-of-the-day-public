@@ -712,7 +712,18 @@ export async function listCustomQuizzes(
     .select()
     .from(customQuizzes)
     .where(eq(customQuizzes.leagueId, leagueId))
-    .orderBy(desc(customQuizzes.createdAt));
+    .orderBy(asc(customQuizzes.scheduledDate), desc(customQuizzes.createdAt));
+}
+
+export async function setCustomQuizSchedule(
+  db: DB,
+  quizId: string,
+  scheduledDate: string | null,
+): Promise<void> {
+  await db
+    .update(customQuizzes)
+    .set({ scheduledDate, updatedAt: new Date() })
+    .where(eq(customQuizzes.id, quizId));
 }
 
 export async function deleteCustomQuiz(db: DB, quizId: string): Promise<void> {

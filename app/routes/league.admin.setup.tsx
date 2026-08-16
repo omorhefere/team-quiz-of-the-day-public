@@ -63,7 +63,7 @@ export async function action({ request, params }: Route.ActionArgs) {
   }
   const cookie = await commitAdminSession(request, adminId, league.id);
 
-  throw redirect(`/league/${league.code}`, {
+  throw redirect(`/league/${league.code}/manage`, {
     headers: { "Set-Cookie": cookie },
   });
 }
