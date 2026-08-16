@@ -102,9 +102,14 @@ export class AnthropicLLMService implements LLMService {
           },
         ];
 
+    const avoidBlock =
+      params.existingQuestions && params.existingQuestions.length > 0
+        ? `\n\nDo NOT duplicate or rephrase any of these existing questions:\n${params.existingQuestions.map((q, i) => `${i + 1}. ${q}`).join("\n")}`
+        : "";
+
     const userContent = isTopicMode
-      ? `Generate ${params.count} multiple-choice questions about: ${safeTopic ?? "general knowledge"}.${difficultyInstruction(params.difficulty)}`
-      : `Generate ${params.count} multiple-choice questions based strictly on the source documents above.${topicLine}${difficultyInstruction(params.difficulty)}`;
+      ? `Generate ${params.count} multiple-choice questions about: ${safeTopic ?? "general knowledge"}.${difficultyInstruction(params.difficulty)}${avoidBlock}`
+      : `Generate ${params.count} multiple-choice questions based strictly on the source documents above.${topicLine}${difficultyInstruction(params.difficulty)}${avoidBlock}`;
 
     const response = await this.client.messages.parse({
       model: this.model,

@@ -907,6 +907,15 @@ export async function getReadySources(
     .orderBy(desc(sources.createdAt));
 }
 
+export async function getSource(db: DB, sourceId: string, leagueId: string) {
+  const rows = await db
+    .select()
+    .from(sources)
+    .where(and(eq(sources.id, sourceId), eq(sources.leagueId, leagueId)))
+    .limit(1);
+  return rows[0] ?? null;
+}
+
 export async function deleteSource(
   db: DB,
   leagueId: string,
