@@ -49,12 +49,13 @@ export async function action({ request, params }: Route.ActionArgs) {
     : "medium") as "easy" | "medium" | "hard";
   const modeRaw = String(form.get("mode") ?? "").trim();
   const mode = modeRaw === "topic" ? "topic" : "document";
+  const appendToQuizId = String(form.get("appendToQuizId") ?? "").trim();
 
   const sources = mode === "document" ? await getReadySources(db, league.id) : [];
   if (mode === "document" && sources.length === 0) {
     await redirectWithError("Add at least one source before generating a quiz.");
   }
-  if (mode === "topic" && !topic) {
+  if (mode === "topic" && !topic && !appendToQuizId) {
     await redirectWithError("Enter a topic to generate from.");
   }
 
@@ -105,7 +106,6 @@ export async function action({ request, params }: Route.ActionArgs) {
   }));
 
   // If appending to an existing quiz, merge questions in and go back to edit.
-  const appendToQuizId = String(form.get("appendToQuizId") ?? "").trim();
   if (appendToQuizId) {
     const existing = await getCustomQuiz(db, appendToQuizId);
     if (existing && existing.leagueId === league.id) {
