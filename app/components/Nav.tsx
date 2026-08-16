@@ -60,9 +60,8 @@ export function LeagueNav({
   ];
 
   const adminItems: NavItem[] = [
-    { to: `/league/${code}`, label: "Leaderboard" },
+    { to: `/league/${code}/manage`, label: "League" },
     { to: `/league/${code}/play`, label: "Play quiz" },
-    { to: `/league/${code}/manage`, label: "Quizzes" },
     { to: `/league/${code}/sources`, label: "Sources" },
   ];
 

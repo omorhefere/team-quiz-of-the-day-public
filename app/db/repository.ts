@@ -343,7 +343,7 @@ export async function getDeckByDate(db: DB, deckDate: DeckDate): Promise<Deck | 
 /** Creates a league with a unique join code and adds the creator as a member. */
 export async function createLeague(
   db: DB,
-  params: { name: string; createdByTeamId: string },
+  params: { name: string; createdByTeamId: string | null },
 ): Promise<League> {
   const name = params.name.trim();
   for (let attempt = 0; attempt < 5; attempt++) {
@@ -356,7 +356,9 @@ export async function createLeague(
           createdByTeamId: params.createdByTeamId,
         })
         .returning();
-      await joinLeague(db, league.id, params.createdByTeamId);
+      if (params.createdByTeamId) {
+        await joinLeague(db, league.id, params.createdByTeamId);
+      }
       return league;
     } catch (err) {
       if (isUniqueViolation(err) && attempt < 4) continue;

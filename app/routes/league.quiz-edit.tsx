@@ -18,6 +18,7 @@ export async function loader({ request, params }: Route.LoaderArgs) {
   }
   return {
     code: league.code,
+    leagueName: league.name,
     quizId: quiz.id,
     title: quiz.title,
     questions: quiz.questions as ValidQuestion[],
@@ -52,7 +53,18 @@ export default function EditQuiz({ loaderData }: Route.ComponentProps) {
         >
           ← Back to quizzes
         </Link>
-        <h1 className="mb-6 mt-2 text-2xl font-bold">Edit quiz</h1>
+        <p className="mt-3 text-sm font-semibold uppercase tracking-widest text-indigo-400">
+          {loaderData.leagueName}
+        </p>
+        <div className="mt-1 flex items-center justify-between">
+          <h1 className="mb-6 text-2xl font-bold">Edit quiz</h1>
+          <Link
+            to={`/league/${loaderData.code}/sources`}
+            className="mb-6 rounded-lg border border-gray-700 px-3 py-1.5 text-xs font-semibold text-gray-300 hover:bg-gray-900"
+          >
+            + Generate more questions
+          </Link>
+        </div>
         <QuizBuilder
           action={`/league/${loaderData.code}/quizzes/${loaderData.quizId}/edit`}
           initialTitle={loaderData.title}
