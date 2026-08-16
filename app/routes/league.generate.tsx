@@ -5,6 +5,7 @@ import {
   createCustomQuiz,
   getCustomQuiz,
   getReadySources,
+  getSource,
   updateCustomQuiz,
 } from "~/db/repository";
 import { requireLeagueAdmin } from "~/lib/custom-quiz.server";
@@ -50,13 +51,31 @@ export async function action({ request, params }: Route.ActionArgs) {
   const modeRaw = String(form.get("mode") ?? "").trim();
   const mode = modeRaw === "topic" ? "topic" : "document";
   const appendToQuizId = String(form.get("appendToQuizId") ?? "").trim();
+  const sourceId = String(form.get("sourceId") ?? "").trim();
 
-  const sources = mode === "document" ? await getReadySources(db, league.id) : [];
-  if (mode === "document" && sources.length === 0) {
-    await redirectWithError("Add at least one source before generating a quiz.");
+  let sources: Awaited<ReturnType<typeof getReadySources>> = [];
+  if (mode === "document") {
+    if (sourceId) {
+      const single = await getSource(db, sourceId, league.id);
+      if (single && single.status === "ready") sources = [single];
+    } else {
+      sources = await getReadySources(db, league.id);
+    }
+    if (sources.length === 0) {
+      await redirectWithError("Add at least one source before generating a quiz.");
+    }
   }
   if (mode === "topic" && !topic && !appendToQuizId) {
     await redirectWithError("Enter a topic to generate from.");
+  }
+
+  // When appending, fetch existing questions now so we can pass them to the LLM.
+  let existingForAppend: ValidQuestion[] | undefined;
+  if (appendToQuizId) {
+    const existing = await getCustomQuiz(db, appendToQuizId);
+    if (existing && existing.leagueId === league.id) {
+      existingForAppend = existing.questions as ValidQuestion[];
+    }
   }
 
   let questions: ValidQuestion[] = [];
@@ -67,6 +86,7 @@ export async function action({ request, params }: Route.ActionArgs) {
       topic,
       difficulty,
       mode,
+      existingQuestions: existingForAppend?.map((q) => q.q),
     });
     questions = result.questions.map((q) => ({
       q: q.q,
@@ -106,7 +126,7 @@ export async function action({ request, params }: Route.ActionArgs) {
   }));
 
   // If appending to an existing quiz, merge questions in and go back to edit.
-  if (appendToQuizId) {
+  if (appendToQuizId && existingForAppend !== undefined) {
     const existing = await getCustomQuiz(db, appendToQuizId);
     if (existing && existing.leagueId === league.id) {
       const merged = [...(existing.questions as ValidQuestion[]), ...verifiedQuestions];
