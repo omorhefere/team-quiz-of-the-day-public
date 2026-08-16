@@ -4,7 +4,6 @@ import type { Route } from "./+types/league.generate";
 import {
   createCustomQuiz,
   getReadySources,
-  isLeaguePro,
 } from "~/db/repository";
 import { requireLeagueAdmin } from "~/lib/custom-quiz.server";
 import { getLLMService } from "~/lib/llm/index.server";
@@ -30,11 +29,6 @@ export async function action({ request, params }: Route.ActionArgs) {
     throw redirect(`/league/${league.code}/sources`, {
       headers: { "Set-Cookie": cookie },
     });
-  }
-
-  // Paid feature: AI generation is gated behind the pro plan.
-  if (!isLeaguePro(league)) {
-    await redirectWithError("AI generation is a Pro feature. Upgrade your league to use it.");
   }
 
   const form = await request.formData();

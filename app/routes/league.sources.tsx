@@ -5,7 +5,6 @@ import type { Route } from "./+types/league.sources";
 import {
   createSource,
   deleteSource,
-  isLeaguePro,
   listSources,
 } from "~/db/repository";
 import { requireLeagueAdmin } from "~/lib/custom-quiz.server";
@@ -26,7 +25,6 @@ export async function loader({ request, params }: Route.LoaderArgs) {
   return data(
     {
       code: league.code,
-      isPro: isLeaguePro(league),
       usingRealAI: isRealLLMConfigured(),
       globalError,
       sources: items.map((s) => ({
@@ -282,43 +280,41 @@ export default function Sources({ loaderData, actionData }: Route.ComponentProps
         </div>
 
         {/* Topic-only generation — no documents needed */}
-        {loaderData.isPro && (
-          <div className="mt-6 rounded-xl border border-gray-800 bg-gray-900/40 p-5">
-            <p className="text-sm font-semibold text-gray-200">Generate from a topic</p>
-            <p className="mt-1 text-xs text-gray-500">
-              No documents needed — AI uses its own knowledge. An automatic second pass checks the questions before you publish.
-            </p>
-            <Form
-              method="post"
-              action={`/league/${loaderData.code}/generate`}
-              className="mt-3 space-y-3"
+        <div className="mt-6 rounded-xl border border-gray-800 bg-gray-900/40 p-5">
+          <p className="text-sm font-semibold text-gray-200">Generate from a topic</p>
+          <p className="mt-1 text-xs text-gray-500">
+            No documents needed — AI uses its own knowledge. An automatic second pass checks the questions before you publish.
+          </p>
+          <Form
+            method="post"
+            action={`/league/${loaderData.code}/generate`}
+            className="mt-3 space-y-3"
+          >
+            <input type="hidden" name="count" value="10" />
+            <input type="hidden" name="mode" value="topic" />
+            <input
+              name="topic"
+              required
+              maxLength={200}
+              placeholder="e.g. The French Revolution, our Q3 OKRs"
+              className="w-full rounded-lg border border-gray-700 bg-gray-900 px-3 py-2 text-sm text-gray-100 outline-none focus:border-indigo-500"
+            />
+            <div className="flex gap-3">
+              {(["easy", "medium", "hard"] as const).map((d) => (
+                <label key={d} className="flex cursor-pointer items-center gap-1.5 text-sm text-gray-400">
+                  <input type="radio" name="difficulty" value={d} defaultChecked={d === "medium"} className="accent-indigo-500" />
+                  {d.charAt(0).toUpperCase() + d.slice(1)}
+                </label>
+              ))}
+            </div>
+            <button
+              disabled={generating}
+              className="rounded-lg bg-indigo-600 px-5 py-2 font-semibold text-white hover:bg-indigo-500 disabled:opacity-60"
             >
-              <input type="hidden" name="count" value="10" />
-              <input type="hidden" name="mode" value="topic" />
-              <input
-                name="topic"
-                required
-                maxLength={200}
-                placeholder="e.g. The French Revolution, our Q3 OKRs"
-                className="w-full rounded-lg border border-gray-700 bg-gray-900 px-3 py-2 text-sm text-gray-100 outline-none focus:border-indigo-500"
-              />
-              <div className="flex gap-3">
-                {(["easy", "medium", "hard"] as const).map((d) => (
-                  <label key={d} className="flex cursor-pointer items-center gap-1.5 text-sm text-gray-400">
-                    <input type="radio" name="difficulty" value={d} defaultChecked={d === "medium"} className="accent-indigo-500" />
-                    {d.charAt(0).toUpperCase() + d.slice(1)}
-                  </label>
-                ))}
-              </div>
-              <button
-                disabled={generating}
-                className="rounded-lg bg-indigo-600 px-5 py-2 font-semibold text-white hover:bg-indigo-500 disabled:opacity-60"
-              >
-                {generating ? "Generating… this takes ~30 seconds" : "Generate from topic →"}
-              </button>
-            </Form>
-          </div>
-        )}
+              {generating ? "Generating… this takes ~30 seconds" : "Generate from topic →"}
+            </button>
+          </Form>
+        </div>
 
         {/* Next step CTA — shown once there's at least one source */}
         {hasSources && (
@@ -339,39 +335,29 @@ export default function Sources({ loaderData, actionData }: Route.ComponentProps
                 {loaderData.globalError}
               </p>
             )}
-            {loaderData.isPro ? (
-              <Form method="post" action={`/league/${loaderData.code}/generate`} className="mt-4 space-y-3">
-                <input type="hidden" name="count" value="10" />
-                <input name="topic" placeholder="Optional topic focus, e.g. refund policy"
-                  className="w-full rounded-lg border border-gray-700 bg-gray-900 px-3 py-2 text-sm" />
-                {/* Difficulty */}
-                <div className="flex gap-3">
-                  {(["easy", "medium", "hard"] as const).map((d) => (
-                    <label key={d} className="flex cursor-pointer items-center gap-1.5 text-sm text-gray-400">
-                      <input
-                        type="radio"
-                        name="difficulty"
-                        value={d}
-                        defaultChecked={d === "medium"}
-                        className="accent-indigo-500"
-                      />
-                      {d.charAt(0).toUpperCase() + d.slice(1)}
-                    </label>
-                  ))}
-                </div>
-                <button disabled={generating}
-                  className="rounded-lg bg-indigo-600 px-5 py-2 font-semibold text-white hover:bg-indigo-500 disabled:opacity-60">
-                  {generating ? "Generating… this takes ~30 seconds" : "Generate 10 questions →"}
-                </button>
-              </Form>
-            ) : (
-              <p className="mt-4 rounded-lg border border-gray-700 px-4 py-3 text-sm text-gray-400">
-                AI generation is a Pro feature.{" "}
-                <Link to={`/league/${loaderData.code}/manage`} className="text-indigo-400 hover:underline">
-                  Manage plan →
-                </Link>
-              </p>
-            )}
+            <Form method="post" action={`/league/${loaderData.code}/generate`} className="mt-4 space-y-3">
+              <input type="hidden" name="count" value="10" />
+              <input name="topic" placeholder="Optional topic focus, e.g. refund policy"
+                className="w-full rounded-lg border border-gray-700 bg-gray-900 px-3 py-2 text-sm" />
+              <div className="flex gap-3">
+                {(["easy", "medium", "hard"] as const).map((d) => (
+                  <label key={d} className="flex cursor-pointer items-center gap-1.5 text-sm text-gray-400">
+                    <input
+                      type="radio"
+                      name="difficulty"
+                      value={d}
+                      defaultChecked={d === "medium"}
+                      className="accent-indigo-500"
+                    />
+                    {d.charAt(0).toUpperCase() + d.slice(1)}
+                  </label>
+                ))}
+              </div>
+              <button disabled={generating}
+                className="rounded-lg bg-indigo-600 px-5 py-2 font-semibold text-white hover:bg-indigo-500 disabled:opacity-60">
+                {generating ? "Generating… this takes ~30 seconds" : "Generate 10 questions →"}
+              </button>
+            </Form>
           </div>
         )}
       </div>
