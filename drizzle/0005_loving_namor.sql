@@ -1,0 +1,1 @@
+ALTER TABLE "custom_quiz" ADD COLUMN "scheduled_date" date;
