@@ -1,4 +1,4 @@
-import { Form, Link, redirect, useActionData, useNavigation } from "react-router";
+import { Link, redirect, useActionData } from "react-router";
 import type { Route } from "./+types/league.quiz-edit";
 import { getCustomQuiz, updateCustomQuiz } from "~/db/repository";
 import { parseQuizPayload, requireLeagueAdmin } from "~/lib/custom-quiz.server";
@@ -45,8 +45,6 @@ export async function action({ request, params }: Route.ActionArgs) {
 
 export default function EditQuiz({ loaderData }: Route.ComponentProps) {
   const actionData = useActionData<typeof action>();
-  const navigation = useNavigation();
-  const generating = navigation.state === "submitting" && navigation.formAction?.includes("generate");
   return (
     <main className="min-h-screen bg-gray-950 text-gray-100">
       <div className="mx-auto max-w-2xl px-6 py-12">
@@ -65,42 +63,6 @@ export default function EditQuiz({ loaderData }: Route.ComponentProps) {
             Topic: <span className="text-gray-200">{loaderData.topic}</span>
           </p>
         )}
-
-        {/* Generate more questions inline */}
-        <div className="mt-6 mb-6 rounded-xl border border-gray-800 bg-gray-900/40 p-4">
-          <p className="text-sm font-semibold text-gray-200">Generate more questions</p>
-          <Form
-            method="post"
-            action={`/league/${loaderData.code}/generate`}
-            className="mt-3 flex flex-wrap items-end gap-3"
-          >
-            <input type="hidden" name="count" value="5" />
-            <input type="hidden" name="mode" value="topic" />
-            <input type="hidden" name="appendToQuizId" value={loaderData.quizId} />
-            <input
-              name="topic"
-              maxLength={200}
-              defaultValue={loaderData.topic ?? ""}
-              placeholder="Topic (optional)"
-              disabled={generating}
-              className="flex-1 min-w-0 rounded-lg border border-gray-700 bg-gray-900 px-3 py-2 text-sm text-gray-100 outline-none focus:border-indigo-500 disabled:opacity-50"
-            />
-            <div className="flex gap-3">
-              {(["easy", "medium", "hard"] as const).map((d) => (
-                <label key={d} className="flex cursor-pointer items-center gap-1.5 text-sm text-gray-400">
-                  <input type="radio" name="difficulty" value={d} defaultChecked={d === "medium"} className="accent-indigo-500" />
-                  {d.charAt(0).toUpperCase() + d.slice(1)}
-                </label>
-              ))}
-            </div>
-            <button
-              disabled={generating}
-              className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500 disabled:opacity-60"
-            >
-              {generating ? "Generating…" : "+ Generate 5 more"}
-            </button>
-          </Form>
-        </div>
         <QuizBuilder
           action={`/league/${loaderData.code}/quizzes/${loaderData.quizId}/edit`}
           initialTitle={loaderData.title}
