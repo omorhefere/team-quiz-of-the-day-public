@@ -290,7 +290,7 @@ export default function Sources({ loaderData, actionData }: Route.ComponentProps
             action={`/league/${loaderData.code}/generate`}
             className="mt-3 space-y-3"
           >
-            <input type="hidden" name="count" value="10" />
+            <input type="hidden" name="count" value="15" />
             <input type="hidden" name="mode" value="topic" />
             <input
               name="topic"
@@ -336,7 +336,7 @@ export default function Sources({ loaderData, actionData }: Route.ComponentProps
               </p>
             )}
             <Form method="post" action={`/league/${loaderData.code}/generate`} className="mt-4 space-y-3">
-              <input type="hidden" name="count" value="10" />
+              <input type="hidden" name="count" value="15" />
               <input name="topic" placeholder="Optional topic focus, e.g. refund policy"
                 className="w-full rounded-lg border border-gray-700 bg-gray-900 px-3 py-2 text-sm" />
               <div className="flex gap-3">

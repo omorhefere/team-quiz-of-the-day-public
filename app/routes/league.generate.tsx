@@ -3,7 +3,9 @@ import { z } from "zod";
 import type { Route } from "./+types/league.generate";
 import {
   createCustomQuiz,
+  getCustomQuiz,
   getReadySources,
+  updateCustomQuiz,
 } from "~/db/repository";
 import { requireLeagueAdmin } from "~/lib/custom-quiz.server";
 import { getLLMService } from "~/lib/llm/index.server";
@@ -101,6 +103,20 @@ export async function action({ request, params }: Route.ActionArgs) {
     ...q,
     verification: verifyResult?.verdicts[i] ?? undefined,
   }));
+
+  // If appending to an existing quiz, merge questions in and go back to edit.
+  const appendToQuizId = String(form.get("appendToQuizId") ?? "").trim();
+  if (appendToQuizId) {
+    const existing = await getCustomQuiz(db, appendToQuizId);
+    if (existing && existing.leagueId === league.id) {
+      const merged = [...(existing.questions as ValidQuestion[]), ...verifiedQuestions];
+      await updateCustomQuiz(db, existing.id, {
+        title: existing.title,
+        questions: merged,
+      });
+      throw redirect(`/league/${league.code}/quizzes/${existing.id}/edit`);
+    }
+  }
 
   // Save as a draft quiz and open it in the builder for the admin to review/edit.
   const dateStr = new Date().toISOString().slice(0, 10);
