@@ -4,6 +4,7 @@ import type { Route } from "./+types/league";
 import { getDb } from "~/db/client";
 import {
   getActiveCustomQuiz,
+  getCustomQuizLeaderboard,
   getCustomQuizSubmission,
   getLeagueByCode,
   getLeagueDailyLeaderboard,
@@ -39,11 +40,12 @@ export async function loader({ request, params }: Route.LoaderArgs) {
     getActiveCustomQuiz(db, league),
   ]);
 
-  // Has this member already played the active custom quiz?
-  const playedActive =
+  const [playedActive, customLeaderboard] = await Promise.all([
     activeQuiz && teamId
-      ? !!(await getCustomQuizSubmission(db, activeQuiz.id, teamId))
-      : false;
+      ? getCustomQuizSubmission(db, activeQuiz.id, teamId).then(Boolean)
+      : Promise.resolve(false),
+    activeQuiz ? getCustomQuizLeaderboard(db, activeQuiz.id) : Promise.resolve([]),
+  ]);
 
   return {
     league,
@@ -53,8 +55,9 @@ export async function loader({ request, params }: Route.LoaderArgs) {
     teamId,
     member,
     isAdmin: isLeagueAdmin(league, teamId),
-    activeQuiz: activeQuiz ? { title: activeQuiz.title } : null,
+    activeQuiz: activeQuiz ? { title: activeQuiz.title, total: (activeQuiz.questions as unknown[]).length } : null,
     playedActive,
+    customLeaderboard,
   };
 }
 
@@ -105,7 +108,7 @@ export default function LeaguePage({ loaderData }: Route.ComponentProps) {
   const registering =
     navigation.state === "submitting" &&
     navigation.formData?.get("intent") === "register-and-join";
-  const { league, deckDate, daily, weekly, teamId, member, isAdmin, activeQuiz, playedActive } =
+  const { league, deckDate, daily, weekly, teamId, member, isAdmin, activeQuiz, playedActive, customLeaderboard } =
     loaderData;
   return (
     <main className="min-h-screen bg-gray-950 text-gray-100">
@@ -131,6 +134,21 @@ export default function LeaguePage({ loaderData }: Route.ComponentProps) {
               {playedActive ? "See your result →" : "Play now →"}
             </Link>
           </div>
+        )}
+
+        {/* Custom quiz leaderboard */}
+        {activeQuiz && customLeaderboard.length > 0 && (
+          <Section title={`${activeQuiz.title} · Leaderboard`} empty="">
+            {customLeaderboard.map((r) => (
+              <Row
+                key={r.teamId}
+                rank={r.rank}
+                name={r.displayName}
+                value={`${r.score}/${activeQuiz.total}`}
+                highlight={r.teamId === teamId}
+              />
+            ))}
+          </Section>
         )}
 
         {/* Visitor with no team: offer to create one and auto-join */}
