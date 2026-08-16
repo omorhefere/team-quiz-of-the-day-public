@@ -37,7 +37,14 @@ export async function action({ request, params }: Route.ActionArgs) {
   const intent = String(form.get("intent") ?? "");
   const quizId = form.get("quizId");
 
-  if (intent === "setActive" && typeof quizId === "string") {
+  if (intent === "playNow" && typeof quizId === "string") {
+    const quiz = await getCustomQuiz(db, quizId);
+    if (quiz && quiz.leagueId === league.id) {
+      const today = new Date().toISOString().slice(0, 10);
+      await setCustomQuizSchedule(db, quizId, today);
+      await setActiveCustomQuiz(db, league.id, quizId);
+    }
+  } else if (intent === "setActive" && typeof quizId === "string") {
     // Ownership check: verify the quiz belongs to THIS league before acting.
     // Without this, an admin could set/delete quizzes from other leagues (IDOR).
     const quiz = await getCustomQuiz(db, quizId);
@@ -108,14 +115,6 @@ export default function ManageLeague({ loaderData }: Route.ComponentProps) {
           >
             Settings
           </Link>
-          {activeQuizId && (
-            <Form method="post">
-              <input type="hidden" name="intent" value="clearActive" />
-              <button disabled={submitting} className="rounded-lg border border-gray-700 px-4 py-2 text-sm font-semibold text-gray-200 hover:bg-gray-900 disabled:opacity-60">
-                Clear active quiz
-              </button>
-            </Form>
-          )}
         </div>
 
         <div className="mt-8 space-y-3">
@@ -168,12 +167,19 @@ export default function ManageLeague({ loaderData }: Route.ComponentProps) {
                     </Form>
                   </div>
                   <div className="flex shrink-0 items-center gap-2">
-                    {!isActive && (
+                    {isActive ? (
                       <Form method="post">
-                        <input type="hidden" name="intent" value="setActive" />
+                        <input type="hidden" name="intent" value="clearActive" />
+                        <button disabled={submitting} className="rounded-lg border border-gray-700 px-3 py-1.5 text-xs font-semibold text-gray-400 hover:bg-gray-900 disabled:opacity-60">
+                          Stop
+                        </button>
+                      </Form>
+                    ) : (
+                      <Form method="post">
+                        <input type="hidden" name="intent" value="playNow" />
                         <input type="hidden" name="quizId" value={quiz.id} />
                         <button disabled={submitting} className="rounded-lg bg-indigo-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-indigo-500 disabled:opacity-60">
-                          Set active
+                          Play today
                         </button>
                       </Form>
                     )}
