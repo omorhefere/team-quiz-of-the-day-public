@@ -113,6 +113,7 @@ export async function action({ request, params }: Route.ActionArgs) {
       await updateCustomQuiz(db, existing.id, {
         title: existing.title,
         questions: merged,
+        topic: topic ?? existing.topic ?? null,
       });
       throw redirect(`/league/${league.code}/quizzes/${existing.id}/edit`);
     }
@@ -128,6 +129,7 @@ export async function action({ request, params }: Route.ActionArgs) {
     leagueId: league.id,
     title,
     questions: verifiedQuestions,
+    topic,
   });
   throw redirect(`/league/${league.code}/quizzes/${quiz.id}/edit`);
 }

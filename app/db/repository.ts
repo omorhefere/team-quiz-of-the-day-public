@@ -666,7 +666,7 @@ export async function setLeaguePlan(
 
 export async function createCustomQuiz(
   db: DB,
-  params: { leagueId: string; title: string; questions: ValidQuestion[] },
+  params: { leagueId: string; title: string; questions: ValidQuestion[]; topic?: string },
 ): Promise<CustomQuiz> {
   const [quiz] = await db
     .insert(customQuizzes)
@@ -674,6 +674,7 @@ export async function createCustomQuiz(
       leagueId: params.leagueId,
       title: params.title.trim(),
       questions: params.questions,
+      topic: params.topic ?? null,
     })
     .returning();
   return quiz;
@@ -682,13 +683,14 @@ export async function createCustomQuiz(
 export async function updateCustomQuiz(
   db: DB,
   quizId: string,
-  params: { title: string; questions: ValidQuestion[] },
+  params: { title: string; questions: ValidQuestion[]; topic?: string | null },
 ): Promise<void> {
   await db
     .update(customQuizzes)
     .set({
       title: params.title.trim(),
       questions: params.questions,
+      ...(params.topic !== undefined ? { topic: params.topic } : {}),
       updatedAt: new Date(),
     })
     .where(eq(customQuizzes.id, quizId));

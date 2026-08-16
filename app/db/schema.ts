@@ -177,6 +177,7 @@ export const customQuizzes = pgTable("custom_quiz", {
     .references(() => leagues.id, { onDelete: "cascade" }),
   title: text("title").notNull(),
   questions: jsonb("questions").$type<Question[]>().notNull(),
+  topic: text("topic"),
   scheduledDate: date("scheduled_date"),
   createdAt: timestamp("created_at", { withTimezone: true })
     .notNull()

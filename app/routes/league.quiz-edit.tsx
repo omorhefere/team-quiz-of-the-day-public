@@ -21,6 +21,7 @@ export async function loader({ request, params }: Route.LoaderArgs) {
     leagueName: league.name,
     quizId: quiz.id,
     title: quiz.title,
+    topic: quiz.topic ?? null,
     questions: quiz.questions as ValidQuestion[],
   };
 }
@@ -58,12 +59,15 @@ export default function EditQuiz({ loaderData }: Route.ComponentProps) {
         <p className="mt-3 text-sm font-semibold uppercase tracking-widest text-indigo-400">
           {loaderData.leagueName}
         </p>
-        <div className="mt-1 flex items-center justify-between">
-          <h1 className="mb-6 text-2xl font-bold">Edit quiz</h1>
-        </div>
+        <h1 className="mt-1 text-2xl font-bold">Edit quiz</h1>
+        {loaderData.topic && (
+          <p className="mt-1 text-sm text-gray-400">
+            Topic: <span className="text-gray-200">{loaderData.topic}</span>
+          </p>
+        )}
 
         {/* Generate more questions inline */}
-        <div className="mb-6 rounded-xl border border-gray-800 bg-gray-900/40 p-4">
+        <div className="mt-6 mb-6 rounded-xl border border-gray-800 bg-gray-900/40 p-4">
           <p className="text-sm font-semibold text-gray-200">Generate more questions</p>
           <Form
             method="post"
@@ -76,6 +80,7 @@ export default function EditQuiz({ loaderData }: Route.ComponentProps) {
             <input
               name="topic"
               maxLength={200}
+              defaultValue={loaderData.topic ?? ""}
               placeholder="Topic (optional)"
               disabled={generating}
               className="flex-1 min-w-0 rounded-lg border border-gray-700 bg-gray-900 px-3 py-2 text-sm text-gray-100 outline-none focus:border-indigo-500 disabled:opacity-50"
