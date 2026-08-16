@@ -179,6 +179,10 @@ export default function Sources({ loaderData, actionData }: Route.ComponentProps
                       placeholder={i === 0 ? "https://your-company.com/about" : "https://…"}
                       className="flex-1 rounded-lg border border-gray-700 bg-gray-900 px-3 py-2 text-sm text-gray-100 outline-none focus:border-indigo-500"
                     />
+                    <button disabled={adding}
+                      className="shrink-0 rounded-lg bg-indigo-600 px-3 py-2 text-sm font-semibold text-white hover:bg-indigo-500 disabled:opacity-60">
+                      {adding ? "Adding…" : i === 0 && urlFields.length === 1 ? "Add page" : `Add`}
+                    </button>
                     {urlFields.length > 1 && (
                       <button type="button" onClick={() => removeField(id)}
                         className="rounded-lg border border-gray-700 px-3 text-gray-500 hover:border-red-500/50 hover:text-red-400"
@@ -187,16 +191,10 @@ export default function Sources({ loaderData, actionData }: Route.ComponentProps
                   </div>
                 ))}
               </div>
-              <div className="mt-3 flex gap-2">
-                <button type="button" onClick={addField}
-                  className="rounded-lg border border-dashed border-gray-700 px-3 py-2 text-xs text-gray-400 hover:border-gray-500">
-                  + Add URL
-                </button>
-                <button disabled={adding}
-                  className="flex-1 rounded-lg bg-indigo-600 px-3 py-2 text-sm font-semibold text-white hover:bg-indigo-500 disabled:opacity-60">
-                  {adding ? "Adding…" : urlFields.length === 1 ? "Add page" : `Add ${urlFields.length} pages`}
-                </button>
-              </div>
+              <button type="button" onClick={addField}
+                className="mt-2 text-xs text-gray-500 hover:text-gray-300">
+                + Add another URL
+              </button>
             </Form>
             {urlErrors && (
               <div className="mt-3 space-y-1.5">
@@ -220,13 +218,13 @@ export default function Sources({ loaderData, actionData }: Route.ComponentProps
             <p className="mb-3 text-sm font-semibold text-gray-200">From a PDF</p>
             <Form method="post" encType="multipart/form-data">
               <input type="hidden" name="intent" value="add-pdf" />
-              <label className="block cursor-pointer rounded-lg border border-dashed border-gray-700 px-3 py-6 text-center text-sm text-gray-400 hover:border-gray-500 hover:text-gray-300">
+              <label className="block cursor-pointer rounded-lg border border-dashed border-gray-700 px-3 py-2 text-center text-sm text-gray-400 hover:border-gray-500 hover:text-gray-300">
                 <input name="pdf" type="file" accept=".pdf,application/pdf" multiple className="sr-only" />
-                Click to select PDF files
-                <span className="mt-1 block text-xs text-gray-600">max 20 MB each</span>
+                Select PDF files
               </label>
+              <p className="mt-1 text-xs text-gray-600">max 20 MB each</p>
               <button disabled={addingPdf}
-                className="mt-3 w-full rounded-lg bg-indigo-600 px-3 py-2 text-sm font-semibold text-white hover:bg-indigo-500 disabled:opacity-60">
+                className="mt-2 w-full rounded-lg bg-indigo-600 px-3 py-2 text-sm font-semibold text-white hover:bg-indigo-500 disabled:opacity-60">
                 {addingPdf ? "Uploading…" : "Upload PDFs"}
               </button>
             </Form>
@@ -275,91 +273,112 @@ export default function Sources({ loaderData, actionData }: Route.ComponentProps
               ) : s.preview ? (
                 <p className="mt-3 line-clamp-3 text-sm text-gray-500">{s.preview}…</p>
               ) : null}
+              {s.status === "ready" && (
+                <Form
+                  method="post"
+                  action={`/league/${loaderData.code}/generate`}
+                  className="mt-3 flex items-center gap-2"
+                >
+                  <input type="hidden" name="count" value="15" />
+                  <input type="hidden" name="sourceId" value={s.id} />
+                  <button
+                    disabled={generating}
+                    className="rounded-lg border border-indigo-500/40 bg-indigo-500/10 px-3 py-1.5 text-xs font-semibold text-indigo-300 hover:bg-indigo-500/20 disabled:opacity-60"
+                  >
+                    {generating ? "Generating…" : "Generate quiz from this source →"}
+                  </button>
+                </Form>
+              )}
             </div>
           ))}
         </div>
 
-        {/* Topic-only generation — no documents needed */}
-        <div className="mt-6 rounded-xl border border-gray-800 bg-gray-900/40 p-5">
-          <p className="text-sm font-semibold text-gray-200">Generate from a topic</p>
-          <p className="mt-1 text-xs text-gray-500">
-            No documents needed — AI uses its own knowledge. An automatic second pass checks the questions before you publish.
-          </p>
-          <Form
-            method="post"
-            action={`/league/${loaderData.code}/generate`}
-            className="mt-3 space-y-3"
-          >
-            <input type="hidden" name="count" value="15" />
-            <input type="hidden" name="mode" value="topic" />
-            <input
-              name="topic"
-              required
-              maxLength={200}
-              placeholder="e.g. The French Revolution, our Q3 OKRs"
-              className="w-full rounded-lg border border-gray-700 bg-gray-900 px-3 py-2 text-sm text-gray-100 outline-none focus:border-indigo-500"
-            />
-            <div className="flex gap-3">
-              {(["easy", "medium", "hard"] as const).map((d) => (
-                <label key={d} className="flex cursor-pointer items-center gap-1.5 text-sm text-gray-400">
-                  <input type="radio" name="difficulty" value={d} defaultChecked={d === "medium"} className="accent-indigo-500" />
-                  {d.charAt(0).toUpperCase() + d.slice(1)}
-                </label>
-              ))}
+        {/* Generate quiz — two options side by side */}
+        <div className="mt-8">
+          <div className="mb-3 flex items-center justify-between">
+            <h2 className="text-sm font-semibold uppercase tracking-widest text-gray-400">Generate a quiz</h2>
+            {!loaderData.usingRealAI && (
+              <span className="rounded-full bg-gray-800 px-2 py-0.5 text-xs text-gray-400">dev stub</span>
+            )}
+          </div>
+          {loaderData.globalError && (
+            <p className="mb-3 rounded-lg border border-red-500/40 bg-red-500/10 px-4 py-3 text-sm text-red-300">
+              {loaderData.globalError}
+            </p>
+          )}
+          <div className="grid gap-4 sm:grid-cols-2">
+            {/* From topic */}
+            <div className="flex flex-col rounded-xl border border-gray-800 bg-gray-900/40 p-5">
+              <p className="text-sm font-semibold text-gray-200">From a topic</p>
+              <p className="mt-1 text-xs text-gray-500">
+                No documents needed — AI uses its own knowledge.
+              </p>
+              <Form
+                method="post"
+                action={`/league/${loaderData.code}/generate`}
+                className="mt-4 flex flex-1 flex-col gap-3"
+              >
+                <input type="hidden" name="count" value="15" />
+                <input type="hidden" name="mode" value="topic" />
+                <input
+                  name="topic"
+                  required
+                  maxLength={200}
+                  placeholder="e.g. The French Revolution, our Q3 OKRs"
+                  className="w-full rounded-lg border border-gray-700 bg-gray-900 px-3 py-2 text-sm text-gray-100 outline-none focus:border-indigo-500"
+                />
+                <div className="flex gap-3">
+                  {(["easy", "medium", "hard"] as const).map((d) => (
+                    <label key={d} className="flex cursor-pointer items-center gap-1.5 text-xs text-gray-400">
+                      <input type="radio" name="difficulty" value={d} defaultChecked={d === "medium"} className="accent-indigo-500" />
+                      {d.charAt(0).toUpperCase() + d.slice(1)}
+                    </label>
+                  ))}
+                </div>
+                <button
+                  disabled={generating}
+                  className="mt-auto w-full rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500 disabled:opacity-60"
+                >
+                  {generating ? "Generating…" : "Generate from topic →"}
+                </button>
+              </Form>
             </div>
-            <button
-              disabled={generating}
-              className="rounded-lg bg-indigo-600 px-5 py-2 font-semibold text-white hover:bg-indigo-500 disabled:opacity-60"
-            >
-              {generating ? "Generating… this takes ~30 seconds" : "Generate from topic →"}
-            </button>
-          </Form>
-        </div>
 
-        {/* Next step CTA — shown once there's at least one source */}
-        {hasSources && (
-          <div className="mt-6 rounded-xl border border-indigo-500/30 bg-indigo-500/5 p-5">
-            <div className="flex items-center justify-between">
-              <h2 className="font-semibold">Ready to generate a quiz?</h2>
-              {!loaderData.usingRealAI && (
-                <span className="rounded-full bg-gray-800 px-2 py-0.5 text-xs text-gray-400">
-                  dev stub
-                </span>
+            {/* From sources */}
+            <div className={`flex flex-col rounded-xl border p-5 ${hasSources ? "border-gray-800 bg-gray-900/40" : "border-dashed border-gray-800 bg-gray-900/20"}`}>
+              <p className={`text-sm font-semibold ${hasSources ? "text-gray-200" : "text-gray-500"}`}>From your sources</p>
+              <p className="mt-1 text-xs text-gray-500">
+                AI drafts questions grounded in the documents above.
+              </p>
+              {hasSources ? (
+                <Form method="post" action={`/league/${loaderData.code}/generate`} className="mt-4 flex flex-1 flex-col gap-3">
+                  <input type="hidden" name="count" value="15" />
+                  <input
+                    name="topic"
+                    placeholder="Optional topic focus, e.g. refund policy"
+                    className="w-full rounded-lg border border-gray-700 bg-gray-900 px-3 py-2 text-sm text-gray-100 outline-none focus:border-indigo-500"
+                  />
+                  <div className="flex gap-3">
+                    {(["easy", "medium", "hard"] as const).map((d) => (
+                      <label key={d} className="flex cursor-pointer items-center gap-1.5 text-xs text-gray-400">
+                        <input type="radio" name="difficulty" value={d} defaultChecked={d === "medium"} className="accent-indigo-500" />
+                        {d.charAt(0).toUpperCase() + d.slice(1)}
+                      </label>
+                    ))}
+                  </div>
+                  <button disabled={generating}
+                    className="mt-auto w-full rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500 disabled:opacity-60">
+                    {generating ? "Generating…" : "Generate from sources →"}
+                  </button>
+                </Form>
+              ) : (
+                <p className="mt-auto pt-6 text-center text-xs text-gray-600">
+                  Add a source above to unlock this.
+                </p>
               )}
             </div>
-            <p className="mt-1 text-sm text-gray-400">
-              AI drafts questions from your sources. You review and edit before it goes live.
-            </p>
-            {loaderData.globalError && (
-              <p className="mt-3 rounded-lg border border-red-500/40 bg-red-500/10 px-4 py-3 text-sm text-red-300">
-                {loaderData.globalError}
-              </p>
-            )}
-            <Form method="post" action={`/league/${loaderData.code}/generate`} className="mt-4 space-y-3">
-              <input type="hidden" name="count" value="15" />
-              <input name="topic" placeholder="Optional topic focus, e.g. refund policy"
-                className="w-full rounded-lg border border-gray-700 bg-gray-900 px-3 py-2 text-sm" />
-              <div className="flex gap-3">
-                {(["easy", "medium", "hard"] as const).map((d) => (
-                  <label key={d} className="flex cursor-pointer items-center gap-1.5 text-sm text-gray-400">
-                    <input
-                      type="radio"
-                      name="difficulty"
-                      value={d}
-                      defaultChecked={d === "medium"}
-                      className="accent-indigo-500"
-                    />
-                    {d.charAt(0).toUpperCase() + d.slice(1)}
-                  </label>
-                ))}
-              </div>
-              <button disabled={generating}
-                className="rounded-lg bg-indigo-600 px-5 py-2 font-semibold text-white hover:bg-indigo-500 disabled:opacity-60">
-                {generating ? "Generating… this takes ~30 seconds" : "Generate 10 questions →"}
-              </button>
-            </Form>
           </div>
-        )}
+        </div>
       </div>
     </main>
   );
