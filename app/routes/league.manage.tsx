@@ -7,7 +7,6 @@ import {
   listCustomQuizzes,
   setActiveCustomQuiz,
   setCustomQuizSchedule,
-  setLeaguePlan,
 } from "~/db/repository";
 import { requireLeagueAdmin } from "~/lib/custom-quiz.server";
 
@@ -19,9 +18,8 @@ export async function loader({ request, params }: Route.LoaderArgs) {
   const { db, league } = await requireLeagueAdmin(request, params.code);
   const quizzes = await listCustomQuizzes(db, league.id);
   return {
-    league: { code: league.code, name: league.name, plan: league.plan },
+    league: { code: league.code, name: league.name },
     activeQuizId: league.activeCustomQuizId,
-    isDev: process.env.NODE_ENV !== "production",
     quizzes: quizzes.map((q) => ({
       id: q.id,
       title: q.title,
@@ -64,33 +62,24 @@ export async function action({ request, params }: Route.ActionArgs) {
       const scheduledDate = form.get("scheduledDate");
       await setCustomQuizSchedule(db, quizId, scheduledDate ? String(scheduledDate) : null);
     }
-  } else if (intent === "setPlan") {
-    const plan = form.get("plan") === "pro" ? "pro" : "free";
-    await setLeaguePlan(db, league.id, plan);
   }
   throw redirect(`/league/${league.code}/manage`);
 }
 
 export default function ManageLeague({ loaderData }: Route.ComponentProps) {
-  const { league, activeQuizId, quizzes, isDev } = loaderData;
+  const { league, activeQuizId, quizzes } = loaderData;
   const navigation = useNavigation();
   const submitting = navigation.state === "submitting";
   return (
     <main className="min-h-screen bg-gray-950 text-gray-100">
       <LeagueNav code={league.code} isAdmin />
       <div className="mx-auto max-w-2xl px-6 py-12">
-        <div className="mb-4 flex items-center justify-between">
-          <h1 className="text-2xl font-bold">Manage quizzes</h1>
-          <span
-            className={`rounded-full px-3 py-1 text-xs font-semibold ${
-              league.plan === "pro"
-                ? "bg-indigo-500/20 text-indigo-300"
-                : "bg-gray-800 text-gray-400"
-            }`}
-          >
-            {league.plan.toUpperCase()} plan
-          </span>
+        <div className="mb-1">
+          <p className="text-sm font-semibold uppercase tracking-widest text-indigo-400">
+            {league.name}
+          </p>
         </div>
+        <h1 className="text-2xl font-bold">Manage quizzes</h1>
         <p className="mt-1 text-sm text-gray-400">
           Build a quiz and set it as your league&rsquo;s quiz of the day. Members
           play it once.
@@ -119,9 +108,10 @@ export default function ManageLeague({ loaderData }: Route.ComponentProps) {
 
         <div className="mt-8 space-y-3">
           {quizzes.length === 0 && (
-            <p className="rounded-xl border border-gray-800 px-4 py-8 text-center text-gray-500">
-              No quizzes yet. Build your first one.
-            </p>
+            <div className="rounded-xl border border-gray-800 px-4 py-10 text-center">
+              <p className="text-gray-400 font-medium">No quizzes yet</p>
+              <p className="mt-1 text-sm text-gray-600">Use the buttons above to generate or build one.</p>
+            </div>
           )}
           {quizzes.map((quiz) => {
             const isActive = quiz.id === activeQuizId;
@@ -208,21 +198,6 @@ export default function ManageLeague({ loaderData }: Route.ComponentProps) {
           })}
         </div>
 
-        {/* Dev-only plan toggle — hidden in production until real billing lands. */}
-        {isDev && <div className="mt-12 rounded-xl border border-dashed border-gray-800 p-4 text-sm text-gray-500">
-          <p className="mb-2 font-medium text-gray-400">Plan (dev toggle)</p>
-          <Form method="post" className="flex items-center gap-2">
-            <input type="hidden" name="intent" value="setPlan" />
-            <input
-              type="hidden"
-              name="plan"
-              value={league.plan === "pro" ? "free" : "pro"}
-            />
-            <button className="rounded-lg border border-gray-700 px-3 py-1.5 text-xs font-semibold text-gray-300 hover:bg-gray-900">
-              {league.plan === "pro" ? "Downgrade to free" : "Upgrade to pro"}
-            </button>
-          </Form>
-        </div>}
       </div>
     </main>
   );

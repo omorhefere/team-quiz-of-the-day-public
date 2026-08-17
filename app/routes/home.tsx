@@ -21,11 +21,9 @@ export async function action({ request }: Route.ActionArgs) {
   const form = await request.formData();
   const intent = String(form.get("intent") ?? "");
 
-  // "Create league" from landing — redirect to register with league name in URL.
+  // "Create league" from landing — go to the dedicated league creation page.
   if (intent === "create-league") {
-    const name = String(form.get("name") ?? "").trim().slice(0, 30);
-    if (!name) return data({ error: "Enter a league name." }, { status: 400 });
-    throw redirect(`/register?league=${encodeURIComponent(name)}`);
+    throw redirect(`/leagues/new`);
   }
 
   // Admin sign-in.

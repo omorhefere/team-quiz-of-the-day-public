@@ -47,6 +47,8 @@ export interface GenerateParams {
   difficulty?: "easy" | "medium" | "hard";
   /** "document" (default) grounds questions in sources. "topic" uses model knowledge — unverified. */
   mode?: "document" | "topic";
+  /** Existing question prompts to avoid duplicating. */
+  existingQuestions?: string[];
 }
 
 export interface VerificationResult {

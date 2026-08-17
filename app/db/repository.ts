@@ -343,7 +343,7 @@ export async function getDeckByDate(db: DB, deckDate: DeckDate): Promise<Deck | 
 /** Creates a league with a unique join code and adds the creator as a member. */
 export async function createLeague(
   db: DB,
-  params: { name: string; createdByTeamId: string },
+  params: { name: string; createdByTeamId: string | null },
 ): Promise<League> {
   const name = params.name.trim();
   for (let attempt = 0; attempt < 5; attempt++) {
@@ -356,7 +356,9 @@ export async function createLeague(
           createdByTeamId: params.createdByTeamId,
         })
         .returning();
-      await joinLeague(db, league.id, params.createdByTeamId);
+      if (params.createdByTeamId) {
+        await joinLeague(db, league.id, params.createdByTeamId);
+      }
       return league;
     } catch (err) {
       if (isUniqueViolation(err) && attempt < 4) continue;
@@ -664,7 +666,7 @@ export async function setLeaguePlan(
 
 export async function createCustomQuiz(
   db: DB,
-  params: { leagueId: string; title: string; questions: ValidQuestion[] },
+  params: { leagueId: string; title: string; questions: ValidQuestion[]; topic?: string },
 ): Promise<CustomQuiz> {
   const [quiz] = await db
     .insert(customQuizzes)
@@ -672,6 +674,7 @@ export async function createCustomQuiz(
       leagueId: params.leagueId,
       title: params.title.trim(),
       questions: params.questions,
+      topic: params.topic ?? null,
     })
     .returning();
   return quiz;
@@ -680,13 +683,14 @@ export async function createCustomQuiz(
 export async function updateCustomQuiz(
   db: DB,
   quizId: string,
-  params: { title: string; questions: ValidQuestion[] },
+  params: { title: string; questions: ValidQuestion[]; topic?: string | null },
 ): Promise<void> {
   await db
     .update(customQuizzes)
     .set({
       title: params.title.trim(),
       questions: params.questions,
+      ...(params.topic !== undefined ? { topic: params.topic } : {}),
       updatedAt: new Date(),
     })
     .where(eq(customQuizzes.id, quizId));
@@ -901,6 +905,15 @@ export async function getReadySources(
     .from(sources)
     .where(and(eq(sources.leagueId, leagueId), eq(sources.status, "ready")))
     .orderBy(desc(sources.createdAt));
+}
+
+export async function getSource(db: DB, sourceId: string, leagueId: string) {
+  const rows = await db
+    .select()
+    .from(sources)
+    .where(and(eq(sources.id, sourceId), eq(sources.leagueId, leagueId)))
+    .limit(1);
+  return rows[0] ?? null;
 }
 
 export async function deleteSource(

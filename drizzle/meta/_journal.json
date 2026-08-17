@@ -43,6 +43,13 @@
       "when": 1786839382803,
       "tag": "0005_loving_namor",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1786887637824,
+      "tag": "0006_sloppy_rhodey",
+      "breakpoints": true
     }
   ]
 }

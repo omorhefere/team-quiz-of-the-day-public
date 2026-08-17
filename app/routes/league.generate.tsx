@@ -3,8 +3,10 @@ import { z } from "zod";
 import type { Route } from "./+types/league.generate";
 import {
   createCustomQuiz,
+  getCustomQuiz,
   getReadySources,
-  isLeaguePro,
+  getSource,
+  updateCustomQuiz,
 } from "~/db/repository";
 import { requireLeagueAdmin } from "~/lib/custom-quiz.server";
 import { getLLMService } from "~/lib/llm/index.server";
@@ -32,11 +34,6 @@ export async function action({ request, params }: Route.ActionArgs) {
     });
   }
 
-  // Paid feature: AI generation is gated behind the pro plan.
-  if (!isLeaguePro(league)) {
-    await redirectWithError("AI generation is a Pro feature. Upgrade your league to use it.");
-  }
-
   const form = await request.formData();
   const countSchema = z.coerce
     .number()
@@ -53,13 +50,32 @@ export async function action({ request, params }: Route.ActionArgs) {
     : "medium") as "easy" | "medium" | "hard";
   const modeRaw = String(form.get("mode") ?? "").trim();
   const mode = modeRaw === "topic" ? "topic" : "document";
+  const appendToQuizId = String(form.get("appendToQuizId") ?? "").trim();
+  const sourceId = String(form.get("sourceId") ?? "").trim();
 
-  const sources = mode === "document" ? await getReadySources(db, league.id) : [];
-  if (mode === "document" && sources.length === 0) {
-    await redirectWithError("Add at least one source before generating a quiz.");
+  let sources: Awaited<ReturnType<typeof getReadySources>> = [];
+  if (mode === "document") {
+    if (sourceId) {
+      const single = await getSource(db, sourceId, league.id);
+      if (single && single.status === "ready") sources = [single];
+    } else {
+      sources = await getReadySources(db, league.id);
+    }
+    if (sources.length === 0) {
+      await redirectWithError("Add at least one source before generating a quiz.");
+    }
   }
-  if (mode === "topic" && !topic) {
+  if (mode === "topic" && !topic && !appendToQuizId) {
     await redirectWithError("Enter a topic to generate from.");
+  }
+
+  // When appending, fetch existing questions now so we can pass them to the LLM.
+  let existingForAppend: ValidQuestion[] | undefined;
+  if (appendToQuizId) {
+    const existing = await getCustomQuiz(db, appendToQuizId);
+    if (existing && existing.leagueId === league.id) {
+      existingForAppend = existing.questions as ValidQuestion[];
+    }
   }
 
   let questions: ValidQuestion[] = [];
@@ -70,6 +86,7 @@ export async function action({ request, params }: Route.ActionArgs) {
       topic,
       difficulty,
       mode,
+      existingQuestions: existingForAppend?.map((q) => q.q),
     });
     questions = result.questions.map((q) => ({
       q: q.q,
@@ -108,6 +125,20 @@ export async function action({ request, params }: Route.ActionArgs) {
     verification: verifyResult?.verdicts[i] ?? undefined,
   }));
 
+  // If appending to an existing quiz, merge questions in and go back to edit.
+  if (appendToQuizId && existingForAppend !== undefined) {
+    const existing = await getCustomQuiz(db, appendToQuizId);
+    if (existing && existing.leagueId === league.id) {
+      const merged = [...(existing.questions as ValidQuestion[]), ...verifiedQuestions];
+      await updateCustomQuiz(db, existing.id, {
+        title: existing.title,
+        questions: merged,
+        topic: topic ?? existing.topic ?? null,
+      });
+      throw redirect(`/league/${league.code}/quizzes/${existing.id}/edit`);
+    }
+  }
+
   // Save as a draft quiz and open it in the builder for the admin to review/edit.
   const dateStr = new Date().toISOString().slice(0, 10);
   const prefix = mode === "topic" ? `AI draft (topic) · ${dateStr}` : `AI draft · ${dateStr}`;
@@ -118,6 +149,7 @@ export async function action({ request, params }: Route.ActionArgs) {
     leagueId: league.id,
     title,
     questions: verifiedQuestions,
+    topic,
   });
   throw redirect(`/league/${league.code}/quizzes/${quiz.id}/edit`);
 }

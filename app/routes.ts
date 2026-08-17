@@ -6,7 +6,8 @@ export default [
   route("join", "routes/join.tsx"),
   route("play", "routes/play.tsx"),
   route("leaderboard", "routes/leaderboard.tsx"),
-  route("leagues/create", "routes/leagues.create.tsx"),
+  route("leagues/new", "routes/leagues.create.tsx", { id: "leagues-new" }),
+  route("leagues/create", "routes/leagues.create.tsx", { id: "leagues-create" }),
   route("leagues/join", "routes/leagues.join.tsx"),
   route("league/:code", "routes/league.tsx"),
   // Custom quizzes (admin-managed, league-scoped).
