@@ -161,6 +161,9 @@ export default function Sources({ loaderData, actionData }: Route.ComponentProps
     generating && !generatingSourceId && !generatingTopic;
 
   const [urlFields, setUrlFields] = useState([crypto.randomUUID()]);
+  // The file input is visually hidden inside the drop-zone label, so without
+  // this the card gives no sign that a file was chosen.
+  const [pdfNames, setPdfNames] = useState<string[]>([]);
   function addField() { setUrlFields((p) => [...p, crypto.randomUUID()]); }
   function removeField(id: string) { setUrlFields((p) => p.length > 1 ? p.filter((f) => f !== id) : p); }
 
@@ -171,7 +174,11 @@ export default function Sources({ loaderData, actionData }: Route.ComponentProps
   // "From your sources" card gates on that rather than on raw count —
   // otherwise a source that failed to process would offer a button that
   // always errors with "add at least one source".
-  const hasReadySources = loaderData.sources.some((s) => s.status === "ready");
+  const readyCount = loaderData.sources.filter((s) => s.status === "ready").length;
+  // With a single source this card does exactly what that source's own
+  // "Generate quiz from this source" button does, so it only earns its place
+  // once there is more than one document to combine.
+  const canCombineSources = readyCount > 1;
 
   return (
     <main className="min-h-screen bg-gray-950 text-gray-100">
@@ -245,17 +252,49 @@ export default function Sources({ loaderData, actionData }: Route.ComponentProps
             <p className="mb-3 text-sm font-semibold text-gray-200">From a PDF</p>
             <Form method="post" encType="multipart/form-data" className="flex flex-1 flex-col">
               <input type="hidden" name="intent" value="add-pdf" />
-              <label className="block cursor-pointer rounded-lg border border-dashed border-gray-700 px-3 py-2 text-center text-sm text-gray-400 hover:border-gray-500 hover:text-gray-300">
-                <input name="pdf" type="file" accept=".pdf,application/pdf" multiple className="sr-only" />
-                Select PDF files
+              <label
+                className={`block cursor-pointer rounded-lg border border-dashed px-3 py-2 text-center text-sm ${
+                  pdfNames.length
+                    ? "border-indigo-500/50 bg-indigo-500/5 text-indigo-300"
+                    : "border-gray-700 text-gray-400 hover:border-gray-500 hover:text-gray-300"
+                }`}
+              >
+                <input
+                  name="pdf"
+                  type="file"
+                  accept=".pdf,application/pdf"
+                  multiple
+                  className="sr-only"
+                  onChange={(e) =>
+                    setPdfNames(
+                      Array.from(e.currentTarget.files ?? []).map((f) => f.name),
+                    )
+                  }
+                />
+                {pdfNames.length === 0
+                  ? "Select PDF files"
+                  : pdfNames.length === 1
+                    ? pdfNames[0]
+                    : `${pdfNames.length} files selected`}
               </label>
+              {pdfNames.length > 1 && (
+                <p
+                  className="mt-1 truncate text-xs text-gray-500"
+                  title={pdfNames.join(", ")}
+                >
+                  {pdfNames.join(", ")}
+                </p>
+              )}
               <p className="mt-1 mb-2 text-xs text-gray-600">max 20 MB each</p>
               <SubmitButton
                 pending={addingPdf}
                 pendingLabel="Uploading…"
-                className="mt-auto w-full rounded-lg bg-indigo-600 px-3 py-2 text-sm font-semibold text-white hover:bg-indigo-500 disabled:opacity-60"
+                // With nothing selected this can only fail with "Select at
+                // least one PDF file", so don't offer the click.
+                disabled={pdfNames.length === 0}
+                className="mt-auto w-full rounded-lg bg-indigo-600 px-3 py-2 text-sm font-semibold text-white hover:bg-indigo-500 disabled:cursor-not-allowed disabled:opacity-60"
               >
-                Upload PDFs
+                {pdfNames.length > 1 ? `Upload ${pdfNames.length} PDFs` : "Upload PDF"}
               </SubmitButton>
             </Form>
             {pdfErrors && (
@@ -386,13 +425,14 @@ export default function Sources({ loaderData, actionData }: Route.ComponentProps
               </Form>
             </div>
 
-            {/* From sources */}
-            <div className={`flex flex-col rounded-xl border p-5 ${hasReadySources ? "border-gray-800 bg-gray-900/40" : "border-dashed border-gray-800 bg-gray-900/20"}`}>
-              <p className={`text-sm font-semibold ${hasReadySources ? "text-gray-200" : "text-gray-500"}`}>From your sources</p>
+            {/* Combine several sources into one quiz. A single source is
+                already covered by its own generate button in the list above. */}
+            <div className={`flex flex-col rounded-xl border p-5 ${canCombineSources ? "border-gray-800 bg-gray-900/40" : "border-dashed border-gray-800 bg-gray-900/20"}`}>
+              <p className={`text-sm font-semibold ${canCombineSources ? "text-gray-200" : "text-gray-500"}`}>Combine all sources</p>
               <p className="mt-1 text-xs text-gray-500">
-                AI drafts questions grounded in the documents above.
+                One quiz drawing on all {canCombineSources ? readyCount : ""} documents together.
               </p>
-              {hasReadySources ? (
+              {canCombineSources ? (
                 <Form method="post" action={`/league/${loaderData.code}/generate`} className="mt-4 flex flex-1 flex-col gap-3">
                   <input type="hidden" name="count" value={MAX_CUSTOM_QUESTIONS} />
                   <input
@@ -414,12 +454,14 @@ export default function Sources({ loaderData, actionData }: Route.ComponentProps
                     disabled={generating}
                     className="mt-auto w-full rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500 disabled:opacity-60"
                   >
-                    Generate from sources →
+                    Generate from all sources →
                   </SubmitButton>
                 </Form>
               ) : (
                 <p className="mt-auto pt-6 text-center text-xs text-gray-600">
-                  Add a source above to unlock this.
+                  {readyCount === 1
+                    ? "Add a second source to combine them into one quiz."
+                    : "Add sources above to unlock this."}
                 </p>
               )}
             </div>
