@@ -1,4 +1,5 @@
 import { Form, data, redirect, useActionData, useNavigation } from "react-router";
+import { SubmitButton } from "~/components/SubmitButton";
 import type { Route } from "./+types/leagues.create";
 import { getDb } from "~/db/client";
 import { createLeague } from "~/db/repository";
@@ -9,8 +10,14 @@ export function meta() {
   return [{ title: "Create a league · Team Quiz of the Day" }];
 }
 
-export async function loader() {
-  return null;
+/**
+ * The landing page and the signed-in team view both offer a "create a league"
+ * box that only asks for a name. Both hand that name over as `?name=`, so it
+ * can prefill here instead of being retyped.
+ */
+export async function loader({ request }: Route.LoaderArgs) {
+  const name = new URL(request.url).searchParams.get("name") ?? "";
+  return { presetName: name.trim().slice(0, 30) };
 }
 
 export async function action({ request }: Route.ActionArgs) {
@@ -54,7 +61,7 @@ export async function action({ request }: Route.ActionArgs) {
   });
 }
 
-export default function CreateLeague() {
+export default function CreateLeague({ loaderData }: Route.ComponentProps) {
   const result = useActionData<typeof action>();
   const navigation = useNavigation();
   const submitting = navigation.state === "submitting";
@@ -82,6 +89,8 @@ export default function CreateLeague() {
               type="text"
               required
               maxLength={30}
+              defaultValue={loaderData.presetName}
+              autoFocus={!loaderData.presetName}
               placeholder="e.g. Platform Engineering"
               disabled={submitting}
               className="w-full rounded-lg border border-gray-700 bg-gray-900 px-4 py-3 disabled:opacity-50"
@@ -129,12 +138,13 @@ export default function CreateLeague() {
             />
           </div>
 
-          <button
-            disabled={submitting}
+          <SubmitButton
+            pending={submitting}
+            pendingLabel="Creating league…"
             className="w-full rounded-lg bg-indigo-600 px-4 py-3 font-semibold disabled:opacity-60"
           >
-            {submitting ? "Creating league…" : "Create league →"}
-          </button>
+            Create league →
+          </SubmitButton>
         </Form>
       </div>
     </main>
