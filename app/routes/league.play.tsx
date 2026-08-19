@@ -1,4 +1,5 @@
 import { Form, Link, redirect, useActionData, useNavigation } from "react-router";
+import { SubmitButton } from "~/components/SubmitButton";
 import type { Route } from "./+types/league.play";
 import { getDb } from "~/db/client";
 import {
@@ -209,13 +210,15 @@ export default function LeaguePlay({ loaderData }: Route.ComponentProps) {
             </div>
           </fieldset>
         ))}
-        <button
+        <SubmitButton
           type="submit"
-          disabled={submitting}
+          pending={submitting}
+          pendingLabel="Scoring…"
+          spinnerClassName="h-5 w-5"
           className="w-full rounded-lg bg-indigo-600 px-4 py-4 text-lg font-semibold text-white transition hover:bg-indigo-500 disabled:opacity-60"
         >
-          {submitting ? "Scoring…" : "Submit our answers"}
-        </button>
+          Submit our answers
+        </SubmitButton>
       </Form>
     </Shell>
   );

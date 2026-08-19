@@ -1,4 +1,5 @@
 import { data, Form, Link, redirect, useNavigation } from "react-router";
+import { SubmitButton } from "~/components/SubmitButton";
 import { LeagueNav } from "~/components/Nav";
 import { useState } from "react";
 import type { Route } from "./+types/league.sources";
@@ -143,6 +144,20 @@ export default function Sources({ loaderData, actionData }: Route.ComponentProps
   const generating =
     navigation.state !== "idle" &&
     navigation.location?.pathname?.endsWith("/generate");
+  // Which source's button was clicked, so only that one shows a spinner
+  // instead of every generate button on the page lighting up at once.
+  const generatingSourceId = generating
+    ? (navigation.formData?.get("sourceId") ?? null)
+    : null;
+  const deletingSourceId =
+    navigation.state === "submitting" &&
+    navigation.formData?.get("intent") === "delete"
+      ? navigation.formData?.get("sourceId")
+      : null;
+  const generatingTopic =
+    generating && navigation.formData?.get("mode") === "topic";
+  const generatingAllSources =
+    generating && !generatingSourceId && !generatingTopic;
 
   const [urlFields, setUrlFields] = useState([crypto.randomUUID()]);
   function addField() { setUrlFields((p) => [...p, crypto.randomUUID()]); }
@@ -151,6 +166,11 @@ export default function Sources({ loaderData, actionData }: Route.ComponentProps
   const urlErrors = actionData?.intent === "add" ? actionData.errors : null;
   const pdfErrors = actionData?.intent === "add-pdf" ? actionData.errors : null;
   const hasSources = loaderData.sources.length > 0;
+  // Generation only ever uses sources the server considers ready, so the
+  // "From your sources" card gates on that rather than on raw count —
+  // otherwise a source that failed to process would offer a button that
+  // always errors with "add at least one source".
+  const hasReadySources = loaderData.sources.some((s) => s.status === "ready");
 
   return (
     <main className="min-h-screen bg-gray-950 text-gray-100">
@@ -179,10 +199,13 @@ export default function Sources({ loaderData, actionData }: Route.ComponentProps
                       placeholder={i === 0 ? "https://your-company.com/about" : "https://…"}
                       className="flex-1 rounded-lg border border-gray-700 bg-gray-900 px-3 py-2 text-sm text-gray-100 outline-none focus:border-indigo-500"
                     />
-                    <button disabled={adding}
-                      className="shrink-0 rounded-lg bg-indigo-600 px-3 py-2 text-sm font-semibold text-white hover:bg-indigo-500 disabled:opacity-60">
-                      {adding ? "Adding…" : i === 0 && urlFields.length === 1 ? "Add page" : `Add`}
-                    </button>
+                    <SubmitButton
+                      pending={adding}
+                      pendingLabel="Adding…"
+                      className="shrink-0 rounded-lg bg-indigo-600 px-3 py-2 text-sm font-semibold text-white hover:bg-indigo-500 disabled:opacity-60"
+                    >
+                      {i === 0 && urlFields.length === 1 ? "Add page" : `Add`}
+                    </SubmitButton>
                     {urlFields.length > 1 && (
                       <button type="button" onClick={() => removeField(id)}
                         className="rounded-lg border border-gray-700 px-3 text-gray-500 hover:border-red-500/50 hover:text-red-400"
@@ -223,10 +246,13 @@ export default function Sources({ loaderData, actionData }: Route.ComponentProps
                 Select PDF files
               </label>
               <p className="mt-1 text-xs text-gray-600">max 20 MB each</p>
-              <button disabled={addingPdf}
-                className="mt-2 w-full rounded-lg bg-indigo-600 px-3 py-2 text-sm font-semibold text-white hover:bg-indigo-500 disabled:opacity-60">
-                {addingPdf ? "Uploading…" : "Upload PDFs"}
-              </button>
+              <SubmitButton
+                pending={addingPdf}
+                pendingLabel="Uploading…"
+                className="mt-2 w-full rounded-lg bg-indigo-600 px-3 py-2 text-sm font-semibold text-white hover:bg-indigo-500 disabled:opacity-60"
+              >
+                Upload PDFs
+              </SubmitButton>
             </Form>
             {pdfErrors && (
               <div className="mt-3 space-y-1.5">
@@ -265,7 +291,14 @@ export default function Sources({ loaderData, actionData }: Route.ComponentProps
                 <Form method="post">
                   <input type="hidden" name="intent" value="delete" />
                   <input type="hidden" name="sourceId" value={s.id} />
-                  <button className="shrink-0 text-xs font-semibold text-gray-500 hover:text-red-400">Delete</button>
+                  <SubmitButton
+                    pending={deletingSourceId === s.id}
+                    pendingLabel="Deleting…"
+                    spinnerClassName="h-3 w-3"
+                    className="shrink-0 text-xs font-semibold text-gray-500 hover:text-red-400 disabled:opacity-60"
+                  >
+                    Delete
+                  </SubmitButton>
                 </Form>
               </div>
               {s.summary ? (
@@ -281,12 +314,15 @@ export default function Sources({ loaderData, actionData }: Route.ComponentProps
                 >
                   <input type="hidden" name="count" value="15" />
                   <input type="hidden" name="sourceId" value={s.id} />
-                  <button
+                  <SubmitButton
+                    pending={generatingSourceId === s.id}
+                    pendingLabel="Generating…"
+                    spinnerClassName="h-3 w-3"
                     disabled={generating}
                     className="rounded-lg border border-indigo-500/40 bg-indigo-500/10 px-3 py-1.5 text-xs font-semibold text-indigo-300 hover:bg-indigo-500/20 disabled:opacity-60"
                   >
-                    {generating ? "Generating…" : "Generate quiz from this source →"}
-                  </button>
+                    Generate quiz from this source →
+                  </SubmitButton>
                 </Form>
               )}
             </div>
@@ -335,22 +371,24 @@ export default function Sources({ loaderData, actionData }: Route.ComponentProps
                     </label>
                   ))}
                 </div>
-                <button
+                <SubmitButton
+                  pending={generatingTopic}
+                  pendingLabel="Generating…"
                   disabled={generating}
                   className="mt-auto w-full rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500 disabled:opacity-60"
                 >
-                  {generating ? "Generating…" : "Generate from topic →"}
-                </button>
+                  Generate from topic →
+                </SubmitButton>
               </Form>
             </div>
 
             {/* From sources */}
-            <div className={`flex flex-col rounded-xl border p-5 ${hasSources ? "border-gray-800 bg-gray-900/40" : "border-dashed border-gray-800 bg-gray-900/20"}`}>
-              <p className={`text-sm font-semibold ${hasSources ? "text-gray-200" : "text-gray-500"}`}>From your sources</p>
+            <div className={`flex flex-col rounded-xl border p-5 ${hasReadySources ? "border-gray-800 bg-gray-900/40" : "border-dashed border-gray-800 bg-gray-900/20"}`}>
+              <p className={`text-sm font-semibold ${hasReadySources ? "text-gray-200" : "text-gray-500"}`}>From your sources</p>
               <p className="mt-1 text-xs text-gray-500">
                 AI drafts questions grounded in the documents above.
               </p>
-              {hasSources ? (
+              {hasReadySources ? (
                 <Form method="post" action={`/league/${loaderData.code}/generate`} className="mt-4 flex flex-1 flex-col gap-3">
                   <input type="hidden" name="count" value="15" />
                   <input
@@ -366,10 +404,14 @@ export default function Sources({ loaderData, actionData }: Route.ComponentProps
                       </label>
                     ))}
                   </div>
-                  <button disabled={generating}
-                    className="mt-auto w-full rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500 disabled:opacity-60">
-                    {generating ? "Generating…" : "Generate from sources →"}
-                  </button>
+                  <SubmitButton
+                    pending={generatingAllSources}
+                    pendingLabel="Generating…"
+                    disabled={generating}
+                    className="mt-auto w-full rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500 disabled:opacity-60"
+                  >
+                    Generate from sources →
+                  </SubmitButton>
                 </Form>
               ) : (
                 <p className="mt-auto pt-6 text-center text-xs text-gray-600">

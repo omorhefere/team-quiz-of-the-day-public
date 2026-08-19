@@ -1,5 +1,6 @@
 import { Form, Link, redirect, useActionData, useNavigation } from "react-router";
 import { LeagueNav } from "~/components/Nav";
+import { SubmitButton } from "~/components/SubmitButton";
 import type { Route } from "./+types/league";
 import { getDb } from "~/db/client";
 import {
@@ -174,12 +175,13 @@ export default function LeaguePage({ loaderData }: Route.ComponentProps) {
                 placeholder="e.g. Platform Engineering"
                 className="flex-1 rounded-lg border border-gray-700 bg-gray-900 px-3 py-2 text-sm text-gray-100 outline-none focus:border-indigo-500"
               />
-              <button
-                disabled={registering}
+              <SubmitButton
+                pending={registering}
+                pendingLabel="Joining…"
                 className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500 disabled:opacity-60"
               >
-                {registering ? "Joining…" : "Join league →"}
-              </button>
+                Join league →
+              </SubmitButton>
             </Form>
           </div>
         )}

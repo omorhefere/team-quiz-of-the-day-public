@@ -1,4 +1,5 @@
 import { Form, data, redirect, useActionData, useNavigation } from "react-router";
+import { SubmitButton } from "~/components/SubmitButton";
 import type { Route } from "./+types/league.admin.login";
 import { getDb } from "~/db/client";
 import { getLeagueByCode } from "~/db/repository";
@@ -82,12 +83,13 @@ export default function AdminLogin({ loaderData }: Route.ComponentProps) {
               className="w-full rounded-lg border border-gray-700 bg-gray-900 px-4 py-3 disabled:opacity-50"
             />
           </div>
-          <button
-            disabled={submitting}
+          <SubmitButton
+            pending={submitting}
+            pendingLabel="Signing in…"
             className="w-full rounded-lg bg-indigo-600 px-4 py-3 font-semibold disabled:opacity-60"
           >
-            {submitting ? "Signing in…" : "Sign in →"}
-          </button>
+            Sign in →
+          </SubmitButton>
           <p className="text-center text-sm text-gray-500">
             Forgot your password? Email{" "}
             <a
