@@ -186,9 +186,9 @@ export default function Sources({ loaderData, actionData }: Route.ComponentProps
         <div className="mt-6 grid gap-4 sm:grid-cols-2">
 
           {/* Web pages */}
-          <div className="rounded-xl border border-gray-800 bg-gray-900/40 p-4">
+          <div className="flex flex-col rounded-xl border border-gray-800 bg-gray-900/40 p-4">
             <p className="mb-3 text-sm font-semibold text-gray-200">From a web page</p>
-            <Form method="post">
+            <Form method="post" className="flex flex-1 flex-col">
               <input type="hidden" name="intent" value="add" />
               <div className="space-y-2">
                 {urlFields.map((id, i) => (
@@ -200,16 +200,6 @@ export default function Sources({ loaderData, actionData }: Route.ComponentProps
                       placeholder={i === 0 ? "https://your-company.com/about" : "https://…"}
                       className="flex-1 rounded-lg border border-gray-700 bg-gray-900 px-3 py-2 text-sm text-gray-100 outline-none focus:border-indigo-500"
                     />
-                    <SubmitButton
-                      pending={adding}
-                      pendingLabel="Adding…"
-                      spinnerClassName="h-3.5 w-3.5"
-                      // Fixed width: without it the label swap resizes the
-                      // button mid-submit and the URL input jumps.
-                      className="w-28 shrink-0 rounded-lg bg-indigo-600 px-3 py-2 text-sm font-semibold text-white hover:bg-indigo-500 disabled:opacity-60"
-                    >
-                      {i === 0 && urlFields.length === 1 ? "Add page" : `Add`}
-                    </SubmitButton>
                     {urlFields.length > 1 && (
                       <button type="button" onClick={() => removeField(id)}
                         className="rounded-lg border border-gray-700 px-3 text-gray-500 hover:border-red-500/50 hover:text-red-400"
@@ -222,6 +212,16 @@ export default function Sources({ loaderData, actionData }: Route.ComponentProps
                 className="mt-2 text-xs text-gray-500 hover:text-gray-300">
                 + Add another URL
               </button>
+              {/* One submit for the whole form, sitting below the fields to
+                  mirror the PDF card. It used to live inside the field loop,
+                  which rendered a duplicate submit button per URL row. */}
+              <SubmitButton
+                pending={adding}
+                pendingLabel="Adding…"
+                className="mt-auto w-full rounded-lg bg-indigo-600 px-3 py-2 text-sm font-semibold text-white hover:bg-indigo-500 disabled:opacity-60"
+              >
+                {urlFields.length === 1 ? "Add page" : `Add ${urlFields.length} pages`}
+              </SubmitButton>
             </Form>
             {urlErrors && (
               <div className="mt-3 space-y-1.5">
@@ -241,19 +241,19 @@ export default function Sources({ loaderData, actionData }: Route.ComponentProps
           </div>
 
           {/* PDF documents */}
-          <div className="rounded-xl border border-gray-800 bg-gray-900/40 p-4">
+          <div className="flex flex-col rounded-xl border border-gray-800 bg-gray-900/40 p-4">
             <p className="mb-3 text-sm font-semibold text-gray-200">From a PDF</p>
-            <Form method="post" encType="multipart/form-data">
+            <Form method="post" encType="multipart/form-data" className="flex flex-1 flex-col">
               <input type="hidden" name="intent" value="add-pdf" />
               <label className="block cursor-pointer rounded-lg border border-dashed border-gray-700 px-3 py-2 text-center text-sm text-gray-400 hover:border-gray-500 hover:text-gray-300">
                 <input name="pdf" type="file" accept=".pdf,application/pdf" multiple className="sr-only" />
                 Select PDF files
               </label>
-              <p className="mt-1 text-xs text-gray-600">max 20 MB each</p>
+              <p className="mt-1 mb-2 text-xs text-gray-600">max 20 MB each</p>
               <SubmitButton
                 pending={addingPdf}
                 pendingLabel="Uploading…"
-                className="mt-2 w-full rounded-lg bg-indigo-600 px-3 py-2 text-sm font-semibold text-white hover:bg-indigo-500 disabled:opacity-60"
+                className="mt-auto w-full rounded-lg bg-indigo-600 px-3 py-2 text-sm font-semibold text-white hover:bg-indigo-500 disabled:opacity-60"
               >
                 Upload PDFs
               </SubmitButton>
