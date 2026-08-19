@@ -199,16 +199,6 @@ export default function Sources({ loaderData, actionData }: Route.ComponentProps
                       placeholder={i === 0 ? "https://your-company.com/about" : "https://…"}
                       className="flex-1 rounded-lg border border-gray-700 bg-gray-900 px-3 py-2 text-sm text-gray-100 outline-none focus:border-indigo-500"
                     />
-                    <SubmitButton
-                      pending={adding}
-                      pendingLabel="Adding…"
-                      spinnerClassName="h-3.5 w-3.5"
-                      // Fixed width: without it the label swap resizes the
-                      // button mid-submit and the URL input jumps.
-                      className="w-28 shrink-0 rounded-lg bg-indigo-600 px-3 py-2 text-sm font-semibold text-white hover:bg-indigo-500 disabled:opacity-60"
-                    >
-                      {i === 0 && urlFields.length === 1 ? "Add page" : `Add`}
-                    </SubmitButton>
                     {urlFields.length > 1 && (
                       <button type="button" onClick={() => removeField(id)}
                         className="rounded-lg border border-gray-700 px-3 text-gray-500 hover:border-red-500/50 hover:text-red-400"
@@ -221,6 +211,16 @@ export default function Sources({ loaderData, actionData }: Route.ComponentProps
                 className="mt-2 text-xs text-gray-500 hover:text-gray-300">
                 + Add another URL
               </button>
+              {/* One submit for the whole form, sitting below the fields to
+                  mirror the PDF card. It used to live inside the field loop,
+                  which rendered a duplicate submit button per URL row. */}
+              <SubmitButton
+                pending={adding}
+                pendingLabel="Adding…"
+                className="mt-2 w-full rounded-lg bg-indigo-600 px-3 py-2 text-sm font-semibold text-white hover:bg-indigo-500 disabled:opacity-60"
+              >
+                {urlFields.length === 1 ? "Add page" : `Add ${urlFields.length} pages`}
+              </SubmitButton>
             </Form>
             {urlErrors && (
               <div className="mt-3 space-y-1.5">
