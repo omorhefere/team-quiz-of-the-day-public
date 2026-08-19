@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Form, Link, data, redirect, useActionData, useLoaderData, useNavigation } from "react-router";
 import type { Route } from "./+types/register";
+import { SubmitButton } from "~/components/SubmitButton";
 import { getDb } from "~/db/client";
 import { createLeague, createTeam } from "~/db/repository";
 import { commitTeamId } from "~/lib/session.server";
@@ -154,14 +155,13 @@ export default function Register() {
           disabled={submitting}
           className="w-full rounded-lg border border-gray-700 bg-gray-900 px-4 py-3 disabled:opacity-50"
         />
-        <button
-          disabled={submitting}
+        <SubmitButton
+          pending={submitting}
+          pendingLabel={league ? "Setting up…" : "Creating your team…"}
           className="w-full rounded-lg bg-indigo-600 px-4 py-3 font-semibold disabled:opacity-60"
         >
-          {submitting
-            ? league ? "Setting up…" : "Creating your team…"
-            : league ? "Create team & set up league →" : "Get our team code"}
-        </button>
+          {league ? "Create team & set up league →" : "Get our team code"}
+        </SubmitButton>
       </Form>
     </Centered>
   );

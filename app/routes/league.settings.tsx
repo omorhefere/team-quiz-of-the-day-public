@@ -1,4 +1,5 @@
 import { Form, Link, redirect, useNavigation } from "react-router";
+import { SubmitButton } from "~/components/SubmitButton";
 import type { Route } from "./+types/league.settings";
 import {
   deleteLeague,
@@ -83,9 +84,9 @@ export default function LeagueSettings({ loaderData }: Route.ComponentProps) {
               required
               className="flex-1 rounded-lg border border-gray-700 bg-gray-900 px-4 py-2 text-gray-100 outline-none focus:border-indigo-500"
             />
-            <button disabled={submitting} className="rounded-lg bg-indigo-600 px-4 py-2 font-semibold text-white hover:bg-indigo-500 disabled:opacity-60">
-              {submitting ? "Saving…" : "Save"}
-            </button>
+            <SubmitButton pending={submitting} pendingLabel="Saving…" className="rounded-lg bg-indigo-600 px-4 py-2 font-semibold text-white hover:bg-indigo-500 disabled:opacity-60">
+              Save
+            </SubmitButton>
           </Form>
         </section>
 
@@ -116,9 +117,9 @@ export default function LeagueSettings({ loaderData }: Route.ComponentProps) {
                   >
                     <input type="hidden" name="intent" value="remove-member" />
                     <input type="hidden" name="teamId" value={m.teamId} />
-                    <button disabled={submitting} className="text-xs font-semibold text-gray-500 hover:text-red-400 disabled:opacity-60">
+                    <SubmitButton pending={submitting} pendingLabel="Removing…" spinnerClassName="h-3 w-3" className="text-xs font-semibold text-gray-500 hover:text-red-400 disabled:opacity-60">
                       Remove
-                    </button>
+                    </SubmitButton>
                   </Form>
                 )}
               </div>
@@ -144,9 +145,9 @@ export default function LeagueSettings({ loaderData }: Route.ComponentProps) {
             }}
           >
             <input type="hidden" name="intent" value="delete" />
-            <button disabled={submitting} className="rounded-lg border border-red-500/40 px-4 py-2 text-sm font-semibold text-red-400 hover:bg-red-500/10 disabled:opacity-60">
-              {submitting ? "Deleting…" : "Delete league"}
-            </button>
+            <SubmitButton pending={submitting} pendingLabel="Deleting…" className="rounded-lg border border-red-500/40 px-4 py-2 text-sm font-semibold text-red-400 hover:bg-red-500/10 disabled:opacity-60">
+              Delete league
+            </SubmitButton>
           </Form>
         </section>
       </div>

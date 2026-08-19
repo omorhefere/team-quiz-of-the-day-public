@@ -1,5 +1,6 @@
 import { Form, Link, redirect, useNavigation } from "react-router";
 import { LeagueNav } from "~/components/Nav";
+import { SubmitButton } from "~/components/SubmitButton";
 import type { Route } from "./+types/league.manage";
 import {
   deleteCustomQuiz,
@@ -70,6 +71,13 @@ export default function ManageLeague({ loaderData }: Route.ComponentProps) {
   const { league, activeQuizId, quizzes } = loaderData;
   const navigation = useNavigation();
   const submitting = navigation.state === "submitting";
+  // Scope the pending state to the row that was actually clicked, so one
+  // action doesn't spin every button in the quiz list.
+  const pendingQuizId = submitting ? navigation.formData?.get("quizId") : null;
+  const pendingIntent = submitting ? navigation.formData?.get("intent") : null;
+  const isPending = (intent: string, quizId?: string) =>
+    pendingIntent === intent &&
+    (quizId === undefined || pendingQuizId === quizId);
   return (
     <main className="min-h-screen bg-gray-950 text-gray-100">
       <LeagueNav code={league.code} isAdmin />
@@ -160,17 +168,29 @@ export default function ManageLeague({ loaderData }: Route.ComponentProps) {
                     {isActive ? (
                       <Form method="post">
                         <input type="hidden" name="intent" value="clearActive" />
-                        <button disabled={submitting} className="rounded-lg border border-gray-700 px-3 py-1.5 text-xs font-semibold text-gray-400 hover:bg-gray-900 disabled:opacity-60">
+                        <SubmitButton
+                          pending={isPending("clearActive")}
+                          pendingLabel="Stopping…"
+                          spinnerClassName="h-3 w-3"
+                          disabled={submitting}
+                          className="rounded-lg border border-gray-700 px-3 py-1.5 text-xs font-semibold text-gray-400 hover:bg-gray-900 disabled:opacity-60"
+                        >
                           Stop
-                        </button>
+                        </SubmitButton>
                       </Form>
                     ) : (
                       <Form method="post">
                         <input type="hidden" name="intent" value="playNow" />
                         <input type="hidden" name="quizId" value={quiz.id} />
-                        <button disabled={submitting} className="rounded-lg bg-indigo-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-indigo-500 disabled:opacity-60">
+                        <SubmitButton
+                          pending={isPending("playNow", quiz.id)}
+                          pendingLabel="Starting…"
+                          spinnerClassName="h-3 w-3"
+                          disabled={submitting}
+                          className="rounded-lg bg-indigo-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-indigo-500 disabled:opacity-60"
+                        >
                           Play today
-                        </button>
+                        </SubmitButton>
                       </Form>
                     )}
                     <Link
@@ -187,9 +207,15 @@ export default function ManageLeague({ loaderData }: Route.ComponentProps) {
                     >
                       <input type="hidden" name="intent" value="delete" />
                       <input type="hidden" name="quizId" value={quiz.id} />
-                      <button disabled={submitting} className="rounded-lg px-3 py-1.5 text-xs font-semibold text-gray-500 hover:text-red-400 disabled:opacity-60">
+                      <SubmitButton
+                        pending={isPending("delete", quiz.id)}
+                        pendingLabel="Deleting…"
+                        spinnerClassName="h-3 w-3"
+                        disabled={submitting}
+                        className="rounded-lg px-3 py-1.5 text-xs font-semibold text-gray-500 hover:text-red-400 disabled:opacity-60"
+                      >
                         Delete
-                      </button>
+                      </SubmitButton>
                     </Form>
                   </div>
                 </div>

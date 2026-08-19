@@ -1,4 +1,5 @@
 import { Form, Link, data, redirect, useActionData, useNavigation } from "react-router";
+import { SubmitButton } from "~/components/SubmitButton";
 import type { Route } from "./+types/league.admin.setup";
 import { getDb } from "~/db/client";
 import { getLeagueByCode, isLeagueAdmin } from "~/db/repository";
@@ -133,12 +134,13 @@ export default function AdminSetup({ loaderData }: Route.ComponentProps) {
               className="w-full rounded-lg border border-gray-700 bg-gray-900 px-4 py-3 disabled:opacity-50"
             />
           </div>
-          <button
-            disabled={submitting}
+          <SubmitButton
+            pending={submitting}
+            pendingLabel="Creating account…"
             className="w-full rounded-lg bg-indigo-600 px-4 py-3 font-semibold disabled:opacity-60"
           >
-            {submitting ? "Creating account…" : "Create admin account →"}
-          </button>
+            Create admin account →
+          </SubmitButton>
         </Form>
       </div>
     </main>
