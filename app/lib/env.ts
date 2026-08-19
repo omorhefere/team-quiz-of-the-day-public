@@ -74,6 +74,16 @@ export const env = {
   get llmModel(): string {
     return read("LLM_MODEL") ?? "claude-sonnet-4-6";
   },
+
+  /**
+   * Model used for the adversarial verifier pass. Checking existing questions
+   * against a quote is a much lighter job than writing them, and this call is
+   * serial with generation — so it runs on Haiku by default to keep it off the
+   * admin's wait. Override with LLM_VERIFY_MODEL.
+   */
+  get llmVerifyModel(): string {
+    return read("LLM_VERIFY_MODEL") ?? "claude-haiku-4-5";
+  },
 };
 
 /**

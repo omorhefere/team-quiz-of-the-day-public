@@ -79,10 +79,12 @@ function buildSourceText(sources: GenerateParams["sources"]): string {
 export class AnthropicLLMService implements LLMService {
   private client: Anthropic;
   private model: string;
+  private verifyModel: string;
 
-  constructor(apiKey: string, model: string) {
+  constructor(apiKey: string, model: string, verifyModel: string) {
     this.client = new Anthropic({ apiKey });
     this.model = model;
+    this.verifyModel = verifyModel;
   }
 
   async generateQuiz(params: GenerateParams): Promise<GeneratedQuiz> {
@@ -125,6 +127,11 @@ export class AnthropicLLMService implements LLMService {
       system: systemBlocks,
       messages: [{ role: "user", content: userContent }],
       output_config: {
+        // `effort` defaults to "high", which spends a lot of thinking on what
+        // is ultimately a bounded extraction task — and the admin waits for
+        // every second of it. "medium" is the better trade here; raise it if
+        // question quality regresses.
+        effort: "medium",
         format: zodOutputFormat(generatedQuizSchema),
       },
     });
@@ -170,8 +177,12 @@ export class AnthropicLLMService implements LLMService {
       })
       .join("\n\n");
 
+    // Verification is a checking task against text we already have, not a
+    // generation task, so it runs on a smaller/faster model than the writer.
+    // It's also serial with generateQuiz, so its latency lands directly on
+    // the admin's wait.
     const response = await this.client.messages.parse({
-      model: this.model,
+      model: this.verifyModel,
       max_tokens: 2000,
       system: [{ type: "text", text: VERIFY_SYSTEM_INSTRUCTIONS }],
       messages: [

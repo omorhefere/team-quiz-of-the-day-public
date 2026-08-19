@@ -14,7 +14,11 @@ import { FakeLLMService } from "./fake";
 
 export function getLLMService(): LLMService {
   if (env.anthropicApiKey) {
-    return new AnthropicLLMService(env.anthropicApiKey, env.llmModel);
+    return new AnthropicLLMService(
+      env.anthropicApiKey,
+      env.llmModel,
+      env.llmVerifyModel,
+    );
   }
   return new FakeLLMService();
 }

@@ -13,7 +13,7 @@ import { getLLMService } from "~/lib/llm/index.server";
 import type { VerifyResult } from "~/lib/llm/schema";
 import {
   CUSTOM_QUIZ_TITLE_MAX,
-  MAX_CUSTOM_QUESTIONS,
+  parseQuestionCount,
   type ValidQuestion,
 } from "~/lib/quiz";
 import { flashError } from "~/lib/session.server";
@@ -69,13 +69,7 @@ export async function action({ request, params }: Route.ActionArgs) {
   }
 
   const form = await request.formData();
-  const countSchema = z.coerce
-    .number()
-    .int()
-    .min(1)
-    .max(MAX_CUSTOM_QUESTIONS)
-    .default(5);
-  const count = countSchema.catch(5).parse(form.get("count") ?? undefined);
+  const count = parseQuestionCount(form.get("count"));
   // Cap topic to prevent prompt injection via an unusually long free-text field.
   const topic = (String(form.get("topic") ?? "").replace(/[\r\n]+/g, " ").trim().slice(0, 200)) || undefined;
   const difficultyRaw = String(form.get("difficulty") ?? "").trim();

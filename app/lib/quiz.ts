@@ -40,6 +40,23 @@ export const MIN_CUSTOM_QUESTIONS = 1;
 export const MAX_CUSTOM_QUESTIONS = 10;
 export const CUSTOM_QUIZ_TITLE_MAX = 80;
 
+/**
+ * How many questions to ask the model for, given a raw form value.
+ *
+ * Clamps rather than rejects. A previous version validated against
+ * MAX_CUSTOM_QUESTIONS and fell back to 5 on failure, so when the generate
+ * forms asked for 15 the admin silently got a 5-question quiz — neither the
+ * number requested nor the cap, with nothing logged. Anything above the cap
+ * now means "give me the cap".
+ */
+export function parseQuestionCount(raw: FormDataEntryValue | null): number {
+  const n = Number(raw);
+  if (!Number.isInteger(n) || n < MIN_CUSTOM_QUESTIONS) {
+    return MAX_CUSTOM_QUESTIONS;
+  }
+  return Math.min(n, MAX_CUSTOM_QUESTIONS);
+}
+
 export const customQuizQuestionsSchema = z
   .array(questionSchema)
   .min(MIN_CUSTOM_QUESTIONS, "Add at least one question")

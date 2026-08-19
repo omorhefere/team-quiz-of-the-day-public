@@ -1,6 +1,8 @@
 import { describe, expect, it } from "vitest";
 import {
+  MAX_CUSTOM_QUESTIONS,
   deckQuestionsSchema,
+  parseQuestionCount,
   scoreAnswers,
   validateDeckQuestions,
   type ValidQuestion,
@@ -54,5 +56,26 @@ describe("deck validation", () => {
     const bad = structuredClone(valid);
     bad[0].correct_idx = 9;
     expect(validateDeckQuestions(bad)).toMatchObject({ ok: false });
+  });
+});
+
+describe("parseQuestionCount", () => {
+  it("clamps a request above the cap down to the cap", () => {
+    // Regression: the generate forms asked for 15 while the cap was 10, and a
+    // `.max()` + `.catch(5)` silently produced 5-question quizzes.
+    expect(parseQuestionCount("15")).toBe(MAX_CUSTOM_QUESTIONS);
+  });
+
+  it("keeps a valid in-range request", () => {
+    expect(parseQuestionCount("3")).toBe(3);
+  });
+
+  it("falls back to the cap for missing, junk, or non-positive values", () => {
+    expect(parseQuestionCount(null)).toBe(MAX_CUSTOM_QUESTIONS);
+    expect(parseQuestionCount("")).toBe(MAX_CUSTOM_QUESTIONS);
+    expect(parseQuestionCount("abc")).toBe(MAX_CUSTOM_QUESTIONS);
+    expect(parseQuestionCount("2.5")).toBe(MAX_CUSTOM_QUESTIONS);
+    expect(parseQuestionCount("0")).toBe(MAX_CUSTOM_QUESTIONS);
+    expect(parseQuestionCount("-4")).toBe(MAX_CUSTOM_QUESTIONS);
   });
 });
