@@ -66,7 +66,10 @@ Set "reason" for any "review" or "flagged" verdict — one short sentence explai
 function difficultyInstruction(d: GenerateParams["difficulty"]): string {
   if (d === "easy") return "\nDifficulty: EASY — favour questions where the answer is stated plainly and obviously in the source. Avoid trick questions or fine distinctions.";
   if (d === "hard") return "\nDifficulty: HARD — favour questions that require careful reading, specific recall, or distinguishing between closely related facts. Avoid questions with an obvious answer.";
-  return "\nDifficulty: MEDIUM — mix straightforward and moderately challenging questions.";
+  if (d === "medium") return "\nDifficulty: MEDIUM — mix straightforward and moderately challenging questions.";
+  // Nothing chosen — send no instruction rather than quietly steering the
+  // model, so "no selection" genuinely means no difficulty.
+  return "";
 }
 
 function buildSourceText(sources: GenerateParams["sources"]): string {

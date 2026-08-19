@@ -417,7 +417,7 @@ export default function Sources({ loaderData, actionData }: Route.ComponentProps
                 <div className="flex gap-3">
                   {(["easy", "medium", "hard"] as const).map((d) => (
                     <label key={d} className="flex cursor-pointer items-center gap-1.5 text-xs text-gray-400">
-                      <input type="radio" name="difficulty" value={d} defaultChecked={d === "medium"} className="accent-indigo-500" />
+                      <input type="radio" name="difficulty" value={d} className="accent-indigo-500" />
                       {d.charAt(0).toUpperCase() + d.slice(1)}
                     </label>
                   ))}

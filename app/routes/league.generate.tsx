@@ -72,10 +72,12 @@ export async function action({ request, params }: Route.ActionArgs) {
   const count = parseQuestionCount(form.get("count"));
   // Cap topic to prevent prompt injection via an unusually long free-text field.
   const topic = (String(form.get("topic") ?? "").replace(/[\r\n]+/g, " ").trim().slice(0, 200)) || undefined;
+  // Left undefined when nothing was picked — no silent fallback to medium, so
+  // an unselected form produces no difficulty instruction at all.
   const difficultyRaw = String(form.get("difficulty") ?? "").trim();
-  const difficulty = (["easy", "medium", "hard"].includes(difficultyRaw)
-    ? difficultyRaw
-    : "medium") as "easy" | "medium" | "hard";
+  const difficulty = ["easy", "medium", "hard"].includes(difficultyRaw)
+    ? (difficultyRaw as "easy" | "medium" | "hard")
+    : undefined;
   const modeRaw = String(form.get("mode") ?? "").trim();
   const mode = modeRaw === "topic" ? "topic" : "document";
   const appendToQuizId = String(form.get("appendToQuizId") ?? "").trim();
