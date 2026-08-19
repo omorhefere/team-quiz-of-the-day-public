@@ -1,5 +1,6 @@
 import { data, Form, Link, redirect, useNavigation } from "react-router";
 import { SubmitButton } from "~/components/SubmitButton";
+import { MAX_CUSTOM_QUESTIONS } from "~/lib/quiz";
 import { LeagueNav } from "~/components/Nav";
 import { useState } from "react";
 import type { Route } from "./+types/league.sources";
@@ -315,7 +316,7 @@ export default function Sources({ loaderData, actionData }: Route.ComponentProps
                   action={`/league/${loaderData.code}/generate`}
                   className="mt-3 flex items-center gap-2"
                 >
-                  <input type="hidden" name="count" value="15" />
+                  <input type="hidden" name="count" value={MAX_CUSTOM_QUESTIONS} />
                   <input type="hidden" name="sourceId" value={s.id} />
                   <SubmitButton
                     pending={generatingSourceId === s.id}
@@ -357,7 +358,7 @@ export default function Sources({ loaderData, actionData }: Route.ComponentProps
                 action={`/league/${loaderData.code}/generate`}
                 className="mt-4 flex flex-1 flex-col gap-3"
               >
-                <input type="hidden" name="count" value="15" />
+                <input type="hidden" name="count" value={MAX_CUSTOM_QUESTIONS} />
                 <input type="hidden" name="mode" value="topic" />
                 <input
                   name="topic"
@@ -393,7 +394,7 @@ export default function Sources({ loaderData, actionData }: Route.ComponentProps
               </p>
               {hasReadySources ? (
                 <Form method="post" action={`/league/${loaderData.code}/generate`} className="mt-4 flex flex-1 flex-col gap-3">
-                  <input type="hidden" name="count" value="15" />
+                  <input type="hidden" name="count" value={MAX_CUSTOM_QUESTIONS} />
                   <input
                     name="topic"
                     placeholder="Optional topic focus, e.g. refund policy"
