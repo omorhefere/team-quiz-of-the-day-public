@@ -1,4 +1,5 @@
 import { Form, Link, data, redirect, useActionData, useNavigation } from "react-router";
+import { SubmitButton } from "~/components/SubmitButton";
 import { Nav } from "~/components/Nav";
 import type { Route } from "./+types/home";
 import { getDb } from "~/db/client";
@@ -21,9 +22,13 @@ export async function action({ request }: Route.ActionArgs) {
   const form = await request.formData();
   const intent = String(form.get("intent") ?? "");
 
-  // "Create league" from landing — go to the dedicated league creation page.
+  // "Create league" from landing — go to the dedicated league creation page,
+  // carrying the name the admin already typed so they don't retype it there.
   if (intent === "create-league") {
-    throw redirect(`/leagues/new`);
+    const name = String(form.get("name") ?? "").trim().slice(0, 30);
+    throw redirect(
+      name ? `/leagues/new?name=${encodeURIComponent(name)}` : "/leagues/new",
+    );
   }
 
   // Admin sign-in.
@@ -118,9 +123,11 @@ function Dashboard({
   const navigation = useNavigation();
   const navigatingToPlay =
     navigation.state === "loading" && navigation.location?.pathname === "/play";
+  // This form navigates (GET) rather than submitting, so it shows up as a
+  // "loading" state to /leagues/new, not "submitting".
   const creatingLeague =
-    navigation.state === "submitting" &&
-    navigation.formAction?.endsWith("/leagues/create");
+    navigation.state === "loading" &&
+    navigation.location?.pathname === "/leagues/new";
   const joiningLeague =
     navigation.state === "submitting" &&
     navigation.formAction?.endsWith("/leagues/join");
@@ -253,9 +260,13 @@ function Dashboard({
           )}
 
           <div className="grid gap-3 sm:grid-cols-2">
+            {/* GET, not POST: /leagues/create's action requires email and
+                password, so posting a bare name here landed the user straight
+                on "Enter a valid email address". Navigating with ?name= lets
+                that page prefill and collect the rest. */}
             <Form
-              method="post"
-              action="/leagues/create"
+              method="get"
+              action="/leagues/new"
               className="space-y-2 rounded-xl border border-gray-800 p-4"
             >
               <label className="block text-sm font-medium text-gray-300">
@@ -323,7 +334,16 @@ function Stat({ label, value }: { label: string; value: string | number }) {
 
 function Landing({ adminError }: { adminError?: string }) {
   const navigation = useNavigation();
-  const signingIn = navigation.state === "submitting" && !navigation.formAction?.includes("/register") && !navigation.formAction?.includes("/join");
+  // Both admin forms post to this route, so formAction can't tell them apart —
+  // it is "/" either way, and the old check only excluded /register and /join.
+  // That made "Create league" animate the Sign in button as if it had been
+  // clicked. Key off the same `intent` the action already switches on.
+  const submittingIntent =
+    navigation.state === "submitting"
+      ? navigation.formData?.get("intent")
+      : null;
+  const signingIn = submittingIntent === "sign-in";
+  const creatingLeagueAdmin = submittingIntent === "create-league";
   return (
     <main className="min-h-screen bg-gray-950 text-gray-100">
       <div className="mx-auto max-w-4xl px-6 py-16">
@@ -425,12 +445,14 @@ function Landing({ adminError }: { adminError?: string }) {
                   placeholder="e.g. Acme Engineering"
                   className="w-full rounded-lg border border-gray-700 bg-gray-900 px-4 py-3 text-base outline-none focus:border-indigo-500"
                 />
-                <button
+                <SubmitButton
                   type="submit"
-                  className="w-full rounded-lg bg-indigo-600 px-4 py-3 font-semibold text-white transition hover:bg-indigo-500"
+                  pending={creatingLeagueAdmin}
+                  pendingLabel="Creating…"
+                  className="w-full rounded-lg bg-indigo-600 px-4 py-3 font-semibold text-white transition hover:bg-indigo-500 disabled:opacity-60"
                 >
                   Create league
-                </button>
+                </SubmitButton>
               </Form>
 
               <div className="flex items-center gap-3 text-xs text-gray-600">
@@ -440,6 +462,7 @@ function Landing({ adminError }: { adminError?: string }) {
               </div>
 
               <Form method="post" className="space-y-3">
+                <input type="hidden" name="intent" value="sign-in" />
                 <label className="block text-sm font-medium text-gray-300">
                   Sign in to manage your league
                 </label>
