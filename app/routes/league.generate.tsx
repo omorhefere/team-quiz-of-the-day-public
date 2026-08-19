@@ -24,6 +24,40 @@ export async function loader({ params }: Route.LoaderArgs) {
   throw redirect(`/league/${params.code}/sources`);
 }
 
+/**
+ * Turn a generation failure into something the admin can act on.
+ *
+ * This used to be a single "check that your sources have enough content" for
+ * every failure — including auth errors, rate limits, and an SDK guard that
+ * rejected the request before it was ever sent. That message sent us hunting
+ * through source records for a bug that was in the request config, so each
+ * distinct cause now names itself. The full error is still logged.
+ */
+function describeGenerationError(err: unknown): string {
+  const status = (err as { status?: number } | null)?.status;
+  const message = err instanceof Error ? err.message : String(err);
+
+  if (status === 401 || status === 403) {
+    return "AI generation isn't authenticated — the API key is missing or invalid.";
+  }
+  if (status === 429) {
+    return "The AI provider is rate limiting us. Wait a minute and try again.";
+  }
+  if (status === 529 || (typeof status === "number" && status >= 500)) {
+    return "The AI provider is unavailable right now. Try again shortly.";
+  }
+  if (/stop reason: max_tokens/i.test(message)) {
+    return "The quiz was cut off before it finished. Try generating fewer questions.";
+  }
+  if (/stop reason: refusal/i.test(message)) {
+    return "The AI declined to generate from this source. Try a different source or topic.";
+  }
+  if (/streaming is required/i.test(message)) {
+    return "Generation is misconfigured on the server (streaming required). This is a bug — please report it.";
+  }
+  return "Generation failed. The error has been logged; try again shortly.";
+}
+
 export async function action({ request, params }: Route.ActionArgs) {
   const { db, league } = await requireLeagueAdmin(request, params.code);
 
@@ -96,7 +130,7 @@ export async function action({ request, params }: Route.ActionArgs) {
     }));
   } catch (err) {
     console.error("[generate] LLM error:", err);
-    await redirectWithError("Generation failed. Check that your sources have enough content.");
+    await redirectWithError(describeGenerationError(err));
   }
 
   // Defensive guard — belt-and-suspenders.

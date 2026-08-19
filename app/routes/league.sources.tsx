@@ -202,7 +202,10 @@ export default function Sources({ loaderData, actionData }: Route.ComponentProps
                     <SubmitButton
                       pending={adding}
                       pendingLabel="Adding…"
-                      className="shrink-0 rounded-lg bg-indigo-600 px-3 py-2 text-sm font-semibold text-white hover:bg-indigo-500 disabled:opacity-60"
+                      spinnerClassName="h-3.5 w-3.5"
+                      // Fixed width: without it the label swap resizes the
+                      // button mid-submit and the URL input jumps.
+                      className="w-28 shrink-0 rounded-lg bg-indigo-600 px-3 py-2 text-sm font-semibold text-white hover:bg-indigo-500 disabled:opacity-60"
                     >
                       {i === 0 && urlFields.length === 1 ? "Add page" : `Add`}
                     </SubmitButton>
