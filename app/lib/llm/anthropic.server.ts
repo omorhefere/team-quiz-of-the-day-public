@@ -111,7 +111,14 @@ export class AnthropicLLMService implements LLMService {
       ? `Generate ${params.count} multiple-choice questions about: ${safeTopic ?? "general knowledge"}.${difficultyInstruction(params.difficulty)}${avoidBlock}`
       : `Generate ${params.count} multiple-choice questions based strictly on the source documents above.${topicLine}${difficultyInstruction(params.difficulty)}${avoidBlock}`;
 
-    const response = await this.client.messages.parse({
+    // Streamed, not `.parse()`: the SDK estimates a request's duration from
+    // max_tokens and refuses non-streaming calls it thinks may exceed 10
+    // minutes ("Streaming is required for operations that may take longer
+    // than 10 minutes"). Document mode's 32k budget crosses that line, so
+    // every source-backed generation failed before a request was ever sent.
+    // Streaming also avoids HTTP timeouts on genuinely long generations.
+    // `finalMessage()` still carries `parsed_output` from output_config.
+    const stream = this.client.messages.stream({
       model: this.model,
       max_tokens: isTopicMode ? 8000 : 32000,
       ...(isTopicMode ? {} : { thinking: { type: "adaptive" } }),
@@ -121,6 +128,7 @@ export class AnthropicLLMService implements LLMService {
         format: zodOutputFormat(generatedQuizSchema),
       },
     });
+    const response = await stream.finalMessage();
 
     // parsed_output is null if the model refused or hit the token cap.
     if (!response.parsed_output) {
