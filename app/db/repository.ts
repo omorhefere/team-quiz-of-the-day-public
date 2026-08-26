@@ -637,15 +637,23 @@ export async function removeTeamFromLeague(
     );
 }
 
-/** All members of a league with their display name and join date. */
+/**
+ * All members of a league with their display name, team code, and join date.
+ *
+ * The team code is a bearer credential (entering it signs you in as that
+ * team), so this is only ever surfaced to a league admin.
+ */
 export async function getLeagueMembers(
   db: DB,
   leagueId: string,
-): Promise<{ teamId: string; displayName: string; joinedAt: Date }[]> {
+): Promise<
+  { teamId: string; displayName: string; code: string; joinedAt: Date }[]
+> {
   const rows = await db
     .select({
       teamId: leagueMemberships.teamId,
       displayName: teams.displayName,
+      code: teams.code,
       joinedAt: leagueMemberships.joinedAt,
     })
     .from(leagueMemberships)

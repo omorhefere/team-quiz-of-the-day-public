@@ -63,6 +63,9 @@ export function LeagueNav({
     { to: `/league/${code}/manage`, label: "League" },
     { to: `/league/${code}/play`, label: "Play quiz" },
     { to: `/league/${code}/sources`, label: "Sources" },
+    // Admins regularly need to see who has joined and re-share a team's code,
+    // so it gets a nav slot rather than living only behind Settings.
+    { to: `/league/${code}/settings#members`, label: "Members" },
   ];
 
   return <Nav items={isAdmin ? adminItems : playerItems} showSignOut />;
