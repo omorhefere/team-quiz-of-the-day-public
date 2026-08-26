@@ -91,20 +91,28 @@ export default function LeagueSettings({ loaderData }: Route.ComponentProps) {
         </section>
 
         {/* Members */}
-        <section className="mt-10">
+        <section id="members" className="mt-10 scroll-mt-6">
           <h2 className="mb-3 text-sm font-semibold uppercase tracking-widest text-gray-500">
             Members ({members.length})
           </h2>
           <div className="divide-y divide-gray-800 overflow-hidden rounded-xl border border-gray-800">
             {members.map((m) => (
               <div key={m.teamId} className="flex items-center gap-3 px-4 py-3">
-                <span className="flex-1 truncate font-medium">
+                <span className="min-w-0 flex-1 truncate font-medium">
                   {m.displayName}
                   {m.teamId === adminTeamId && (
                     <span className="ml-2 text-xs text-indigo-400">admin</span>
                   )}
                 </span>
-                <span className="text-xs text-gray-600">
+                {/* A team's code is how that team signs in, so it's shown to
+                    the admin for re-sharing — never on a player-facing page. */}
+                <span
+                  className="shrink-0 select-all font-mono text-xs text-indigo-300"
+                  title={`${m.displayName}'s team code`}
+                >
+                  {m.code}
+                </span>
+                <span className="hidden shrink-0 text-xs text-gray-600 sm:inline">
                   joined {new Date(m.joinedAt).toLocaleDateString()}
                 </span>
                 {m.teamId !== adminTeamId && (
