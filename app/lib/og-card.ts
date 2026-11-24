@@ -4,7 +4,7 @@
  * Built as a plain SVG string (no JSX/satori) and rasterized with the native
  * `@resvg/resvg-js`, so it runs in any Node server with zero wasm/bundler
  * issues. Rendering uses system fonts — the production image must ship a sans
- * font (see Dockerfile / HANDOFF).
+ * font (see Dockerfile).
  *
  * This module is pure and synchronous so it can be unit-tested by rendering to
  * a PNG buffer and checking the signature.
