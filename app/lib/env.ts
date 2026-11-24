@@ -66,13 +66,13 @@ export const env = {
   },
 
   /**
-   * Model used for quiz generation. Defaults to Sonnet 4.6 — a strong, cheaper
+   * Model used for quiz generation. Defaults to Sonnet 5.5 — a strong, cheaper
    * model that's plenty for grounded generation (the quality is enforced by the
    * prompt + source_quote + human review, not raw model horsepower). Override
-   * with LLM_MODEL=claude-opus-4-8 for max quality.
+   * with LLM_MODEL=claude-opus-5-5 for max quality.
    */
   get llmModel(): string {
-    return read("LLM_MODEL") ?? "claude-sonnet-4-6";
+    return read("LLM_MODEL") ?? "claude-sonnet-5-5";
   },
 
   /**
@@ -82,7 +82,7 @@ export const env = {
    * admin's wait. Override with LLM_VERIFY_MODEL.
    */
   get llmVerifyModel(): string {
-    return read("LLM_VERIFY_MODEL") ?? "claude-haiku-4-5";
+    return read("LLM_VERIFY_MODEL") ?? "claude-haiku-5-5";
   },
 };
 

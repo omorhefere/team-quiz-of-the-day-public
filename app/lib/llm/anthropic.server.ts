@@ -10,7 +10,7 @@
  *   them means the 2nd+ generation only pays ~0.1x for that text. (Note: caching
  *   only kicks in above ~4k tokens on Opus — small corpora just won't cache, which
  *   is fine.)
- * - `claude-sonnet-4-6` by default: great quality for structured extraction at
+ * - `claude-sonnet-5-5` by default: great quality for structured extraction at
  *   ~10x lower cost than Opus. Override with LLM_MODEL env var if needed.
  *
  * Server-only (`.server`).

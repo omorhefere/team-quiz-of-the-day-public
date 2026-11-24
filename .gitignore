@@ -15,3 +15,9 @@
 
 # Aider
 .aider*
+
+# Local tooling state (Neon CLI link, Claude Code, Superpowers plans)
+.neon
+.claude/
+.superpowers/
+docs/superpowers/
